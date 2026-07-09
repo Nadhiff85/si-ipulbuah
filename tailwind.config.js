@@ -11,7 +11,7 @@ export default {
         primary: {
           DEFAULT: '#2E7D32', // hijau segar - header, sidebar, tombol utama
           light: '#4CAF50',
-          dark: '#1B5E20',    // sidebar admin/superadmin
+          dark: '#14401A',    // sidebar admin/superadmin (digelapkan sedikit)
         },
         accent: {
           DEFAULT: '#FB8C00', // oranye hangat - CTA (checkout, beli)
