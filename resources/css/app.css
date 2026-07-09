@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-surface-soft text-ink font-sans;
+}
+
+/* Transisi halus global untuk kesan lebih hidup & interaktif */
+a, button {
+  transition: all 0.2s ease;
+}
+
+/* Scrollbar tipis & sesuai tema Fresh Orchard */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #4CAF50; border-radius: 10px; }
+::-webkit-scrollbar-track { background: #FAFAF7; }
+
+/* Animasi fade-in halus untuk konten yang baru dimuat */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.3s ease-out; }

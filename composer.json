@@ -1,0 +1,36 @@
+{
+    "name": "ipulbuah/si-ipulbuah",
+    "type": "project",
+    "description": "SI-IPULBUAH - Sistem Informasi Penjualan Buah Segar (Laravel 13 API)",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^13.0",
+        "laravel/sanctum": "*",
+        "spatie/laravel-permission": "*",
+        "intervention/image": "*",
+        "barryvdh/laravel-dompdf": "*",
+        "maatwebsite/excel": "*"
+    },
+    "require-dev": {
+        "fakerphp/faker": "*",
+        "nunomaduro/collision": "*",
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": { "App\\": "app/", "Database\\Factories\\": "database/factories/", "Database\\Seeders\\": "database/seeders/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "tests/" }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": { "dont-discover": [] }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
