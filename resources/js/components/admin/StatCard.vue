@@ -15,5 +15,6 @@ import { computed } from 'vue'
 const props = defineProps({ label: String, value: [String, Number], icon: [Object, Function], color: String })
 
 const colorClass = computed(() => 'text-ink/60')
+
 const bgClass = computed(() => 'bg-ink/5')
 </script>
