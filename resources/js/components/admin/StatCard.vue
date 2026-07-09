@@ -14,11 +14,6 @@
 import { computed } from 'vue'
 const props = defineProps({ label: String, value: [String, Number], icon: [Object, Function], color: String })
 
-const colorClass = computed(() => ({
-  primary: 'text-primary', accent: 'text-accent', badge: 'text-accent', danger: 'text-danger',
-}[props.color] || 'text-ink'))
-
-const bgClass = computed(() => ({
-  primary: 'bg-primary/10', accent: 'bg-accent/10', badge: 'bg-badge/15', danger: 'bg-danger/10',
-}[props.color] || 'bg-ink/5'))
+const colorClass = computed(() => 'text-ink/60')
+const bgClass = computed(() => 'bg-ink/5')
 </script>
