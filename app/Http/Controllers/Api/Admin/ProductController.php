@@ -120,6 +120,7 @@ class ProductController extends Controller
             'labels' => 'nullable|array', // ["best_seller","promo","musiman","segar"]
             'is_seasonal' => 'boolean',
             'is_active' => 'boolean',
+            'is_featured' => 'boolean',
         ]);
     }
 

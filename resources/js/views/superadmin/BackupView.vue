@@ -26,13 +26,17 @@
         </tbody>
       </table>
     </div>
-    <p class="text-xs text-ink/40 mt-3">⚠️ Restore akan menimpa seluruh data saat ini. Pastikan Anda yakin sebelum melanjutkan.</p>
+    <p class="text-xs text-ink/40 mt-3 flex items-center gap-1.5">
+      <ExclamationTriangleIcon class="w-4 h-4 text-warning shrink-0" stroke-width="1.75" />
+      Restore akan menimpa seluruh data saat ini. Pastikan Anda yakin sebelum melanjutkan.
+    </p>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 const backups = ref([])
 const running = ref(false)

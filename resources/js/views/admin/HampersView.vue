@@ -10,7 +10,9 @@
         <p class="font-semibold text-sm">{{ h.name }}</p>
         <p class="text-xs text-ink/50 mb-2">{{ h.items?.map(i => i.product.name).join(', ') }}</p>
         <p class="text-accent font-bold text-sm mb-2">Rp {{ formatPrice(h.base_price) }}</p>
-        <p class="text-xs mb-2" v-if="h.is_custom_allowed">✅ Izinkan kustom</p>
+        <p class="text-xs mb-2 flex items-center gap-1 text-success" v-if="h.is_custom_allowed">
+          <CheckCircleIcon class="w-4 h-4" stroke-width="1.75" /> Izinkan kustom
+        </p>
         <div class="flex gap-2">
           <button @click="openEdit(h)" class="text-primary text-xs hover:underline">Edit</button>
           <button @click="remove(h)" class="text-danger text-xs hover:underline">Hapus</button>
@@ -40,6 +42,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { CheckCircleIcon } from '@heroicons/vue/24/outline'
 
 const hampers = ref([])
 const showModal = ref(false)

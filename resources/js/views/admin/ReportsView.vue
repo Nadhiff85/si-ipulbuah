@@ -3,8 +3,12 @@
     <div class="flex justify-between items-center mb-5">
       <h2 class="font-bold text-ink">Laporan Toko</h2>
       <div class="flex gap-2">
-        <a href="/api/admin/reports/sales/export-excel" target="_blank" class="bg-success text-white px-4 py-2 rounded-full text-sm">📊 Excel</a>
-        <a href="/api/admin/reports/sales/export-pdf" target="_blank" class="bg-danger text-white px-4 py-2 rounded-full text-sm">📄 PDF</a>
+        <a href="/api/admin/reports/sales/export-excel" target="_blank" class="bg-success text-white px-4 py-2 rounded-full text-sm flex items-center gap-1.5">
+          <TableCellsIcon class="w-4 h-4" stroke-width="1.75" /> Excel
+        </a>
+        <a href="/api/admin/reports/sales/export-pdf" target="_blank" class="bg-danger text-white px-4 py-2 rounded-full text-sm flex items-center gap-1.5">
+          <DocumentArrowDownIcon class="w-4 h-4" stroke-width="1.75" /> PDF
+        </a>
       </div>
     </div>
 
@@ -65,6 +69,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { TableCellsIcon, DocumentArrowDownIcon } from '@heroicons/vue/24/outline'
 
 const tabs = [
   { key: 'sales', label: 'Penjualan' }, { key: 'products', label: 'Produk' },

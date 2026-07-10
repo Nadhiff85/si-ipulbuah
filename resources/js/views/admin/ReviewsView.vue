@@ -7,7 +7,9 @@
         <div class="flex justify-between items-start mb-2">
           <div>
             <p class="font-medium text-sm">{{ r.user?.name }} — {{ r.product?.name }}</p>
-            <p class="text-badge text-xs">{{ '★'.repeat(r.rating) }}{{ '☆'.repeat(5 - r.rating) }}</p>
+            <p class="flex items-center gap-0.5">
+              <StarIconSolid v-for="s in 5" :key="s" class="w-3.5 h-3.5" :class="s <= r.rating ? 'text-badge' : 'text-ink/15'" />
+            </p>
           </div>
           <span class="text-xs px-2 py-1 rounded-full" :class="statusClass(r.status)">{{ r.status }}</span>
         </div>
@@ -22,7 +24,9 @@
           <input v-model="replyText[r.id]" placeholder="Balas ulasan..." class="flex-1 border border-ink/15 rounded-lg px-3 py-1.5 text-xs" />
           <button @click="reply(r)" class="text-primary text-xs font-medium">Kirim</button>
         </div>
-        <p v-if="r.admin_reply" class="text-xs bg-primary/5 rounded-lg p-2 mt-2">💬 {{ r.admin_reply }}</p>
+        <p v-if="r.admin_reply" class="text-xs bg-primary/5 rounded-lg p-2 mt-2 flex items-start gap-1.5">
+          <ChatBubbleLeftIcon class="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" stroke-width="1.75" /> {{ r.admin_reply }}
+        </p>
       </div>
     </div>
   </div>
@@ -32,6 +36,8 @@
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
 import ActionButton from '../../components/shared/ActionButton.vue'
+import { ChatBubbleLeftIcon } from '@heroicons/vue/24/outline'
+import { StarIcon as StarIconSolid } from '@heroicons/vue/24/solid'
 
 const reviews = ref([])
 const replyText = ref({})

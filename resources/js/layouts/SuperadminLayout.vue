@@ -57,9 +57,17 @@
           <h1 class="font-semibold text-ink text-[15px]">{{ pageTitle }}</h1>
           <p class="text-xs text-ink/45 mt-0.5">Selamat datang kembali, {{ auth.user?.name }}</p>
         </div>
-        <button @click="logout" class="flex items-center gap-2 text-sm text-ink/60 hover:text-danger transition">
-          <ArrowRightStartOnRectangleIcon class="w-5 h-5" stroke-width="1.75" />
-        </button>
+        <div class="flex items-center gap-4">
+          <button
+            @click="previewStore"
+            class="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full transition"
+          >
+            <EyeIcon class="w-4 h-4" stroke-width="1.75" /> Lihat Tampilan Toko
+          </button>
+          <button @click="logout" class="flex items-center gap-2 text-sm text-ink/60 hover:text-danger transition">
+            <ArrowRightStartOnRectangleIcon class="w-5 h-5" stroke-width="1.75" />
+          </button>
+        </div>
       </header>
 
       <main class="p-6">
@@ -78,7 +86,7 @@ import SidebarGroup from '../components/shared/SidebarGroup.vue'
 import {
   Squares2X2Icon, UserCircleIcon, KeyIcon, MagnifyingGlassCircleIcon, DocumentTextIcon,
   ShieldCheckIcon, GlobeAltIcon, SignalIcon, ClipboardDocumentListIcon, CircleStackIcon,
-  Cog6ToothIcon, BellAlertIcon, BuildingStorefrontIcon, ArrowRightStartOnRectangleIcon,
+  Cog6ToothIcon, BellAlertIcon, BuildingStorefrontIcon, ArrowRightStartOnRectangleIcon, EyeIcon,
 } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
@@ -90,5 +98,10 @@ const pageTitle = computed(() => route.meta.title || 'Dashboard Superadmin')
 async function logout() {
   await auth.logout()
   router.push('/login')
+}
+
+function previewStore() {
+  auth.enablePreview()
+  router.push('/')
 }
 </script>

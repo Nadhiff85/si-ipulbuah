@@ -56,6 +56,12 @@
           <p class="text-xs text-ink/45 mt-0.5">Selamat datang kembali, {{ auth.user?.name }}</p>
         </div>
         <div class="flex items-center gap-4">
+          <button
+            @click="previewStore"
+            class="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full transition"
+          >
+            <EyeIcon class="w-4 h-4" stroke-width="1.75" /> Lihat Tampilan Toko
+          </button>
           <span
             class="text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5"
             :class="storeInfo.isOpenNow ? 'bg-success/15 text-success' : 'bg-danger/10 text-danger'"
@@ -90,7 +96,7 @@ import {
   Squares2X2Icon, ShoppingBagIcon, TagIcon, GiftIcon, ReceiptPercentIcon, MapPinIcon,
   ClipboardDocumentListIcon, CreditCardIcon, ClockIcon, UsersIcon, StarIcon,
   ChatBubbleLeftRightIcon, BellAlertIcon, ChartBarIcon, PhotoIcon, Cog6ToothIcon,
-  BellIcon, ArrowRightStartOnRectangleIcon,
+  BellIcon, ArrowRightStartOnRectangleIcon, EyeIcon,
 } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
@@ -103,6 +109,11 @@ const pageTitle = computed(() => route.meta.title || 'Dashboard Admin')
 async function logout() {
   await auth.logout()
   router.push('/login')
+}
+
+function previewStore() {
+  auth.enablePreview()
+  router.push('/')
 }
 
 onMounted(() => storeInfo.fetchStoreInfo())

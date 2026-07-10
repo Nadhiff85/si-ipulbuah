@@ -22,3 +22,26 @@ a, button {
   to { opacity: 1; transform: translateY(0); }
 }
 .fade-in { animation: fadeIn 0.3s ease-out; }
+
+/* Marquee latar belakang Hero - strip foto buah bergerak menyamping tanpa henti */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.animate-marquee-left {
+  animation: marquee-left 40s linear infinite;
+  width: fit-content;
+}
+.animate-marquee-right {
+  animation: marquee-right 45s linear infinite;
+  width: fit-content;
+}
+/* Jeda animasi saat pengguna hover, supaya nyaman kalau ingin memperhatikan foto */
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
+}

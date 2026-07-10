@@ -98,6 +98,21 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore()
 
+  // Akun Staff (Admin/Superadmin) yang sedang login tidak boleh mengakses
+  // halaman toko pelanggan (termasuk Beranda) - KECUALI sedang sengaja
+  // mengaktifkan Mode Pratinjau Toko (untuk cek hasil perubahan produk/konten).
+  if (auth.isLoggedIn && auth.isStaff && !auth.previewMode) {
+    const isStaffArea = to.path.startsWith('/admin') || to.path.startsWith('/superadmin')
+    if (!isStaffArea) {
+      return next(auth.user.role === 'superadmin' ? '/superadmin' : '/admin')
+    }
+  }
+
+  // Begitu staff masuk kembali ke area dashboard, otomatis matikan mode pratinjau
+  if (auth.isStaff && (to.path.startsWith('/admin') || to.path.startsWith('/superadmin'))) {
+    auth.disablePreview()
+  }
+
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return next({
       name: 'login',

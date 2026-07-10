@@ -58,7 +58,9 @@
           <input v-model="bank.no_rek" placeholder="No. Rekening" class="input" />
           <div class="flex gap-1">
             <input v-model="bank.atas_nama" placeholder="Atas Nama" class="input flex-1" />
-            <button type="button" @click="form.bank_accounts.splice(i, 1)" class="text-danger px-2">✕</button>
+            <button type="button" @click="form.bank_accounts.splice(i, 1)" class="text-danger px-2">
+              <XMarkIcon class="w-4 h-4" stroke-width="2" />
+            </button>
           </div>
         </div>
         <button @click="saveBankAccounts" :disabled="saving" class="bg-primary text-white px-5 py-2 rounded-full text-sm font-medium mt-2">
@@ -71,7 +73,7 @@
         <div class="flex items-center gap-4">
           <div class="w-32 h-32 rounded-lg border-2 border-dashed border-ink/20 flex items-center justify-center overflow-hidden">
             <img v-if="currentQris" :src="currentQris" class="w-full h-full object-cover" />
-            <span v-else class="text-3xl">📱</span>
+            <span v-else><DevicePhoneMobileIcon class="w-8 h-8 text-ink/25" stroke-width="1.5" /></span>
           </div>
           <div>
             <input type="file" accept="image/*" @change="onQrisSelected" class="text-sm mb-2" />
@@ -98,6 +100,7 @@
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
 import RichTextEditor from '../../components/admin/RichTextEditor.vue'
+import { XMarkIcon, DevicePhoneMobileIcon } from '@heroicons/vue/24/outline'
 
 const tab = ref('umum')
 const saving = ref(false)

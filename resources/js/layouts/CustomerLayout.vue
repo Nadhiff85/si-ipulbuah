@@ -1,5 +1,19 @@
 <template>
   <div class="min-h-screen flex flex-col bg-surface-soft">
+    <!-- Banner Mode Pratinjau - hanya tampil untuk staff yang sedang cek tampilan toko -->
+    <div v-if="auth.isStaff && auth.previewMode" class="bg-ink text-white text-sm px-4 py-2.5 flex items-center justify-between sticky top-0 z-50">
+      <span class="flex items-center gap-2">
+        <EyeIcon class="w-4 h-4" stroke-width="1.75" />
+        Mode Pratinjau — Anda sedang melihat tampilan seperti pelanggan
+      </span>
+      <button
+        @click="exitPreview"
+        class="flex items-center gap-1.5 bg-white/15 hover:bg-white/25 px-3 py-1 rounded-full text-xs font-medium transition"
+      >
+        <ArrowLeftIcon class="w-3.5 h-3.5" stroke-width="1.75" /> Kembali ke Dashboard
+      </button>
+    </div>
+
     <!-- ===== Header ===== -->
     <header class="bg-white sticky top-0 z-40 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
@@ -119,6 +133,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useStoreInfoStore } from '../stores/store'
+import { EyeIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -138,5 +153,10 @@ function goToProtected(path) {
       query: { redirect: path, reason: 'Masuk atau daftar dulu untuk melihat detail produk dan mulai belanja 🍊' },
     })
   }
+}
+
+function exitPreview() {
+  auth.disablePreview()
+  router.push(auth.user.role === 'superadmin' ? '/superadmin' : '/admin')
 }
 </script>

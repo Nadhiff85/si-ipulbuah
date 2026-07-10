@@ -10,7 +10,7 @@ class Product extends Model
         'category_id', 'name', 'slug', 'description', 'origin_region', 'origin_type',
         'unit', 'price_unit', 'price_wholesale', 'wholesale_min_qty', 'cost_price',
         'stock', 'min_stock_alert', 'freshness_days', 'stock_in_date', 'storage_tips',
-        'labels', 'is_seasonal', 'is_active', 'rating_avg', 'rating_count', 'sold_count',
+        'labels', 'is_seasonal', 'is_active', 'is_featured', 'rating_avg', 'rating_count', 'sold_count',
     ];
 
     protected $casts = [

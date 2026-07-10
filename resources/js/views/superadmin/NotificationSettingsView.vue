@@ -11,7 +11,7 @@
       </div>
 
       <div class="bg-primary/5 rounded-xl2 p-4 text-xs text-ink/60">
-        <p class="font-semibold mb-1">📧 Konfigurasi Email (SMTP)</p>
+        <p class="font-semibold mb-1 flex items-center gap-1.5"><EnvelopeIcon class="w-4 h-4" stroke-width="1.75" /> Konfigurasi Email (SMTP)</p>
         <p>Pengaturan SMTP (host, port, username, password) dikonfigurasi lewat file <code class="bg-white px-1 rounded">.env</code> di server untuk keamanan kredensial, bukan lewat panel ini.</p>
       </div>
 
@@ -39,6 +39,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { EnvelopeIcon } from '@heroicons/vue/24/outline'
 
 const saving = ref(false)
 const form = ref({ whatsapp_api_key: '' })

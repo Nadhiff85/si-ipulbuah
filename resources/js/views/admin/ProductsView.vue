@@ -26,7 +26,7 @@
             <td class="p-3">
               <div class="w-12 h-12 rounded-lg bg-primary/5 overflow-hidden flex items-center justify-center">
                 <img v-if="p.images?.[0]" :src="p.images[0].image_path" class="w-full h-full object-cover" />
-                <span v-else>🍎</span>
+                <span v-else><PhotoIcon class="w-5 h-5 text-ink/25" stroke-width="1.5" /></span>
               </div>
             </td>
             <td class="p-3 font-medium">{{ p.name }}</td>
@@ -35,6 +35,7 @@
             <td class="p-3" :class="p.stock <= p.min_stock_alert ? 'text-danger font-semibold' : ''">{{ p.stock }}</td>
             <td class="p-3">
               <span v-for="l in p.labels" :key="l" class="bg-badge/20 text-accent text-[10px] font-bold px-1.5 py-0.5 rounded mr-1">{{ l }}</span>
+              <span v-if="p.is_featured" class="bg-primary/15 text-primary text-[10px] font-bold px-1.5 py-0.5 rounded">Terlaris</span>
             </td>
             <td class="p-3">
               <span :class="p.is_active ? 'text-success' : 'text-danger'">● {{ p.is_active ? 'Aktif' : 'Nonaktif' }}</span>
@@ -149,6 +150,10 @@
             <input type="checkbox" v-model="form.is_active" /> Produk Aktif
           </label>
 
+          <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox" v-model="form.is_featured" /> Tampilkan di "Produk Terlaris" (Beranda Publik)
+          </label>
+
           <div class="flex justify-end gap-2 pt-3">
             <button type="button" @click="showModal = false" class="px-4 py-2 text-sm text-ink/60">Batal</button>
             <button type="submit" :disabled="saving" class="bg-primary text-white px-5 py-2 rounded-full text-sm font-medium">
@@ -165,6 +170,7 @@
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
 import ActionButton from '../../components/shared/ActionButton.vue'
+import { PhotoIcon } from '@heroicons/vue/24/outline'
 
 const products = ref([])
 const categories = ref([])
@@ -177,7 +183,7 @@ const emptyForm = () => ({
   id: null, category_id: '', name: '', origin_type: 'lokal', unit: 'kg', origin_region: '',
   price_unit: 0, price_wholesale: null, wholesale_min_qty: null,
   stock: 0, min_stock_alert: 5, freshness_days: null, storage_tips: '',
-  labels: [], is_active: true, stock_change_reason: '',
+  labels: [], is_active: true, is_featured: false, stock_change_reason: '',
 })
 const form = ref(emptyForm())
 

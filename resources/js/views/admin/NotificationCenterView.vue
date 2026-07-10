@@ -18,8 +18,9 @@
             <option v-for="c in customers" :key="c.id" :value="c.id">{{ c.name }}</option>
           </select>
         </div>
-        <p v-else class="text-xs text-ink/50 bg-warning/10 rounded-lg p-2">
-          ⚠️ Pesan akan dikirim ke <strong>SEMUA</strong> pelanggan terdaftar via WhatsApp & Email.
+        <p v-else class="text-xs text-ink/60 bg-warning/10 rounded-lg p-2 flex items-center gap-1.5">
+          <ExclamationTriangleIcon class="w-4 h-4 text-warning shrink-0" stroke-width="1.75" />
+          Pesan akan dikirim ke <strong>SEMUA</strong> pelanggan terdaftar via WhatsApp & Email.
         </p>
 
         <div>
@@ -57,6 +58,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 const form = ref({ target: 'single', user_id: '', message: '' })
 const search = ref('')

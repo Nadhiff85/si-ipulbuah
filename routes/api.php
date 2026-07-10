@@ -34,6 +34,8 @@ use App\Http\Controllers\Api\Superadmin\MonitoringController;
 use App\Http\Controllers\Api\Superadmin\RolePermissionController;
 use App\Http\Controllers\Api\Superadmin\SystemLogController;
 use App\Http\Controllers\Api\Superadmin\SystemSettingController;
+use App\Http\Controllers\Api\PublicCategoryController;
+use App\Http\Controllers\Api\PublicProductController;
 use App\Http\Controllers\Api\StoreSettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +52,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/store-settings', [StoreSettingsController::class, 'show']);
 Route::get('/faqs', [StoreSettingsController::class, 'faqs']);
+Route::get('/products/featured', [PublicProductController::class, 'featured']);
+Route::get('/categories/glimpse', [PublicCategoryController::class, 'index']);
 
 // ===================== TERAUTENTIKASI (semua role) =====================
 Route::middleware(['auth:sanctum', 'session.timeout'])->group(function () {

@@ -1,9 +1,31 @@
 <template>
   <div>
     <!-- ===== Hero Banner ===== -->
-    <section class="bg-gradient-to-br from-primary/10 via-surface-soft to-accent/10">
-      <div class="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8 items-center">
-        <div>
+    <section class="relative overflow-hidden bg-surface-soft">
+      <span class="absolute top-5 right-5 z-20 bg-accent text-white text-xs font-bold px-4 py-2 rounded-full shadow">
+        Gratis Ongkir*
+      </span>
+
+      <!-- Background marquee: strip foto buah bergerak memanjang, jadi latar di belakang teks -->
+      <div class="absolute inset-0 flex flex-col justify-center gap-5 py-4">
+        <div class="flex whitespace-nowrap animate-marquee-left">
+          <div v-for="n in 2" :key="`row1-${n}`" class="flex gap-6 pr-6 shrink-0">
+            <FruitThumb v-for="fruit in fruitList" :key="`${n}-${fruit.file}`" :fruit="fruit" />
+          </div>
+        </div>
+        <div class="flex whitespace-nowrap animate-marquee-right">
+          <div v-for="n in 2" :key="`row2-${n}`" class="flex gap-6 pr-6 shrink-0">
+            <FruitThumb v-for="fruit in fruitListReversed" :key="`${n}-${fruit.file}`" :fruit="fruit" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay gradasi supaya teks tetap terbaca jelas di atas marquee -->
+      <div class="absolute inset-0 bg-gradient-to-r from-surface-soft via-surface-soft/92 to-surface-soft/55"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-surface-soft/40 via-transparent to-surface-soft/40"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-4 py-16 md:py-20">
+        <div class="max-w-xl">
           <span class="inline-block bg-badge/20 text-accent font-semibold px-3 py-1 rounded-full text-xs mb-4">
             100% SEGAR
           </span>
@@ -15,74 +37,88 @@
             Kabupaten Sigi & Kabupaten Donggala.
           </p>
           <div class="flex flex-wrap gap-3 mb-6">
-            <span class="trust-badge">✅ 100% Segar</span>
-            <span class="trust-badge">🚚 Pengiriman Cepat</span>
-            <span class="trust-badge">🔒 Bayar Aman (QRIS)</span>
-            <span class="trust-badge">🏅 Garansi Kualitas</span>
+            <span class="trust-badge"><CheckCircleIcon class="w-3.5 h-3.5" stroke-width="2" /> 100% Segar</span>
+            <span class="trust-badge"><TruckIcon class="w-3.5 h-3.5" stroke-width="2" /> Pengiriman Cepat</span>
+            <span class="trust-badge"><LockClosedIcon class="w-3.5 h-3.5" stroke-width="2" /> Bayar Aman (QRIS)</span>
+            <span class="trust-badge"><ShieldCheckIcon class="w-3.5 h-3.5" stroke-width="2" /> Garansi Kualitas</span>
           </div>
           <div class="flex gap-3">
             <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-semibold px-6 py-3 rounded-full transition">
               Mulai Belanja
             </button>
-            <button @click="goLogin('/parsel-kustom')" class="bg-white border border-primary text-primary font-semibold px-6 py-3 rounded-full hover:bg-primary/5 transition">
-              🎁 Buat Parsel Kustom
+            <button @click="goLogin('/parsel-kustom')" class="bg-white border border-primary text-primary font-semibold px-6 py-3 rounded-full hover:bg-primary/5 transition inline-flex items-center gap-2">
+              <GiftIcon class="w-5 h-5" stroke-width="1.75" /> Buat Parsel Kustom
             </button>
           </div>
-        </div>
-        <div class="relative">
-          <div class="aspect-square rounded-xl2 bg-white shadow-lg flex items-center justify-center text-8xl">
-            🧺🍊🍇🍎
-          </div>
-          <span class="absolute -top-3 -right-3 bg-accent text-white text-xs font-bold px-4 py-2 rounded-full shadow">
-            Gratis Ongkir*
-          </span>
         </div>
       </div>
     </section>
 
-    <!-- ===== Kategori Sekilas ===== -->
+    <!-- ===== Kategori (data asli dari database) ===== -->
     <section class="max-w-7xl mx-auto px-4 py-10">
       <h2 class="text-xl font-bold text-ink mb-5">Jelajahi Kategori</h2>
-      <div class="grid grid-cols-3 sm:grid-cols-6 gap-4">
+
+      <div v-if="loadingCategories" class="grid grid-cols-3 sm:grid-cols-6 gap-4">
+        <div v-for="i in 6" :key="i" class="flex flex-col items-center gap-2 animate-pulse">
+          <div class="w-16 h-16 rounded-full bg-ink/10"></div>
+          <div class="h-3 w-12 bg-ink/10 rounded"></div>
+        </div>
+      </div>
+
+      <p v-else-if="categories.length === 0" class="text-ink/40 text-sm">Belum ada kategori tersedia.</p>
+
+      <div v-else class="grid grid-cols-3 sm:grid-cols-6 gap-4">
         <button
-          v-for="cat in categoriesGlimpse"
-          :key="cat.name"
+          v-for="cat in categories"
+          :key="cat.id"
           @click="goLogin('/katalog')"
           class="flex flex-col items-center gap-2 group"
         >
-          <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-3xl group-hover:bg-primary/20 transition">
-            {{ cat.icon }}
+          <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition">
+            <img v-if="cat.image" :src="cat.image" :alt="cat.name" class="w-full h-full object-cover" />
+            <TagIcon v-else class="w-6 h-6 text-primary" stroke-width="1.5" />
           </div>
           <span class="text-xs text-ink/70">{{ cat.name }}</span>
         </button>
       </div>
     </section>
 
-    <!-- ===== Cuplikan Produk Terlaris (terkunci, ajak login) ===== -->
+    <!-- ===== Produk Terlaris (data asli, dikurasi Admin/Superadmin via is_featured) ===== -->
     <section class="max-w-7xl mx-auto px-4 py-10">
       <div class="flex items-center justify-between mb-5">
         <h2 class="text-xl font-bold text-ink">Produk Terlaris</h2>
         <button @click="goLogin('/katalog')" class="text-primary text-sm font-medium hover:underline">Lihat Semua →</button>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div v-if="loadingFeatured" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+        <div v-for="i in 6" :key="i" class="bg-white rounded-xl2 overflow-hidden animate-pulse">
+          <div class="aspect-square bg-ink/10"></div>
+          <div class="p-3 space-y-2">
+            <div class="h-3 bg-ink/10 rounded w-3/4"></div>
+            <div class="h-3 bg-ink/10 rounded w-1/2"></div>
+          </div>
+        </div>
+      </div>
+
+      <p v-else-if="featuredProducts.length === 0" class="text-ink/40 text-sm">Belum ada produk terlaris yang dikurasi.</p>
+
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
         <button
-          v-for="p in teaserProducts"
-          :key="p.name"
-          @click="goLogin('/katalog')"
-          class="text-left bg-white rounded-xl2 shadow-sm hover:shadow-md transition overflow-hidden"
+          v-for="p in featuredProducts"
+          :key="p.id"
+          @click="goLogin(`/produk/${p.slug}`)"
+          class="text-left bg-white rounded-xl2 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden"
         >
-          <div class="aspect-square bg-primary/5 flex items-center justify-center text-5xl relative">
-            {{ p.emoji }}
-            <span v-if="p.label" class="absolute top-2 left-2 bg-badge text-ink text-[10px] font-bold px-2 py-0.5 rounded-full">
-              {{ p.label }}
+          <div class="aspect-square bg-primary/5 flex items-center justify-center relative overflow-hidden">
+            <img v-if="p.images?.[0]?.image_path" :src="p.images[0].image_path" :alt="p.name" class="w-full h-full object-cover" />
+            <PhotoIcon v-else class="w-8 h-8 text-ink/20" stroke-width="1.5" />
+            <span v-if="p.labels?.[0]" class="absolute top-2 left-2 bg-badge text-ink text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+              {{ labelText(p.labels[0]) }}
             </span>
           </div>
           <div class="p-3">
             <p class="font-medium text-sm text-ink truncate">{{ p.name }}</p>
-            <p class="text-xs text-accent font-semibold mt-1 flex items-center gap-1">
-              🔒 Masuk untuk lihat harga
-            </p>
+            <p class="text-accent font-bold text-sm mt-1">Rp {{ formatPrice(p.price_unit) }}<span class="text-ink/40 font-normal">/{{ p.unit }}</span></p>
           </div>
         </button>
       </div>
@@ -98,7 +134,7 @@
           <p class="font-bold text-lg mb-1">Buat Parsel Kustom</p>
           <p class="text-white/80 text-sm">Rangkai sendiri hampers buah sesuai keinginanmu</p>
         </div>
-        <span class="text-3xl">🎁</span>
+        <span><GiftIcon class="w-9 h-9" stroke-width="1.5" /></span>
       </button>
       <button
         @click="goLogin('/musiman')"
@@ -108,7 +144,7 @@
           <p class="font-bold text-lg mb-1">Buah Musiman</p>
           <p class="text-white/80 text-sm">Segar, enak & sedang musim sekarang!</p>
         </div>
-        <span class="text-3xl">🥭</span>
+        <span><SunIcon class="w-9 h-9" stroke-width="1.5" /></span>
       </button>
     </section>
 
@@ -131,8 +167,8 @@
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
           <div class="absolute inset-0 bg-ink/0 group-hover:bg-ink/10 transition flex items-center justify-center">
-            <span class="opacity-0 group-hover:opacity-100 transition bg-white px-4 py-2 rounded-full font-semibold text-primary shadow">
-              🗺️ Buka di Google Maps
+            <span class="opacity-0 group-hover:opacity-100 transition bg-white px-4 py-2 rounded-full font-semibold text-primary shadow inline-flex items-center gap-1.5">
+              <MapIcon class="w-4 h-4" stroke-width="1.75" /> Buka di Google Maps
             </span>
           </div>
         </a>
@@ -161,16 +197,16 @@
           <a
             :href="storeInfo.googleMapsUrl"
             target="_blank"
-            class="block text-center bg-primary text-white text-sm font-semibold py-2.5 rounded-full hover:bg-primary-dark transition"
+            class="flex items-center justify-center gap-1.5 text-center bg-primary text-white text-sm font-semibold py-2.5 rounded-full hover:bg-primary-dark transition"
           >
-            📍 Lihat Rute
+            <MapPinIcon class="w-4 h-4" stroke-width="1.75" /> Lihat Rute
           </a>
           <a
             :href="storeInfo.whatsappUrl"
             target="_blank"
-            class="block text-center border border-success text-success text-sm font-semibold py-2.5 rounded-full hover:bg-success/10 transition"
+            class="flex items-center justify-center gap-1.5 text-center border border-success text-success text-sm font-semibold py-2.5 rounded-full hover:bg-success/10 transition"
           >
-            💬 Hubungi via WhatsApp
+            <ChatBubbleLeftRightIcon class="w-4 h-4" stroke-width="1.75" /> Hubungi via WhatsApp
           </a>
         </div>
       </div>
@@ -195,16 +231,41 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import { useStoreInfoStore } from '../../stores/store'
+import FruitThumb from '../../components/shared/FruitThumb.vue'
+import api from '../../services/api'
+import {
+  PhotoIcon, TagIcon, GiftIcon, SunIcon, CheckCircleIcon, TruckIcon,
+  LockClosedIcon, ShieldCheckIcon, MapIcon, MapPinIcon, ChatBubbleLeftRightIcon,
+} from '@heroicons/vue/24/outline'
+
+// Daftar foto untuk marquee latar belakang Hero.
+// Taruh file foto Anda di folder: public/images/marquee/ dengan nama file persis seperti di bawah.
+// Kalau file belum ada, otomatis ditampilkan emoji sebagai pengganti sementara (tidak akan error/rusak).
+const fruitList = [
+  { name: 'Jeruk', file: 'jeruk.jpg', emoji: '🍊' },
+  { name: 'Anggur', file: 'anggur.jpg', emoji: '🍇' },
+  { name: 'Apel', file: 'apel.jpg', emoji: '🍎' },
+  { name: 'Mangga', file: 'mangga.jpg', emoji: '🥭' },
+  { name: 'Buah Naga', file: 'naga.jpg', emoji: '🐉' },
+  { name: 'Melon', file: 'melon.jpg', emoji: '🍈' },
+  { name: 'Nanas', file: 'nanas.jpg', emoji: '🍍' },
+  { name: 'Stroberi', file: 'stroberi.jpg', emoji: '🍓' },
+]
+const fruitListReversed = [...fruitList].reverse()
 
 const router = useRouter()
 const auth = useAuthStore()
 const storeInfo = useStoreInfoStore()
 
-onMounted(() => storeInfo.fetchStoreInfo())
+onMounted(() => {
+  storeInfo.fetchStoreInfo()
+  fetchFeaturedProducts()
+  fetchCategories()
+})
 
 // Semua interaksi produk di beranda publik -> arahkan ke login jika belum masuk
 function goLogin(path) {
@@ -219,27 +280,45 @@ function goLogin(path) {
 }
 
 // Data sekilas (dummy) untuk tampilan beranda publik saja - bukan data transaksional
-const categoriesGlimpse = [
-  { name: 'Buah Lokal', icon: '🍌' },
-  { name: 'Buah Impor', icon: '🍎' },
-  { name: 'Musiman', icon: '🥭' },
-  { name: 'Paket Buah', icon: '🧺' },
-  { name: 'Hampers', icon: '🎁' },
-  { name: 'Best Seller', icon: '⭐' },
-]
+// Kategori diambil dari API publik (data asli dari Manajemen Kategori Admin)
+const categories = ref([])
+const loadingCategories = ref(true)
 
-const teaserProducts = [
-  { name: 'Jeruk Medan', emoji: '🍊', label: 'Best Seller' },
-  { name: 'Anggur Red Globe', emoji: '🍇', label: null },
-  { name: 'Durian Montong', emoji: '🥥', label: 'Musiman' },
-  { name: 'Mangga Harum Manis', emoji: '🥭', label: null },
-  { name: 'Apel Fuji', emoji: '🍎', label: null },
-  { name: 'Paket Hemat Family', emoji: '🧺', label: 'Promo' },
-]
+async function fetchCategories() {
+  loadingCategories.value = true
+  try {
+    const { data } = await api.get('/categories/glimpse')
+    categories.value = data.categories
+  } finally {
+    loadingCategories.value = false
+  }
+}
+
+// Produk Terlaris diambil dari API publik, dikurasi Admin/Superadmin lewat toggle is_featured
+const featuredProducts = ref([])
+const loadingFeatured = ref(true)
+
+async function fetchFeaturedProducts() {
+  loadingFeatured.value = true
+  try {
+    const { data } = await api.get('/products/featured')
+    featuredProducts.value = data.products
+  } finally {
+    loadingFeatured.value = false
+  }
+}
+
+function labelText(label) {
+  return { segar: 'Segar', best_seller: 'Best Seller', musiman: 'Musiman', promo: 'Promo' }[label] || label
+}
+
+function formatPrice(v) {
+  return new Intl.NumberFormat('id-ID').format(v)
+}
 </script>
 
 <style scoped>
 .trust-badge {
-  @apply bg-white text-ink/70 text-xs font-medium px-3 py-1.5 rounded-full border border-ink/10;
+  @apply bg-white text-ink/70 text-xs font-medium px-3 py-1.5 rounded-full border border-ink/10 inline-flex items-center gap-1.5;
 }
 </style>
