@@ -1,19 +1,5 @@
 <template>
   <div class="min-h-screen flex flex-col bg-surface-soft">
-    <!-- Banner Mode Pratinjau - hanya tampil untuk staff yang sedang cek tampilan toko -->
-    <div v-if="auth.isStaff && auth.previewMode" class="bg-ink text-white text-sm px-4 py-2.5 flex items-center justify-between sticky top-0 z-50">
-      <span class="flex items-center gap-2">
-        <EyeIcon class="w-4 h-4" stroke-width="1.75" />
-        Mode Pratinjau — Anda sedang melihat tampilan seperti pelanggan
-      </span>
-      <button
-        @click="exitPreview"
-        class="flex items-center gap-1.5 bg-white/15 hover:bg-white/25 px-3 py-1 rounded-full text-xs font-medium transition"
-      >
-        <ArrowLeftIcon class="w-3.5 h-3.5" stroke-width="1.75" /> Kembali ke Dashboard
-      </button>
-    </div>
-
     <!-- ===== Header ===== -->
     <header class="bg-white sticky top-0 z-40 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
@@ -105,7 +91,11 @@
         <div>
           <p class="font-semibold mb-3">Butuh Bantuan?</p>
           <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 bg-success/20 text-success px-3 py-2 rounded-lg hover:bg-success/30">
-            💬 Chat WhatsApp
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 shrink-0">
+              <circle cx="16" cy="16" r="16" fill="#25D366"></circle>
+              <path fill="#FFFFFF" d="M23.47 8.52A9.8 9.8 0 0 0 16.06 5.5c-5.42 0-9.83 4.4-9.84 9.82a9.8 9.8 0 0 0 1.31 4.92L6.1 26.5l6.4-1.68a9.85 9.85 0 0 0 4.7 1.2h.01c5.42 0 9.83-4.4 9.84-9.82a9.76 9.76 0 0 0-2.88-6.92zm-7.41 15.1h-.01a8.17 8.17 0 0 1-4.17-1.14l-.3-.18-3.1.81.83-3.02-.2-.31a8.17 8.17 0 0 1-1.26-4.36c0-4.52 3.68-8.19 8.2-8.19a8.15 8.15 0 0 1 5.8 2.4a8.14 8.14 0 0 1 2.4 5.8c0 4.52-3.68 8.19-8.2 8.19zm4.49-6.14c-.25-.12-1.45-.72-1.68-.8s-.39-.12-.56.13c-.16.24-.64.8-.79.97s-.29.19-.54.06a6.7 6.7 0 0 1-1.97-1.22a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5c.11-.11.25-.29.37-.44c.12-.14.16-.25.24-.41c.08-.17.04-.31-.02-.44s-.56-1.35-.76-1.85c-.2-.48-.41-.42-.56-.42h-.48a.9.9 0 0 0-.66.31a2.75 2.75 0 0 0-.86 2.04c0 1.2.87 2.37 1 2.53c.12.17 1.71 2.62 4.15 3.67c.58.25 1.03.4 1.38.51c.58.19 1.11.16 1.53.1c.47-.07 1.45-.59 1.65-1.16s.2-1.06.14-1.16s-.23-.16-.48-.28z"></path>
+            </svg>
+            Chat WhatsApp
           </a>
         </div>
       </div>
@@ -120,10 +110,13 @@
     <a
       :href="storeInfo.whatsappUrl"
       target="_blank"
-      class="fixed bottom-5 right-5 z-50 bg-success text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-lg hover:scale-105 transition"
+      class="fixed bottom-5 right-5 z-50 w-14 h-14 flex items-center justify-center hover:scale-105 transition drop-shadow-lg"
       title="Chat via WhatsApp"
     >
-      💬
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-14 h-14">
+        <circle cx="16" cy="16" r="16" fill="#25D366"></circle>
+        <path fill="#FFFFFF" d="M23.47 8.52A9.8 9.8 0 0 0 16.06 5.5c-5.42 0-9.83 4.4-9.84 9.82a9.8 9.8 0 0 0 1.31 4.92L6.1 26.5l6.4-1.68a9.85 9.85 0 0 0 4.7 1.2h.01c5.42 0 9.83-4.4 9.84-9.82a9.76 9.76 0 0 0-2.88-6.92zm-7.41 15.1h-.01a8.17 8.17 0 0 1-4.17-1.14l-.3-.18-3.1.81.83-3.02-.2-.31a8.17 8.17 0 0 1-1.26-4.36c0-4.52 3.68-8.19 8.2-8.19a8.15 8.15 0 0 1 5.8 2.4a8.14 8.14 0 0 1 2.4 5.8c0 4.52-3.68 8.19-8.2 8.19zm4.49-6.14c-.25-.12-1.45-.72-1.68-.8s-.39-.12-.56.13c-.16.24-.64.8-.79.97s-.29.19-.54.06a6.7 6.7 0 0 1-1.97-1.22a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5c.11-.11.25-.29.37-.44c.12-.14.16-.25.24-.41c.08-.17.04-.31-.02-.44s-.56-1.35-.76-1.85c-.2-.48-.41-.42-.56-.42h-.48a.9.9 0 0 0-.66.31a2.75 2.75 0 0 0-.86 2.04c0 1.2.87 2.37 1 2.53c.12.17 1.71 2.62 4.15 3.67c.58.25 1.03.4 1.38.51c.58.19 1.11.16 1.53.1c.47-.07 1.45-.59 1.65-1.16s.2-1.06.14-1.16s-.23-.16-.48-.28z"></path>
+      </svg>
     </a>
   </div>
 </template>
@@ -133,7 +126,6 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useStoreInfoStore } from '../stores/store'
-import { EyeIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -153,10 +145,5 @@ function goToProtected(path) {
       query: { redirect: path, reason: 'Masuk atau daftar dulu untuk melihat detail produk dan mulai belanja 🍊' },
     })
   }
-}
-
-function exitPreview() {
-  auth.disablePreview()
-  router.push(auth.user.role === 'superadmin' ? '/superadmin' : '/admin')
 }
 </script>
