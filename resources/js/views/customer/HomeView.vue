@@ -30,7 +30,7 @@
             100% SEGAR
           </span>
           <h1 class="text-3xl md:text-4xl font-extrabold text-ink leading-tight mb-4">
-            Buah Segar Pilihan, Langsung dari Petani Lokal
+            Buah Segar Pilihan,<br>Langsung dari Petani Lokal
           </h1>
           <p class="text-ink/60 mb-6">
             Kualitas terbaik untuk keluarga sehat dan bahagia. Melayani Kota Palu,
@@ -319,6 +319,20 @@ function formatPrice(v) {
 
 <style scoped>
 .trust-badge {
-  @apply bg-white text-ink/70 text-xs font-medium px-3 py-1.5 rounded-full border border-ink/10 inline-flex items-center gap-1.5;
+  background-color: #FFFFFF;
+  color: rgba(44, 44, 44, 0.7);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: rgba(44, 44, 44, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
 }
 </style>
