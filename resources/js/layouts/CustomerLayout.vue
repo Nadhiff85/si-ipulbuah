@@ -95,10 +95,7 @@
         <div>
           <p class="font-semibold mb-3">Butuh Bantuan?</p>
           <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 bg-success/20 text-success px-3 py-2 rounded-lg hover:bg-success/30">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-5 h-5 shrink-0">
-              <circle cx="16" cy="16" r="16" fill="#25D366"></circle>
-              <path fill="#FFFFFF" d="M23.47 8.52A9.8 9.8 0 0 0 16.06 5.5c-5.42 0-9.83 4.4-9.84 9.82a9.8 9.8 0 0 0 1.31 4.92L6.1 26.5l6.4-1.68a9.85 9.85 0 0 0 4.7 1.2h.01c5.42 0 9.83-4.4 9.84-9.82a9.76 9.76 0 0 0-2.88-6.92zm-7.41 15.1h-.01a8.17 8.17 0 0 1-4.17-1.14l-.3-.18-3.1.81.83-3.02-.2-.31a8.17 8.17 0 0 1-1.26-4.36c0-4.52 3.68-8.19 8.2-8.19a8.15 8.15 0 0 1 5.8 2.4a8.14 8.14 0 0 1 2.4 5.8c0 4.52-3.68 8.19-8.2 8.19zm4.49-6.14c-.25-.12-1.45-.72-1.68-.8s-.39-.12-.56.13c-.16.24-.64.8-.79.97s-.29.19-.54.06a6.7 6.7 0 0 1-1.97-1.22a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5c.11-.11.25-.29.37-.44c.12-.14.16-.25.24-.41c.08-.17.04-.31-.02-.44s-.56-1.35-.76-1.85c-.2-.48-.41-.42-.56-.42h-.48a.9.9 0 0 0-.66.31a2.75 2.75 0 0 0-.86 2.04c0 1.2.87 2.37 1 2.53c.12.17 1.71 2.62 4.15 3.67c.58.25 1.03.4 1.38.51c.58.19 1.11.16 1.53.1c.47-.07 1.45-.59 1.65-1.16s.2-1.06.14-1.16s-.23-.16-.48-.28z"></path>
-            </svg>
+            <WhatsAppIcon />
             Chat WhatsApp
           </a>
         </div>
@@ -117,10 +114,7 @@
       class="fixed bottom-5 right-5 z-50 w-14 h-14 flex items-center justify-center hover:scale-105 transition drop-shadow-lg"
       title="Chat via WhatsApp"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="w-14 h-14">
-        <circle cx="16" cy="16" r="16" fill="#25D366"></circle>
-        <path fill="#FFFFFF" d="M23.47 8.52A9.8 9.8 0 0 0 16.06 5.5c-5.42 0-9.83 4.4-9.84 9.82a9.8 9.8 0 0 0 1.31 4.92L6.1 26.5l6.4-1.68a9.85 9.85 0 0 0 4.7 1.2h.01c5.42 0 9.83-4.4 9.84-9.82a9.76 9.76 0 0 0-2.88-6.92zm-7.41 15.1h-.01a8.17 8.17 0 0 1-4.17-1.14l-.3-.18-3.1.81.83-3.02-.2-.31a8.17 8.17 0 0 1-1.26-4.36c0-4.52 3.68-8.19 8.2-8.19a8.15 8.15 0 0 1 5.8 2.4a8.14 8.14 0 0 1 2.4 5.8c0 4.52-3.68 8.19-8.2 8.19zm4.49-6.14c-.25-.12-1.45-.72-1.68-.8s-.39-.12-.56.13c-.16.24-.64.8-.79.97s-.29.19-.54.06a6.7 6.7 0 0 1-1.97-1.22a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5c.11-.11.25-.29.37-.44c.12-.14.16-.25.24-.41c.08-.17.04-.31-.02-.44s-.56-1.35-.76-1.85c-.2-.48-.41-.42-.56-.42h-.48a.9.9 0 0 0-.66.31a2.75 2.75 0 0 0-.86 2.04c0 1.2.87 2.37 1 2.53c.12.17 1.71 2.62 4.15 3.67c.58.25 1.03.4 1.38.51c.58.19 1.11.16 1.53.1c.47-.07 1.45-.59 1.65-1.16s.2-1.06.14-1.16s-.23-.16-.48-.28z"></path>
-      </svg>
+      <WhatsAppIcon size="w-14 h-14" />
     </a>
   </div>
 </template>
@@ -130,6 +124,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useStoreInfoStore } from '../stores/store'
+import WhatsAppIcon from '../components/shared/WhatsAppIcon.vue'
 
 const router = useRouter()
 const auth = useAuthStore()

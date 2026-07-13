@@ -206,7 +206,7 @@
             target="_blank"
             class="flex items-center justify-center gap-1.5 text-center border border-success text-success text-sm font-semibold py-2.5 rounded-full hover:bg-success/10 transition"
           >
-            <ChatBubbleLeftRightIcon class="w-4 h-4" stroke-width="1.75" /> Hubungi via WhatsApp
+            <WhatsAppIcon class="w-4 h-4" /> Hubungi via WhatsApp
           </a>
         </div>
       </div>
@@ -236,10 +236,11 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import { useStoreInfoStore } from '../../stores/store'
 import FruitThumb from '../../components/shared/FruitThumb.vue'
+import WhatsAppIcon from '../../components/shared/WhatsAppIcon.vue'
 import api from '../../services/api'
 import {
   PhotoIcon, TagIcon, GiftIcon, SunIcon, CheckCircleIcon, TruckIcon,
-  LockClosedIcon, ShieldCheckIcon, MapIcon, MapPinIcon, ChatBubbleLeftRightIcon,
+  LockClosedIcon, ShieldCheckIcon, MapIcon, MapPinIcon,
 } from '@heroicons/vue/24/outline'
 
 // Daftar foto untuk marquee latar belakang Hero.

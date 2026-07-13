@@ -16,7 +16,10 @@
 
     <div class="mt-8 bg-primary/5 rounded-xl2 p-5 text-center">
       <p class="text-sm text-ink/70 mb-2">Masih ada pertanyaan lain?</p>
-      <a :href="storeInfo.whatsappUrl" target="_blank" class="text-success font-medium hover:underline">💬 Chat via WhatsApp</a>
+      <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 text-success font-medium hover:underline">
+        <WhatsAppIcon />
+        Chat via WhatsApp
+      </a>
     </div>
   </div>
 </template>
@@ -25,6 +28,7 @@
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
 import { useStoreInfoStore } from '../../stores/store'
+import WhatsAppIcon from '../../components/shared/WhatsAppIcon.vue'
 
 const storeInfo = useStoreInfoStore()
 const faqs = ref([])
