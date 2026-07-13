@@ -7,7 +7,7 @@
         "laravel/framework": "^13.0",
         "laravel/sanctum": "*",
         "spatie/laravel-permission": "*",
-        "intervention/image": "*",
+        "intervention/image": "^3.9|^4.0",
         "barryvdh/laravel-dompdf": "*",
         "maatwebsite/excel": "*"
     },

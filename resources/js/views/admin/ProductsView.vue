@@ -154,6 +154,8 @@
             <input type="checkbox" v-model="form.is_featured" /> Tampilkan di "Produk Terlaris" (Beranda Publik)
           </label>
 
+          <p v-if="errorMessage" class="text-danger text-sm bg-danger/10 rounded-lg px-3 py-2">{{ errorMessage }}</p>
+
           <div class="flex justify-end gap-2 pt-3">
             <button type="button" @click="showModal = false" class="px-4 py-2 text-sm text-ink/60">Batal</button>
             <button type="submit" :disabled="saving" class="bg-primary text-white px-5 py-2 rounded-full text-sm font-medium">
@@ -213,8 +215,11 @@ function onFileChange(e) {
   files.value = Array.from(e.target.files)
 }
 
+const errorMessage = ref('')
+
 async function saveProduct() {
   saving.value = true
+  errorMessage.value = ''
   try {
     const payload = new FormData()
     Object.entries(form.value).forEach(([key, val]) => {
@@ -235,6 +240,14 @@ async function saveProduct() {
 
     showModal.value = false
     fetchProducts()
+  } catch (err) {
+    if (err.response?.status === 422) {
+      const errors = err.response.data.errors || {}
+      errorMessage.value = Object.values(errors).flat().join(' ') || 'Data tidak valid, periksa kembali isian form.'
+    } else {
+      errorMessage.value = err.response?.data?.message || 'Gagal menyimpan produk. Coba lagi.'
+    }
+    console.error('Gagal menyimpan produk:', err.response?.data || err)
   } finally {
     saving.value = false
   }

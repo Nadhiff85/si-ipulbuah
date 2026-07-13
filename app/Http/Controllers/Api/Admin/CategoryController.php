@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Intervention\Image\Laravel\Facades\Image;
 
 class CategoryController extends Controller
 {
+    public function __construct(private ImageUploadService $imageUpload) {}
+
     // Manajemen Kategori (fitur B.3) - termasuk upload foto/ikon kategori
     public function index()
     {
@@ -63,11 +65,11 @@ class CategoryController extends Controller
     {
         $filename = 'categories/' . uniqid() . '.webp';
 
-        Image::read($request->file('image_file'))
-            ->scaleDown(width: 400)
-            ->toWebp(quality: 80)
-            ->save(storage_path('app/public/' . $filename));
-
-        return '/storage/' . $filename;
+        return $this->imageUpload->saveAsWebp(
+            $request->file('image_file'),
+            $filename,
+            maxWidth: 400,
+            quality: 80
+        );
     }
 }

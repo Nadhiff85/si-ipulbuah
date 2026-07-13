@@ -8,14 +8,17 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\StockLog;
 use App\Models\Wishlist;
+use App\Services\ImageUploadService;
 use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Intervention\Image\Laravel\Facades\Image;
 
 class ProductController extends Controller
 {
-    public function __construct(private WhatsAppService $whatsapp) {}
+    public function __construct(
+        private WhatsAppService $whatsapp,
+        private ImageUploadService $imageUpload,
+    ) {}
 
     // Manajemen Produk (fitur B.2): CRUD lengkap + multi-foto + varian + label
     public function index(Request $request)
@@ -54,15 +57,24 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        // Log perubahan stok (fitur B.14) jika stok berubah
-        if ($stockBefore !== $product->stock) {
+        // Log perubahan stok (fitur B.14) jika stok BENAR-BENAR berubah.
+        // Cast ke int dulu sebelum dibandingkan, karena $stockBefore datang dari
+        // database (integer asli), sedangkan $product->stock setelah update()
+        // berasal dari input form (selalu string), jadi "10" vs 10 bisa keliru
+        // dianggap berubah kalau dibandingkan pakai !== tanpa cast.
+        if ((int) $stockBefore !== (int) $product->stock) {
             StockLog::create([
                 'product_id' => $product->id,
                 'user_id' => $request->user()->id,
                 'stock_before' => $stockBefore,
                 'stock_after' => $product->stock,
-                'change' => $product->stock - $stockBefore,
-                'reason' => $request->input('stock_change_reason', 'Penyesuaian oleh Admin'),
+                'change' => (int) $product->stock - (int) $stockBefore,
+                // Tidak pakai default parameter di input() karena field kosong
+                // otomatis dikonversi jadi null oleh middleware Laravel, dan
+                // default di input() cuma jalan kalau key-nya tidak ada sama
+                // sekali, bukan kalau ada tapi bernilai null. Pakai fallback
+                // manual di sini supaya kolom NOT NULL di database tetap aman.
+                'reason' => $request->input('stock_change_reason') ?: 'Penyesuaian oleh Admin',
             ]);
 
             // Notifikasi Stok (fitur A.12): beritahu pelanggan yang menunggu jika produk kembali tersedia
@@ -131,15 +143,11 @@ class ProductController extends Controller
 
         foreach ($request->file('images') as $index => $file) {
             $filename = 'products/' . uniqid() . '.webp';
-
-            Image::read($file)
-                ->scaleDown(width: 1000)
-                ->toWebp(quality: 80)
-                ->save(storage_path('app/public/' . $filename));
+            $path = $this->imageUpload->saveAsWebp($file, $filename, maxWidth: 1000, quality: 80);
 
             ProductImage::create([
                 'product_id' => $product->id,
-                'image_path' => '/storage/' . $filename,
+                'image_path' => $path,
                 'is_primary' => $index === 0,
                 'sort_order' => $index,
             ]);
