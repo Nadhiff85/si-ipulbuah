@@ -6,23 +6,15 @@
         Gratis Ongkir*
       </span>
 
-      <!-- Background marquee: strip foto buah bergerak memanjang, jadi latar di belakang teks -->
-      <div class="absolute inset-0 flex flex-col justify-center gap-5 py-4">
-        <div class="flex whitespace-nowrap animate-marquee-left">
-          <div v-for="n in 2" :key="`row1-${n}`" class="flex gap-6 pr-6 shrink-0">
-            <FruitThumb v-for="fruit in fruitList" :key="`${n}-${fruit.file}`" :fruit="fruit" />
-          </div>
-        </div>
-        <div class="flex whitespace-nowrap animate-marquee-right">
-          <div v-for="n in 2" :key="`row2-${n}`" class="flex gap-6 pr-6 shrink-0">
-            <FruitThumb v-for="fruit in fruitListReversed" :key="`${n}-${fruit.file}`" :fruit="fruit" />
-          </div>
-        </div>
-      </div>
+      <!-- Background 1 foto saja - lebih sederhana & gampang dipastikan tampil.
+           Taruh foto Anda di: public/images/hero-bg.jpeg (nama file harus persis ini) -->
+      <div
+        class="absolute inset-0 bg-cover bg-center"
+        :style="{ backgroundImage: `url(/images/hero-bg.jpeg)` }"
+      ></div>
 
-      <!-- Overlay gradasi supaya teks tetap terbaca jelas di atas marquee -->
-      <div class="absolute inset-0 bg-gradient-to-r from-surface-soft via-surface-soft/92 to-surface-soft/55"></div>
-      <div class="absolute inset-0 bg-gradient-to-b from-surface-soft/40 via-transparent to-surface-soft/40"></div>
+      <!-- Overlay gradasi HANYA di sisi kiri (area teks) supaya foto di kanan tetap jelas terlihat -->
+      <div class="absolute inset-0 bg-gradient-to-r from-surface-soft via-surface-soft/85 to-transparent"></div>
 
       <div class="relative z-10 max-w-7xl mx-auto px-4 py-16 md:py-20">
         <div class="max-w-xl">
@@ -30,7 +22,8 @@
             100% SEGAR
           </span>
           <h1 class="text-3xl md:text-4xl font-extrabold text-ink leading-tight mb-4">
-            Buah Segar Pilihan,<br>Langsung dari Petani Lokal
+            <span class="text-primary">Buah Segar Pilihan</span><br />
+            Langsung dari Petani Lokal
           </h1>
           <p class="text-ink/60 mb-6">
             Kualitas terbaik untuk keluarga sehat dan bahagia. Melayani Kota Palu,
@@ -206,7 +199,7 @@
             target="_blank"
             class="flex items-center justify-center gap-1.5 text-center border border-success text-success text-sm font-semibold py-2.5 rounded-full hover:bg-success/10 transition"
           >
-            <WhatsAppIcon class="w-4 h-4" /> Hubungi via WhatsApp
+            <ChatBubbleLeftRightIcon class="w-4 h-4" stroke-width="1.75" /> Hubungi via WhatsApp
           </a>
         </div>
       </div>
@@ -235,28 +228,12 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import { useStoreInfoStore } from '../../stores/store'
-import FruitThumb from '../../components/shared/FruitThumb.vue'
-import WhatsAppIcon from '../../components/shared/WhatsAppIcon.vue'
 import api from '../../services/api'
 import {
   PhotoIcon, TagIcon, GiftIcon, SunIcon, CheckCircleIcon, TruckIcon,
-  LockClosedIcon, ShieldCheckIcon, MapIcon, MapPinIcon,
+  LockClosedIcon, ShieldCheckIcon, MapIcon, MapPinIcon, ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline'
 
-// Daftar foto untuk marquee latar belakang Hero.
-// Taruh file foto Anda di folder: public/images/marquee/ dengan nama file persis seperti di bawah.
-// Kalau file belum ada, otomatis ditampilkan emoji sebagai pengganti sementara (tidak akan error/rusak).
-const fruitList = [
-  { name: 'Jeruk', file: 'jeruk.jpg', emoji: '🍊' },
-  { name: 'Anggur', file: 'anggur.jpg', emoji: '🍇' },
-  { name: 'Apel', file: 'apel.jpg', emoji: '🍎' },
-  { name: 'Mangga', file: 'mangga.jpg', emoji: '🥭' },
-  { name: 'Buah Naga', file: 'naga.jpg', emoji: '🐉' },
-  { name: 'Melon', file: 'melon.jpg', emoji: '🍈' },
-  { name: 'Nanas', file: 'nanas.jpg', emoji: '🍍' },
-  { name: 'Stroberi', file: 'stroberi.jpg', emoji: '🍓' },
-]
-const fruitListReversed = [...fruitList].reverse()
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -320,20 +297,6 @@ function formatPrice(v) {
 
 <style scoped>
 .trust-badge {
-  background-color: #FFFFFF;
-  color: rgba(44, 44, 44, 0.7);
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 500;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
-  border-radius: 9999px;
-  border-width: 1px;
-  border-color: rgba(44, 44, 44, 0.1);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
+  @apply bg-white text-ink/70 text-xs font-medium px-3 py-1.5 rounded-full border border-ink/10 inline-flex items-center gap-1.5;
 }
 </style>
