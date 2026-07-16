@@ -45,3 +45,10 @@ a, button {
 .animate-marquee-right:hover {
   animation-play-state: paused;
 }
+
+/* Efek fade halus di kedua ujung kiri-kanan marquee Hero, supaya transisinya
+   terlihat "menghilang" alami, bukan terpotong tegas di pinggir layar */
+.hero-marquee-mask {
+  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+}

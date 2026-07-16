@@ -6,24 +6,36 @@
         Gratis Ongkir*
       </span>
 
-      <!-- Background 1 foto saja - lebih sederhana & gampang dipastikan tampil.
-           Taruh foto Anda di: public/images/hero-bg.jpeg (nama file harus persis ini) -->
-      <div
-        class="absolute inset-0 bg-cover bg-center"
-        :style="{ backgroundImage: `url(/images/hero-bg.jpeg)` }"
-      ></div>
+      <!-- Background marquee: 3 foto buah bergerak halus, jadi latar di belakang teks.
+           Taruh foto Anda di public/images/marquee/ dengan nama PERSIS: Jeruk.jpeg, Anggur.jpeg, Apel.jpeg -->
+      <div class="hero-marquee-mask absolute inset-0 flex flex-col justify-center gap-6 py-6">
+        <div class="flex whitespace-nowrap animate-marquee-left">
+          <div v-for="n in 4" :key="`row1-${n}`" class="flex gap-6 pr-6 shrink-0">
+            <div v-for="fruit in heroFruits" :key="`${n}-${fruit}`" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden shrink-0 shadow-sm">
+              <img :src="`/images/marquee/${fruit}`" class="w-full h-full object-cover" loading="lazy" />
+            </div>
+          </div>
+        </div>
+        <div class="flex whitespace-nowrap animate-marquee-right">
+          <div v-for="n in 4" :key="`row2-${n}`" class="flex gap-6 pr-6 shrink-0">
+            <div v-for="fruit in heroFruitsReversed" :key="`${n}-${fruit}`" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden shrink-0 shadow-sm">
+              <img :src="`/images/marquee/${fruit}`" class="w-full h-full object-cover" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <!-- Overlay gradasi HANYA di sisi kiri (area teks) supaya foto di kanan tetap jelas terlihat -->
-      <div class="absolute inset-0 bg-gradient-to-r from-surface-soft via-surface-soft/85 to-transparent"></div>
+      <!-- Overlay gradasi supaya teks tetap terbaca jelas di atas marquee -->
+      <div class="absolute inset-0 bg-gradient-to-r from-surface-soft via-surface-soft/90 to-surface-soft/60"></div>
 
       <div class="relative z-10 max-w-7xl mx-auto px-4 py-16 md:py-20">
         <div class="max-w-xl">
           <span class="inline-block bg-badge/20 text-accent font-semibold px-3 py-1 rounded-full text-xs mb-4">
             100% SEGAR
           </span>
-          <h1 class="text-3xl md:text-4xl font-extrabold text-ink leading-tight mb-4">
+          <h1 class="text-3xl md:text-4xl font-extrabold leading-tight mb-4">
             <span class="text-primary">Buah Segar Pilihan</span><br />
-            Langsung dari Petani Lokal
+            <span class="text-ink">Langsung dari Petani Lokal</span>
           </h1>
           <p class="text-ink/60 mb-6">
             Kualitas terbaik untuk keluarga sehat dan bahagia. Melayani Kota Palu,
@@ -35,8 +47,8 @@
             <span class="trust-badge"><LockClosedIcon class="w-3.5 h-3.5" stroke-width="2" /> Bayar Aman (QRIS)</span>
             <span class="trust-badge"><ShieldCheckIcon class="w-3.5 h-3.5" stroke-width="2" /> Garansi Kualitas</span>
           </div>
-          <div class="flex gap-3">
-            <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-semibold px-6 py-3 rounded-full transition">
+          <div class="flex flex-wrap gap-3">
+            <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-semibold px-6 py-3 rounded-full transition shadow-sm">
               Mulai Belanja
             </button>
             <button @click="goLogin('/parsel-kustom')" class="bg-white border border-primary text-primary font-semibold px-6 py-3 rounded-full hover:bg-primary/5 transition inline-flex items-center gap-2">
@@ -234,6 +246,10 @@ import {
   LockClosedIcon, ShieldCheckIcon, MapIcon, MapPinIcon, ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline'
 
+// 3 foto untuk marquee latar belakang Hero.
+// Nama file HARUS PERSIS dengan yang ada di folder public/images/marquee/
+const heroFruits = ['Jeruk.jpeg', 'Anggur.jpeg', 'Apel.jpeg']
+const heroFruitsReversed = [...heroFruits].reverse()
 
 const router = useRouter()
 const auth = useAuthStore()
