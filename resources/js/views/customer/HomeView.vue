@@ -1,13 +1,12 @@
 <template>
   <div>
-    <!-- ===== Hero Banner ===== -->
+    <!-- ===== Hero Banner (TEKS MAKIN BESAR & MEGAH) ===== -->
     <section class="relative overflow-hidden bg-surface-soft">
       <span class="absolute top-5 right-5 z-20 bg-accent text-white text-xs font-bold px-4 py-2 rounded-full shadow">
         Gratis Ongkir*
       </span>
 
-      <!-- Background marquee: 3 foto buah bergerak halus, jadi latar di belakang teks.
-           Taruh foto Anda di public/images/marquee/ dengan nama PERSIS: Jeruk.jpeg, Anggur.jpeg, Apel.jpeg -->
+      <!-- Background marquee -->
       <div class="hero-marquee-mask absolute inset-0 flex flex-col justify-center gap-6 py-6">
         <div class="flex whitespace-nowrap animate-marquee-left">
           <div v-for="n in 4" :key="`row1-${n}`" class="flex gap-6 pr-6 shrink-0">
@@ -25,41 +24,49 @@
         </div>
       </div>
 
-      <!-- Overlay gradasi supaya teks tetap terbaca jelas di atas marquee -->
+      <!-- Overlay gradasi -->
       <div class="absolute inset-0 bg-gradient-to-r from-surface-soft via-surface-soft/90 to-surface-soft/60"></div>
 
-      <div class="relative z-10 max-w-7xl mx-auto px-4 py-16 md:py-20">
-        <div class="max-w-xl">
-          <span class="inline-block bg-badge/20 text-accent font-semibold px-3 py-1 rounded-full text-xs mb-4">
+      <!-- Konten Teks Banner Utama yang Diperbesar Ekstra -->
+      <div class="relative z-10 max-w-7xl mx-auto px-4 py-24 md:py-28">
+        <div class="max-w-3xl"> <!-- Diperlebar agar menampung teks raksasa -->
+          <span class="inline-block bg-badge/20 text-accent font-black px-4 py-2 rounded-full text-xs mb-5 uppercase tracking-widest">
             100% SEGAR
           </span>
-          <h1 class="text-3xl md:text-4xl font-extrabold leading-tight mb-4">
+          
+          <!-- Judul Utama Raksasa (text-5xl / md:text-6xl) -->
+          <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6 tracking-tight">
             <span class="text-primary">Buah Segar Pilihan</span><br />
             <span class="text-ink">Langsung dari Petani Lokal</span>
           </h1>
-          <p class="text-ink/60 mb-6">
+          
+          <!-- Deskripsi Sub-judul (text-lg / md:text-xl) -->
+          <p class="text-ink/80 text-lg md:text-xl mb-10 leading-relaxed font-medium">
             Kualitas terbaik untuk keluarga sehat dan bahagia. Melayani Kota Palu,
             Kabupaten Sigi & Kabupaten Donggala.
           </p>
-          <div class="flex flex-wrap gap-3 mb-6">
-            <span class="trust-badge"><CheckCircleIcon class="w-3.5 h-3.5" stroke-width="2" /> 100% Segar</span>
-            <span class="trust-badge"><TruckIcon class="w-3.5 h-3.5" stroke-width="2" /> Pengiriman Cepat</span>
-            <span class="trust-badge"><LockClosedIcon class="w-3.5 h-3.5" stroke-width="2" /> Bayar Aman (QRIS)</span>
-            <span class="trust-badge"><ShieldCheckIcon class="w-3.5 h-3.5" stroke-width="2" /> Garansi Kualitas</span>
+          
+          <div class="flex flex-wrap gap-3 mb-10">
+            <span class="trust-badge text-sm"><CheckCircleIcon class="w-5 h-5" stroke-width="2" /> 100% Segar</span>
+            <span class="trust-badge text-sm"><TruckIcon class="w-5 h-5" stroke-width="2" /> Pengiriman Cepat</span>
+            <span class="trust-badge text-sm"><LockClosedIcon class="w-5 h-5" stroke-width="2" /> Bayar Aman (QRIS)</span>
+            <span class="trust-badge text-sm"><ShieldCheckIcon class="w-5 h-5" stroke-width="2" /> Garansi Kualitas</span>
           </div>
-          <div class="flex flex-wrap gap-3">
-            <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-semibold px-6 py-3 rounded-full transition shadow-sm">
+          
+          <!-- Tombol Aksi yang Proporsional -->
+          <div class="flex flex-wrap gap-4">
+            <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-extrabold text-base md:text-lg px-10 py-4 rounded-full transition shadow-lg hover:-translate-y-0.5 active:translate-y-0">
               Mulai Belanja
             </button>
-            <button @click="goLogin('/parsel-kustom')" class="bg-white border border-primary text-primary font-semibold px-6 py-3 rounded-full hover:bg-primary/5 transition inline-flex items-center gap-2">
-              <GiftIcon class="w-5 h-5" stroke-width="1.75" /> Buat Parsel Kustom
+            <button @click="goLogin('/parsel-kustom')" class="bg-white border-2 border-primary text-primary font-extrabold text-base md:text-lg px-10 py-4 rounded-full hover:bg-primary/5 transition inline-flex items-center gap-2 shadow-md hover:-translate-y-0.5 active:translate-y-0">
+              <GiftIcon class="w-5 h-5" stroke-width="2.5" /> Buat Parsel Kustom
             </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== Kategori (data asli dari database) ===== -->
+    <!-- ===== Kategori ===== -->
     <section class="max-w-7xl mx-auto px-4 py-10">
       <h2 class="text-xl font-bold text-ink mb-5">Jelajahi Kategori</h2>
 
@@ -88,7 +95,7 @@
       </div>
     </section>
 
-    <!-- ===== Produk Terlaris (data asli, dikurasi Admin/Superadmin via is_featured) ===== -->
+    <!-- ===== Produk Terlaris ===== -->
     <section class="max-w-7xl mx-auto px-4 py-10">
       <div class="flex items-center justify-between mb-5">
         <h2 class="text-xl font-bold text-ink">Produk Terlaris</h2>
@@ -159,7 +166,6 @@
       <p class="text-ink/60 text-sm mb-5">Peta interaktif - bisa digeser & di-zoom langsung</p>
 
       <div class="grid md:grid-cols-3 gap-5">
-        <!-- Peta Interaktif (langsung tampil, bisa digeser & zoom) -->
         <div class="md:col-span-2">
           <div class="rounded-xl2 overflow-hidden shadow-sm border border-ink/5">
             <iframe
@@ -170,7 +176,6 @@
             ></iframe>
           </div>
 
-          <!-- Kartu info lokasi singkat, di bawah peta -->
           <div class="mt-3 bg-white rounded-xl2 border border-ink/5 p-3 flex items-center justify-between gap-3">
             <div class="min-w-0">
               <p class="font-semibold text-sm text-ink truncate">{{ storeInfo.storeName }}</p>
@@ -197,7 +202,6 @@
           </div>
         </div>
 
-        <!-- Info Toko -->
         <div class="bg-white rounded-xl2 shadow-sm border border-ink/5 p-5 space-y-4">
           <div>
             <p class="text-xs text-ink/50 mb-1">Status Toko</p>
@@ -265,8 +269,6 @@ import {
   LockClosedIcon, ShieldCheckIcon, MapPinIcon, ChatBubbleLeftRightIcon, ArrowTopRightOnSquareIcon,
 } from '@heroicons/vue/24/outline'
 
-// 3 foto untuk marquee latar belakang Hero.
-// Nama file HARUS PERSIS dengan yang ada di folder public/images/marquee/
 const heroFruits = ['Jeruk.jpeg', 'Anggur.jpeg', 'Apel.jpeg']
 const heroFruitsReversed = [...heroFruits].reverse()
 
@@ -280,7 +282,7 @@ onMounted(() => {
   fetchCategories()
 })
 
-// Semua interaksi produk di beranda publik -> arahkan ke login jika belum masuk
+// Fungsi login check
 function goLogin(path) {
   if (auth.isLoggedIn) {
     router.push(path)
@@ -292,8 +294,6 @@ function goLogin(path) {
   }
 }
 
-// Data sekilas (dummy) untuk tampilan beranda publik saja - bukan data transaksional
-// Kategori diambil dari API publik (data asli dari Manajemen Kategori Admin)
 const categories = ref([])
 const loadingCategories = ref(true)
 
@@ -307,7 +307,6 @@ async function fetchCategories() {
   }
 }
 
-// Produk Terlaris diambil dari API publik, dikurasi Admin/Superadmin lewat toggle is_featured
 const featuredProducts = ref([])
 const loadingFeatured = ref(true)
 
@@ -332,6 +331,6 @@ function formatPrice(v) {
 
 <style scoped>
 .trust-badge {
-  @apply bg-white text-ink/70 text-xs font-medium px-3 py-1.5 rounded-full border border-ink/10 inline-flex items-center gap-1.5;
+  @apply bg-white text-ink/70 font-semibold px-4 py-2 rounded-full border border-ink/10 inline-flex items-center gap-1.5 shadow-sm;
 }
 </style>

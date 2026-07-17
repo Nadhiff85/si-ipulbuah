@@ -14,60 +14,53 @@
       </button>
     </div>
 
-    <!-- ===== Header ===== -->
-    <header class="bg-white sticky top-0 z-40 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
+    <!-- ===== Header / Navbar (Satu Baris & Huruf Navigasi Ekstra Besar) ===== -->
+    <header class="bg-white sticky top-0 z-40 shadow-sm border-b border-ink/5">
+      <div class="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
+        
+        <!-- Bagian Kiri: Logo -->
         <router-link to="/" class="flex items-center gap-2 shrink-0">
           <img src="/logo.png" alt="IPUL BUAH" class="h-11 w-11 object-contain" />
           <div class="leading-tight">
-            <p class="font-extrabold text-primary text-lg -mb-1">IPUL BUAH</p>
-            <p class="text-[11px] text-ink/60">Segar setiap hari</p>
+            <p class="font-black text-primary text-xl -mb-0.5">IPUL BUAH</p>
+            <p class="text-xs text-ink/60">Segar setiap hari</p>
           </div>
         </router-link>
 
-        <div class="flex-1 hidden md:block">
-          <button
-            @click="goToProtected('/katalog')"
-            class="w-full text-left px-4 py-2.5 rounded-full border border-ink/10 text-ink/40 hover:border-primary/40 transition"
-          >
-            🔍 Cari buah favoritmu...
-          </button>
-        </div>
+        <!-- Bagian Tengah: Menu Utama Navigasi (HURUF JAUH LEBIH BESAR & TEBAL) -->
+        <nav class="hidden md:flex flex-1 justify-center items-center gap-10 text-lg lg:text-xl font-bold">
+          <router-link to="/" class="text-ink hover:text-primary transition-colors">Beranda</router-link>
+          <button @click="goToProtected('/katalog')" class="text-ink/70 hover:text-primary transition-colors">Katalog</button>
+          <button @click="goToProtected('/paket-buah')" class="text-ink/70 hover:text-primary transition-colors">Paket & Hampers</button>
+        </nav>
 
-        <nav class="flex items-center gap-4 text-sm">
-          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center gap-1 text-ink/70 hover:text-primary">
+        <!-- Bagian Kanan: Menu Pengguna / Akun (Ikut Diperbesar Menjadi text-base) -->
+        <div class="flex items-center gap-6 text-base font-semibold shrink-0">
+          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center gap-1 text-ink/70 hover:text-primary transition-colors">
             ❤ Wishlist
           </button>
-          <button @click="goToProtected('/keranjang')" class="flex items-center gap-1 text-ink/70 hover:text-primary">
+          <button @click="goToProtected('/keranjang')" class="flex items-center gap-1 text-ink/70 hover:text-primary transition-colors">
             🛒 Keranjang
           </button>
 
           <template v-if="auth.isLoggedIn">
-            <router-link to="/akun" class="font-medium text-ink hover:text-primary">Halo, {{ auth.user?.name?.split(' ')[0] }}</router-link>
-          </template>
-          <template v-else>
-            <router-link to="/login" class="text-ink/70 hover:text-primary">Masuk</router-link>
-            <router-link
-              to="/register"
-              class="bg-primary text-white px-4 py-2 rounded-full font-medium hover:bg-primary-dark transition"
-            >
-              Daftar
+            <router-link to="/akun" class="font-bold text-ink hover:text-primary transition-colors">
+              Halo, {{ auth.user?.name?.split(' ')[0] }}
             </router-link>
           </template>
-        </nav>
-      </div>
-
-      <div class="border-t border-ink/5">
-        <div class="max-w-7xl mx-auto px-4 flex gap-6 text-sm py-2 overflow-x-auto">
-          <router-link to="/" class="whitespace-nowrap font-medium text-primary">Beranda</router-link>
-          <button @click="goToProtected('/katalog')" class="whitespace-nowrap text-ink/70 hover:text-primary">Katalog</button>
-          <button @click="goToProtected('/paket-buah')" class="whitespace-nowrap text-ink/70 hover:text-primary">Paket & Hampers</button>
-          <button @click="goToProtected('/promo')" class="whitespace-nowrap text-ink/70 hover:text-primary">Promo</button>
-          <button @click="goToProtected('/musiman')" class="whitespace-nowrap text-ink/70 hover:text-primary">Musiman</button>
-          <router-link to="/tentang-kami" class="whitespace-nowrap text-ink/70 hover:text-primary">Tentang Kami</router-link>
-          <router-link to="/faq" class="whitespace-nowrap text-ink/70 hover:text-primary">FAQ & Bantuan</router-link>
-          <router-link to="/kontak" class="whitespace-nowrap text-ink/70 hover:text-primary">Kontak</router-link>
+          <template v-else>
+            <div class="flex items-center gap-4">
+              <router-link to="/login" class="text-ink/70 hover:text-primary transition-colors">Masuk</router-link>
+              <router-link
+                to="/register"
+                class="bg-primary text-white px-5 py-2 rounded-full font-bold hover:bg-primary-dark transition-all"
+              >
+                Daftar
+              </router-link>
+            </div>
+          </template>
         </div>
+
       </div>
     </header>
 
@@ -103,8 +96,17 @@
         </div>
 
         <div>
-          <p class="font-semibold mb-3">Butuh Bantuan?</p>
-          <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 bg-success/20 text-success px-3 py-2 rounded-lg hover:bg-success/30">
+          <p class="font-semibold mb-3">Layanan & Informasi</p>
+          <ul class="space-y-2 mb-4 text-white/70">
+            <li><button @click="goToProtected('/promo')" class="hover:text-badge transition-colors text-left w-full">Promo</button></li>
+            <li><button @click="goToProtected('/musiman')" class="hover:text-badge transition-colors text-left w-full">Musiman</button></li>
+            <li><router-link to="/tentang-kami" class="hover:text-badge transition-colors block">Tentang Kami</router-link></li>
+            <li><router-link to="/faq" class="hover:text-badge transition-colors block">FAQ & Bantuan</router-link></li>
+            <li><router-link to="/kontak" class="hover:text-badge transition-colors block">Kontak</router-link></li>
+          </ul>
+          
+          <p class="font-semibold mb-2">Butuh Bantuan?</p>
+          <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 bg-success/20 text-success px-3 py-2 rounded-lg hover:bg-success/30 transition-all">
             💬 Chat WhatsApp
           </a>
         </div>
@@ -143,7 +145,6 @@ onMounted(() => {
   storeInfo.fetchStoreInfo()
 })
 
-// Fitur/menu yang butuh login akan diarahkan ke halaman Login dengan pesan alasan
 function goToProtected(path) {
   if (auth.isLoggedIn) {
     router.push(path)
