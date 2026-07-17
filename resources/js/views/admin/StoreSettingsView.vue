@@ -22,6 +22,15 @@
         <label class="label">Alamat</label>
         <textarea v-model="form.address" rows="2" class="input"></textarea>
       </div>
+
+      <div>
+        <label class="label">Link Google Maps Lokasi Toko</label>
+        <input v-model="form.google_maps_link" type="url" placeholder="https://maps.app.goo.gl/..." class="input" />
+        <p class="text-xs text-ink/40 mt-1">
+          Buka Google Maps, cari lokasi toko, klik "Bagikan" → copy link-nya, tempel di sini.
+        </p>
+      </div>
+
       <div>
         <label class="label">No. WhatsApp Bisnis</label>
         <input v-model="form.whatsapp_number" class="input" />
@@ -109,7 +118,8 @@ const qrisFile = ref(null)
 const currentQris = ref(null)
 
 const form = ref({
-  store_name: 'IPUL BUAH', tagline: '', about_content: '', address: '', whatsapp_number: '',
+  store_name: 'IPUL BUAH', tagline: '', about_content: '', address: '',
+  google_maps_link: 'https://maps.app.goo.gl/Ux62N1vWpbXwpd8y7', whatsapp_number: '',
   operating_hours: { buka: '08:00', tutup: '17:00' }, min_order_delivery: 50000,
   bank_accounts: [],
 })

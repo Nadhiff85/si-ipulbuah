@@ -64,10 +64,21 @@ async function save() {
   fetchHampers()
 }
 
+const deletingId = ref(null)
+
 async function remove(h) {
+  if (deletingId.value) return
   if (!confirm(`Hapus paket "${h.name}"?`)) return
-  await api.delete(`/admin/hampers/${h.id}`)
-  fetchHampers()
+
+  deletingId.value = h.id
+  try {
+    await api.delete(`/admin/hampers/${h.id}`)
+    fetchHampers()
+  } catch (err) {
+    alert(err.response?.data?.message || 'Gagal menghapus paket.')
+  } finally {
+    deletingId.value = null
+  }
 }
 
 function formatPrice(v) { return new Intl.NumberFormat('id-ID').format(v) }

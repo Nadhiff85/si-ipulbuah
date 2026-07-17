@@ -11,6 +11,7 @@ export const useStoreInfoStore = defineStore('storeInfo', {
     tagline: 'Segar Setiap Hari, Sehat untuk Keluarga',
     aboutContent: '',
     address: 'Jl. Kemiri No. 47, Siranindi, Kec. Palu Barat, Kota Palu, Sulawesi Tengah, 94111',
+    googleMapsLink: 'https://maps.app.goo.gl/Ux62N1vWpbXwpd8y7',
     whatsappNumber: '6281200000000',
     bankAccounts: [],
     qrisImage: null,

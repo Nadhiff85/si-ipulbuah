@@ -253,10 +253,21 @@ async function saveProduct() {
   }
 }
 
+const deletingId = ref(null)
+
 async function remove(p) {
+  if (deletingId.value) return // cegah klik dobel saat masih proses
   if (!confirm(`Hapus produk "${p.name}"?`)) return
-  await api.delete(`/admin/products/${p.id}`)
-  fetchProducts()
+
+  deletingId.value = p.id
+  try {
+    await api.delete(`/admin/products/${p.id}`)
+    fetchProducts()
+  } catch (err) {
+    alert(err.response?.data?.message || 'Gagal menghapus produk.')
+  } finally {
+    deletingId.value = null
+  }
 }
 
 function formatPrice(v) {

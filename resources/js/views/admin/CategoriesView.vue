@@ -126,10 +126,22 @@ async function save() {
   fetchCategories()
 }
 
+const deletingId = ref(null)
+
 async function remove(c) {
+  if (deletingId.value) return // cegah klik dobel saat masih proses
   if (!confirm(`Hapus kategori "${c.name}"?`)) return
-  await api.delete(`/admin/categories/${c.id}`)
-  fetchCategories()
+
+  deletingId.value = c.id
+  try {
+    await api.delete(`/admin/categories/${c.id}`)
+    fetchCategories()
+  } catch (err) {
+    const msg = err.response?.data?.message || 'Gagal menghapus kategori.'
+    alert(msg)
+  } finally {
+    deletingId.value = null
+  }
 }
 
 onMounted(fetchCategories)

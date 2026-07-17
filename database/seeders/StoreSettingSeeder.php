@@ -19,6 +19,7 @@ class StoreSettingSeeder extends Seeder
             'whatsapp_number' => '6281200000000',
             'operating_hours' => ['buka' => '08:00', 'tutup' => '17:00'],
             'min_order_delivery' => 50000,
+            'google_maps_link' => 'https://maps.app.goo.gl/Ux62N1vWpbXwpd8y7',
         ]);
 
         SystemSetting::firstOrCreate([], [

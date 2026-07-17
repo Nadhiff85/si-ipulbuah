@@ -8,7 +8,7 @@ class StoreSetting extends Model
 {
     protected $fillable = [
         'store_name', 'tagline', 'about_content', 'logo', 'address', 'latitude', 'longitude',
-        'whatsapp_number', 'bank_accounts', 'qris_image', 'operating_hours',
+        'google_maps_link', 'whatsapp_number', 'bank_accounts', 'qris_image', 'operating_hours',
         'min_order_delivery', 'smtp_config', 'whatsapp_api_key',
     ];
 

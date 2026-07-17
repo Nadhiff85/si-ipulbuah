@@ -1,5 +1,19 @@
 <template>
   <div class="min-h-screen flex flex-col bg-surface-soft">
+    <!-- Banner Mode Pratinjau - hanya tampil untuk staff yang sedang cek tampilan toko -->
+    <div v-if="auth.isStaff && auth.previewMode" class="bg-ink text-white text-sm px-4 py-2.5 flex items-center justify-between sticky top-0 z-50">
+      <span class="flex items-center gap-2">
+        <EyeIcon class="w-4 h-4" stroke-width="1.75" />
+        Mode Pratinjau — Anda sedang melihat tampilan seperti pelanggan
+      </span>
+      <button
+        @click="exitPreview"
+        class="flex items-center gap-1.5 bg-white/15 hover:bg-white/25 px-3 py-1 rounded-full text-xs font-medium transition"
+      >
+        <ArrowLeftIcon class="w-3.5 h-3.5" stroke-width="1.75" /> Kembali ke Dashboard
+      </button>
+    </div>
+
     <!-- ===== Header ===== -->
     <header class="bg-white sticky top-0 z-40 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
@@ -76,12 +90,8 @@
         <div>
           <p class="font-semibold mb-3">Lokasi Toko</p>
           <p class="text-white/70 leading-relaxed">{{ storeInfo.address }}</p>
-          <a :href="storeInfo.googleMapsUrl" target="_blank" class="inline-flex items-center gap-1 mt-2 text-badge hover:underline">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4 shrink-0" fill="currentColor">
-              <path d="M16 10c0-2.21-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4s4-1.79 4-4m-6 0c0-1.1.9-2 2-2s2 .9 2 2s-.9 2-2 2s-2-.9-2-2"></path>
-              <path d="M11.42 21.81c.17.12.38.19.58.19s.41-.06.58-.19c.3-.22 7.45-5.37 7.42-11.82c0-4.41-3.59-8-8-8s-8 3.59-8 8c-.03 6.44 7.12 11.6 7.42 11.82M12 4c3.31 0 6 2.69 6 6c.02 4.44-4.39 8.43-6 9.74c-1.61-1.31-6.02-5.29-6-9.74c0-3.31 2.69-6 6-6"></path>
-            </svg>
-            Lihat di Google Maps
+          <a :href="storeInfo.googleMapsLink" target="_blank" class="inline-block mt-2 text-badge hover:underline">
+            📍 Lihat di Google Maps
           </a>
         </div>
 
@@ -95,8 +105,7 @@
         <div>
           <p class="font-semibold mb-3">Butuh Bantuan?</p>
           <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 bg-success/20 text-success px-3 py-2 rounded-lg hover:bg-success/30">
-            <WhatsAppIcon />
-            Chat WhatsApp
+            💬 Chat WhatsApp
           </a>
         </div>
       </div>
@@ -111,10 +120,10 @@
     <a
       :href="storeInfo.whatsappUrl"
       target="_blank"
-      class="fixed bottom-5 right-5 z-50 w-14 h-14 flex items-center justify-center hover:scale-105 transition drop-shadow-lg"
+      class="fixed bottom-5 right-5 z-50 bg-success text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-lg hover:scale-105 transition"
       title="Chat via WhatsApp"
     >
-      <WhatsAppIcon size="w-14 h-14" />
+      💬
     </a>
   </div>
 </template>
@@ -124,7 +133,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useStoreInfoStore } from '../stores/store'
-import WhatsAppIcon from '../components/shared/WhatsAppIcon.vue'
+import { EyeIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -144,5 +153,10 @@ function goToProtected(path) {
       query: { redirect: path, reason: 'Masuk atau daftar dulu untuk melihat detail produk dan mulai belanja 🍊' },
     })
   }
+}
+
+function exitPreview() {
+  auth.disablePreview()
+  router.push(auth.user.role === 'superadmin' ? '/superadmin' : '/admin')
 }
 </script>

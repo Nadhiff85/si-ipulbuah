@@ -85,10 +85,21 @@ async function save() {
   fetchPromotions()
 }
 
+const deletingId = ref(null)
+
 async function remove(p) {
+  if (deletingId.value) return
   if (!confirm(`Hapus promo "${p.name}"?`)) return
-  await api.delete(`/admin/promotions/${p.id}`)
-  fetchPromotions()
+
+  deletingId.value = p.id
+  try {
+    await api.delete(`/admin/promotions/${p.id}`)
+    fetchPromotions()
+  } catch (err) {
+    alert(err.response?.data?.message || 'Gagal menghapus promo.')
+  } finally {
+    deletingId.value = null
+  }
 }
 
 function formatPrice(v) { return new Intl.NumberFormat('id-ID').format(v) }

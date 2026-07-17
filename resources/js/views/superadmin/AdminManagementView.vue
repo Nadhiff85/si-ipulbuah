@@ -97,10 +97,21 @@ async function resetPassword(a) {
   tempPassword.value = data.temporary_password
 }
 
+const deletingId = ref(null)
+
 async function remove(a) {
+  if (deletingId.value) return
   if (!confirm(`Hapus akun admin "${a.name}"?`)) return
-  await api.delete(`/superadmin/admins/${a.id}`)
-  fetchAdmins()
+
+  deletingId.value = a.id
+  try {
+    await api.delete(`/superadmin/admins/${a.id}`)
+    fetchAdmins()
+  } catch (err) {
+    alert(err.response?.data?.message || 'Gagal menghapus akun admin.')
+  } finally {
+    deletingId.value = null
+  }
 }
 
 onMounted(fetchAdmins)

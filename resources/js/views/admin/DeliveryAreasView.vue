@@ -89,10 +89,21 @@ async function toggle(r) {
   fetchRegions()
 }
 
+const deletingId = ref(null)
+
 async function remove(r) {
+  if (deletingId.value) return
   if (!confirm(`Hapus wilayah "${r.district}"?`)) return
-  await api.delete(`/admin/delivery-areas/${r.id}`)
-  fetchRegions()
+
+  deletingId.value = r.id
+  try {
+    await api.delete(`/admin/delivery-areas/${r.id}`)
+    fetchRegions()
+  } catch (err) {
+    alert(err.response?.data?.message || 'Gagal menghapus wilayah.')
+  } finally {
+    deletingId.value = null
+  }
 }
 
 function formatPrice(v) {

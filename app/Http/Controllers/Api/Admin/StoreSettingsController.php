@@ -23,6 +23,7 @@ class StoreSettingsController extends Controller
             'address' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'google_maps_link' => 'nullable|url',
             'whatsapp_number' => 'nullable|string|max:20',
             'whatsapp_api_key' => 'nullable|string',
             'bank_accounts' => 'nullable|array',

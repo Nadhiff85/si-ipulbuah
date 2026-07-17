@@ -156,27 +156,46 @@
     <!-- ===== Lokasi Toko ===== -->
     <section class="max-w-7xl mx-auto px-4 py-12">
       <h2 class="text-xl font-bold text-ink mb-1">Lokasi Toko Kami</h2>
-      <p class="text-ink/60 text-sm mb-5">Klik peta untuk membuka rute lengkap di Google Maps</p>
+      <p class="text-ink/60 text-sm mb-5">Peta interaktif - bisa digeser & di-zoom langsung</p>
 
       <div class="grid md:grid-cols-3 gap-5">
-        <!-- Peta -->
-        <a
-          :href="storeInfo.googleMapsUrl"
-          target="_blank"
-          class="md:col-span-2 block rounded-xl2 overflow-hidden shadow-sm border border-ink/5 relative group"
-        >
-          <iframe
-            :src="storeInfo.googleMapsEmbedUrl"
-            class="w-full h-72 md:h-80 pointer-events-none"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-          <div class="absolute inset-0 bg-ink/0 group-hover:bg-ink/10 transition flex items-center justify-center">
-            <span class="opacity-0 group-hover:opacity-100 transition bg-white px-4 py-2 rounded-full font-semibold text-primary shadow inline-flex items-center gap-1.5">
-              <MapIcon class="w-4 h-4" stroke-width="1.75" /> Buka di Google Maps
-            </span>
+        <!-- Peta Interaktif (langsung tampil, bisa digeser & zoom) -->
+        <div class="md:col-span-2">
+          <div class="rounded-xl2 overflow-hidden shadow-sm border border-ink/5">
+            <iframe
+              :src="storeInfo.googleMapsEmbedUrl"
+              class="w-full h-80 md:h-96"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
-        </a>
+
+          <!-- Kartu info lokasi singkat, di bawah peta -->
+          <div class="mt-3 bg-white rounded-xl2 border border-ink/5 p-3 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <p class="font-semibold text-sm text-ink truncate">{{ storeInfo.storeName }}</p>
+              <p class="text-xs text-ink/50 truncate">{{ storeInfo.address }}</p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <a
+                :href="storeInfo.googleMapsLink"
+                target="_blank"
+                title="Buka di Google Maps"
+                class="w-9 h-9 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition"
+              >
+                <ArrowTopRightOnSquareIcon class="w-4 h-4 text-primary" stroke-width="1.75" />
+              </a>
+              <a
+                :href="storeInfo.googleMapsLink"
+                target="_blank"
+                title="Lihat Rute"
+                class="w-9 h-9 rounded-full bg-accent/10 hover:bg-accent/20 flex items-center justify-center transition"
+              >
+                <MapPinIcon class="w-4 h-4 text-accent" stroke-width="1.75" />
+              </a>
+            </div>
+          </div>
+        </div>
 
         <!-- Info Toko -->
         <div class="bg-white rounded-xl2 shadow-sm border border-ink/5 p-5 space-y-4">
@@ -200,7 +219,7 @@
             <p class="text-sm text-ink leading-relaxed">{{ storeInfo.address }}</p>
           </div>
           <a
-            :href="storeInfo.googleMapsUrl"
+            :href="storeInfo.googleMapsLink"
             target="_blank"
             class="flex items-center justify-center gap-1.5 text-center bg-primary text-white text-sm font-semibold py-2.5 rounded-full hover:bg-primary-dark transition"
           >
@@ -243,7 +262,7 @@ import { useStoreInfoStore } from '../../stores/store'
 import api from '../../services/api'
 import {
   PhotoIcon, TagIcon, GiftIcon, SunIcon, CheckCircleIcon, TruckIcon,
-  LockClosedIcon, ShieldCheckIcon, MapIcon, MapPinIcon, ChatBubbleLeftRightIcon,
+  LockClosedIcon, ShieldCheckIcon, MapPinIcon, ChatBubbleLeftRightIcon, ArrowTopRightOnSquareIcon,
 } from '@heroicons/vue/24/outline'
 
 // 3 foto untuk marquee latar belakang Hero.
