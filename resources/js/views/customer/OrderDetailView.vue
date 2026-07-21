@@ -1,8 +1,10 @@
 <template>
   <div v-if="order" class="max-w-3xl mx-auto px-4 py-8">
-    <router-link to="/pesanan" class="text-primary text-sm hover:underline">← Kembali ke Pesanan Saya</router-link>
+    <router-link to="/pesanan" class="inline-flex items-center gap-1.5 text-primary text-sm hover:underline cursor-pointer">
+      <ArrowLeftIcon class="w-3.5 h-3.5" stroke-width="1.75" /> Kembali ke Pesanan Saya
+    </router-link>
 
-    <div class="bg-white rounded-xl2 border border-ink/5 p-6 mt-4">
+    <div class="glass-card rounded-xl2 p-6 mt-4">
       <div class="flex justify-between items-start mb-6">
         <div>
           <p class="text-xs text-ink/50">No. Invoice</p>
@@ -25,7 +27,8 @@
             class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
             :class="isStepDone(key) ? 'bg-primary text-white' : 'bg-white border-2 border-ink/20 text-ink/30'"
           >
-            {{ isStepDone(key) ? '✓' : idx + 1 }}
+            <CheckIcon v-if="isStepDone(key)" class="w-3.5 h-3.5" stroke-width="2.5" />
+            <span v-else>{{ idx + 1 }}</span>
           </div>
           <span class="text-[11px] mt-1.5 text-ink/60">{{ label }}</span>
         </div>
@@ -35,7 +38,11 @@
       <div class="grid grid-cols-2 gap-4 text-sm mb-6">
         <div>
           <p class="text-ink/50">Cara Terima</p>
-          <p class="font-medium">{{ order.fulfillment_type === 'delivery' ? '🚚 Delivery' : '🏬 Pickup' }}</p>
+          <p class="font-medium flex items-center gap-1.5">
+            <TruckIcon v-if="order.fulfillment_type === 'delivery'" class="w-4 h-4 text-primary" stroke-width="1.75" />
+            <BuildingStorefrontIcon v-else class="w-4 h-4 text-primary" stroke-width="1.75" />
+            {{ order.fulfillment_type === 'delivery' ? 'Delivery' : 'Pickup' }}
+          </p>
         </div>
         <div>
           <p class="text-ink/50">Jadwal</p>
@@ -51,19 +58,28 @@
         </div>
       </div>
 
-      <!-- Instruksi Pembayaran QRIS -->
-      <div v-if="order.payment?.method === 'qris' && order.payment?.status === 'pending'" class="bg-primary/5 rounded-xl2 p-4 mb-6 text-center">
-        <p class="text-sm font-medium mb-3">📱 Scan QRIS untuk membayar Rp {{ formatPrice(order.total) }}</p>
-        <img v-if="storeInfo.qrisImage" :src="storeInfo.qrisImage" class="w-48 h-48 mx-auto rounded-lg border border-ink/10" />
-        <div v-else class="w-48 h-48 mx-auto rounded-lg border-2 border-dashed border-ink/20 flex items-center justify-center text-5xl">📱</div>
-        <p class="text-xs text-ink/50 mt-3">Pembayaran akan terverifikasi otomatis dalam beberapa saat setelah Anda scan & bayar.</p>
+      <!-- Instruksi Pembayaran QRIS (otomatis via Midtrans Snap) -->
+      <div v-if="order.payment?.method === 'qris' && order.payment?.status === 'pending'" class="glass-card-soft rounded-xl2 p-5 mb-6 text-center">
+        <p class="text-sm font-medium mb-3 flex items-center justify-center gap-1.5">
+          <QrCodeIcon class="w-4 h-4 text-primary" stroke-width="1.75" /> Scan QRIS untuk membayar
+          <span class="font-bold text-primary tabular-nums">Rp {{ formatPrice(order.total) }}</span>
+        </p>
+
+        <div v-if="snapError" class="text-sm text-danger bg-danger/10 rounded-lg p-3">{{ snapError }}</div>
+        <div v-else-if="loadingSnap" class="text-sm text-ink/50 py-8">Menyiapkan kode QRIS...</div>
+        <div v-else id="midtrans-snap-container" class="min-h-[300px] flex justify-center"></div>
+
+        <p class="text-xs text-ink/50 mt-3">Pembayaran akan terverifikasi otomatis begitu Anda selesai scan & bayar.</p>
       </div>
 
       <!-- Instruksi Transfer Bank -->
-      <div v-if="order.payment?.method === 'transfer_bank' && order.payment?.status === 'pending' && !order.payment?.proof_image" class="bg-primary/5 rounded-xl2 p-4 mb-6">
-        <p class="text-sm font-medium mb-3">🏦 Transfer Rp {{ formatPrice(order.total) }} ke salah satu rekening berikut:</p>
+      <div v-if="order.payment?.method === 'transfer_bank' && order.payment?.status === 'pending' && !order.payment?.proof_image" class="glass-card-soft rounded-xl2 p-4 mb-6">
+        <p class="text-sm font-medium mb-3 flex items-center gap-1.5">
+          <BuildingLibraryIcon class="w-4 h-4 text-primary" stroke-width="1.75" /> Transfer
+          <span class="font-bold text-primary tabular-nums">Rp {{ formatPrice(order.total) }}</span> ke salah satu rekening berikut:
+        </p>
         <div v-if="storeInfo.bankAccounts?.length" class="space-y-2 mb-3">
-          <div v-for="(bank, i) in storeInfo.bankAccounts" :key="i" class="bg-white rounded-lg p-3 text-sm border border-ink/5">
+          <div v-for="(bank, i) in storeInfo.bankAccounts" :key="i" class="bg-white rounded-lg p-3 text-sm border border-ink/10">
             <p class="font-semibold">{{ bank.bank }}</p>
             <p class="text-ink/70">{{ bank.no_rek }} a.n. {{ bank.atas_nama }}</p>
           </div>
@@ -72,8 +88,8 @@
 
       <!-- Upload Bukti Transfer -->
       <div v-if="order.payment?.method === 'transfer_bank' && order.payment?.status === 'pending' && !order.payment?.proof_image" class="bg-warning/10 border border-warning/30 rounded-xl2 p-4 mb-6">
-        <p class="text-sm font-medium mb-2">📤 Unggah Bukti Transfer</p>
-        <input type="file" @change="uploadProof" accept="image/*" class="text-sm" />
+        <p class="text-sm font-medium mb-2 flex items-center gap-1.5"><ArrowUpTrayIcon class="w-4 h-4 text-warning" stroke-width="1.75" /> Unggah Bukti Transfer</p>
+        <input type="file" @change="uploadProof" accept="image/*" class="text-sm cursor-pointer" />
       </div>
 
       <!-- Item Pesanan -->
@@ -82,7 +98,7 @@
         <div v-for="item in order.items" :key="item.id" class="border-b border-ink/5 pb-3">
           <div class="flex justify-between text-sm">
             <span>{{ item.item_name }} × {{ item.qty }}</span>
-            <span class="font-medium">Rp {{ formatPrice(item.price * item.qty) }}</span>
+            <span class="font-medium tabular-nums">Rp {{ formatPrice(item.price * item.qty) }}</span>
           </div>
 
           <!-- Form Ulasan & Rating (fitur A.11) - tampil setelah pesanan selesai -->
@@ -92,33 +108,36 @@
               <button
                 v-for="star in 5" :key="star"
                 @click="reviewForms[item.id] = { ...reviewForms[item.id], rating: star }"
-                class="text-xl"
+                class="cursor-pointer"
               >
-                {{ (reviewForms[item.id]?.rating || 0) >= star ? '★' : '☆' }}
+                <StarIconSolid v-if="(reviewForms[item.id]?.rating || 0) >= star" class="w-5 h-5 text-badge" />
+                <StarIcon v-else class="w-5 h-5 text-ink/30" stroke-width="1.5" />
               </button>
             </div>
             <textarea
               v-model="reviewForms[item.id].comment"
               rows="2"
               placeholder="Ceritakan pengalaman Anda (opsional)"
-              class="w-full border border-ink/15 rounded-lg px-3 py-2 text-xs mb-2"
+              class="w-full bg-white border border-ink/10 rounded-lg px-3 py-2 text-xs mb-2"
             ></textarea>
             <button
               @click="submitReview(item)"
               :disabled="!reviewForms[item.id]?.rating"
-              class="bg-accent text-white text-xs font-semibold px-4 py-1.5 rounded-full disabled:opacity-50"
+              class="bg-accent text-white text-xs font-semibold px-4 py-1.5 rounded-full disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
             >
               Kirim Ulasan
             </button>
           </div>
-          <p v-else-if="order.status === 'selesai' && item.is_reviewed" class="text-xs text-success mt-1">✓ Sudah diulas, terima kasih!</p>
+          <p v-else-if="order.status === 'selesai' && item.is_reviewed" class="text-xs text-success mt-1 flex items-center gap-1">
+            <CheckCircleIcon class="w-3.5 h-3.5" stroke-width="1.75" /> Sudah diulas, terima kasih!
+          </p>
         </div>
       </div>
 
       <div class="border-t border-ink/10 pt-3 space-y-1 text-sm">
-        <div class="flex justify-between"><span class="text-ink/60">Subtotal</span><span>Rp {{ formatPrice(order.subtotal) }}</span></div>
-        <div class="flex justify-between"><span class="text-ink/60">Ongkos Kirim</span><span>Rp {{ formatPrice(order.shipping_cost) }}</span></div>
-        <div class="flex justify-between font-bold text-ink text-base"><span>Total</span><span>Rp {{ formatPrice(order.total) }}</span></div>
+        <div class="flex justify-between"><span class="text-ink/60">Subtotal</span><span class="tabular-nums">Rp {{ formatPrice(order.subtotal) }}</span></div>
+        <div class="flex justify-between"><span class="text-ink/60">Ongkos Kirim</span><span class="tabular-nums">Rp {{ formatPrice(order.shipping_cost) }}</span></div>
+        <div class="flex justify-between font-bold text-ink text-base"><span>Total</span><span class="tabular-nums">Rp {{ formatPrice(order.total) }}</span></div>
       </div>
     </div>
   </div>
@@ -127,16 +146,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../../services/api'
 import { useStoreInfoStore } from '../../stores/store'
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  TruckIcon,
+  BuildingStorefrontIcon,
+  QrCodeIcon,
+  BuildingLibraryIcon,
+  ArrowUpTrayIcon,
+  StarIcon,
+  CheckCircleIcon,
+} from '@heroicons/vue/24/outline'
+import { StarIcon as StarIconSolid } from '@heroicons/vue/24/solid'
 
 const route = useRoute()
 const storeInfo = useStoreInfoStore()
 const order = ref(null)
 const timeline = ref({})
 const reviewForms = ref({})
+const loadingSnap = ref(true)
+const snapError = ref('')
 
 const statusOrder = ['menunggu_bayar', 'dikonfirmasi', 'diproses', 'dikirim_siap_ambil', 'selesai']
 
@@ -147,6 +180,58 @@ async function fetchOrder() {
   data.order.items.forEach((item) => {
     if (!reviewForms.value[item.id]) reviewForms.value[item.id] = { rating: 0, comment: '' }
   })
+
+  if (data.order.payment?.method === 'qris' && data.order.payment?.status === 'pending') {
+    initMidtransSnap()
+  }
+}
+
+// Muat Snap.js Midtrans sekali saja, lalu embed widget QRIS langsung di
+// halaman ini (bukan popup) supaya menyatu dengan tampilan struk.
+function loadSnapScript() {
+  return new Promise((resolve, reject) => {
+    if (window.snap) return resolve()
+    const existing = document.getElementById('midtrans-snap-js')
+    if (existing) {
+      existing.addEventListener('load', resolve)
+      existing.addEventListener('error', reject)
+      return
+    }
+    const script = document.createElement('script')
+    script.id = 'midtrans-snap-js'
+    script.src = import.meta.env.VITE_MIDTRANS_IS_PRODUCTION === 'true'
+      ? 'https://app.midtrans.com/snap/snap.js'
+      : 'https://app.sandbox.midtrans.com/snap/snap.js'
+    script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY || '')
+    script.onload = resolve
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
+}
+
+async function initMidtransSnap() {
+  loadingSnap.value = true
+  snapError.value = ''
+  try {
+    const [{ data }] = await Promise.all([
+      api.get(`/orders/${order.value.id}/snap-token`),
+      loadSnapScript(),
+    ])
+    // Matikan status loading DULU supaya div #midtrans-snap-container
+    // benar-benar dirender Vue, baru setelah itu panggil snap.embed - kalau
+    // dipanggil sebelum nextTick, elemennya belum ada di DOM dan embed gagal senyap.
+    loadingSnap.value = false
+    await nextTick()
+    window.snap.embed(data.snap_token, {
+      embedId: 'midtrans-snap-container',
+      onSuccess: fetchOrder,
+      onPending: () => {},
+      onError: () => { snapError.value = 'Gagal memuat pembayaran QRIS. Coba muat ulang halaman.' },
+    })
+  } catch (e) {
+    snapError.value = e.response?.data?.message || 'QRIS belum bisa dimuat. Coba muat ulang halaman atau hubungi admin toko.'
+    loadingSnap.value = false
+  }
 }
 
 async function submitReview(item) {

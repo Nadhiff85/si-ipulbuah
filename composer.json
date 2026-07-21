@@ -9,7 +9,8 @@
         "spatie/laravel-permission": "*",
         "intervention/image": "^3.9|^4.0",
         "barryvdh/laravel-dompdf": "*",
-        "maatwebsite/excel": "*"
+        "maatwebsite/excel": "*",
+        "midtrans/midtrans-php": "^2.6"
     },
     "require-dev": {
         "fakerphp/faker": "*",
