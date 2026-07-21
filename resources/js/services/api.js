@@ -14,10 +14,27 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Redirect ke login jika token kedaluwarsa/tidak valid
+// Penanganan error global: supaya tidak ada halaman yang gagal senyap tanpa
+// pesan ke pengguna saat koneksi/server bermasalah. Error 422 (validasi form)
+// sengaja TIDAK ditangani di sini - itu tetap tanggung jawab masing-masing
+// komponen karena pesannya kontekstual ke form yang bersangkutan.
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Lazy import supaya Pinia sudah pasti aktif saat store dipakai (dipanggil
+    // saat request benar-benar gagal, bukan saat modul ini pertama dimuat).
+    import('../stores/toast').then(({ useToastStore }) => {
+      const toast = useToastStore()
+
+      if (!error.response) {
+        toast.show('Tidak bisa terhubung ke server. Cek koneksi internet Anda.')
+      } else if (error.response.status === 401) {
+        toast.show(error.response.data?.message || 'Sesi Anda telah berakhir, silakan masuk kembali.')
+      } else if (error.response.status >= 500) {
+        toast.show('Terjadi kesalahan di server. Coba lagi dalam beberapa saat.')
+      }
+    })
+
     if (error.response?.status === 401) {
       localStorage.removeItem('ipulbuah_token')
       localStorage.removeItem('ipulbuah_user')
