@@ -7,7 +7,7 @@
         <p class="text-white/60 text-sm mt-1">Khusus Admin Toko & Superadmin</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="bg-white rounded-xl2 shadow-lg p-6 space-y-4">
+      <form @submit.prevent="handleLogin" class="glass-card rounded-xl2 shadow-lg p-6 space-y-4">
         <div>
           <label class="text-sm font-medium text-ink block mb-1">Email Staff</label>
           <input v-model="form.email" type="email" required class="input" placeholder="admin@ipulbuah.com" />
@@ -22,7 +22,7 @@
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-primary-dark hover:bg-ink text-white font-semibold py-3 rounded-full transition disabled:opacity-60"
+          class="w-full bg-primary-dark hover:bg-ink text-white font-semibold py-3 rounded-full transition disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
         >
           {{ loading ? 'Memproses...' : 'Masuk sebagai Staff' }}
         </button>
@@ -72,6 +72,6 @@ async function handleLogin() {
 
 <style scoped>
 .input {
-  @apply w-full border border-ink/15 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40;
+  @apply w-full bg-white border border-ink/10 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/40;
 }
 </style>

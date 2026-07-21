@@ -3,14 +3,17 @@
     <h1 class="text-xl font-bold text-ink mb-6">Pesanan Saya</h1>
 
     <p v-if="loading" class="text-ink/50 text-sm">Memuat pesanan...</p>
-    <p v-else-if="orders.length === 0" class="text-ink/50 text-sm">Anda belum memiliki pesanan.</p>
+    <div v-else-if="orders.length === 0" class="glass-card rounded-xl2 p-8 text-center">
+      <ArchiveBoxIcon class="w-8 h-8 text-ink/30 mx-auto mb-2" stroke-width="1.5" />
+      <p class="text-ink/50 text-sm">Anda belum memiliki pesanan.</p>
+    </div>
 
     <div v-else class="space-y-3">
       <router-link
         v-for="order in orders"
         :key="order.id"
         :to="`/pesanan/${order.id}`"
-        class="block bg-white rounded-xl2 border border-ink/5 p-4 hover:shadow-md transition"
+        class="block glass-card rounded-xl2 p-4 hover:shadow-lg hover:-translate-y-0.5 transition-all"
       >
         <div class="flex justify-between items-start mb-2">
           <div>
@@ -33,6 +36,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { ArchiveBoxIcon } from '@heroicons/vue/24/outline'
 
 const orders = ref([])
 const loading = ref(true)

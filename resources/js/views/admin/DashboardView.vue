@@ -10,13 +10,13 @@
 
     <div class="grid md:grid-cols-3 gap-4">
       <!-- Grafik Tren -->
-      <div class="md:col-span-2 bg-white rounded-xl2 border border-ink/5 p-5">
+      <div class="md:col-span-2 glass-card rounded-xl2 p-5">
         <p class="font-semibold text-ink text-sm mb-4">Grafik Penjualan (7 Hari Terakhir)</p>
         <Line v-if="chartData" :data="chartData" :options="chartOptions" />
       </div>
 
       <!-- Metode Pembayaran - Doughnut Chart -->
-      <div class="bg-white rounded-xl2 border border-ink/5 p-5">
+      <div class="glass-card rounded-xl2 p-5">
         <p class="font-semibold text-ink text-sm mb-4">Penjualan per Metode</p>
         <div class="relative h-40 mb-4">
           <Doughnut v-if="paymentChartData" :data="paymentChartData" :options="doughnutOptions" />
@@ -67,12 +67,12 @@ const chartData = computed(() => {
     datasets: [{
       label: 'Penjualan (Rp)',
       data: stats.value.grafik_penjualan.map((d) => d.total),
-      borderColor: '#2E7D32',
-      backgroundColor: 'rgba(46,125,50,0.08)',
+      borderColor: '#FF5A36',
+      backgroundColor: 'rgba(255,90,54,0.10)',
       tension: 0.35,
       fill: true,
       pointRadius: 3,
-      pointBackgroundColor: '#2E7D32',
+      pointBackgroundColor: '#FF5A36',
     }],
   }
 })
@@ -83,7 +83,7 @@ const chartOptions = {
   scales: { y: { grid: { color: '#f1f1ef' } }, x: { grid: { display: false } } },
 }
 
-const paletteMap = { qris: '#2E7D32', transfer_bank: '#FB8C00', bayar_di_tempat: '#FFC107' }
+const paletteMap = { qris: '#FF5A36', transfer_bank: '#123524', bayar_di_tempat: '#7CA300' }
 function methodColor(m) { return paletteMap[m] || '#94a3b8' }
 
 const paymentChartData = computed(() => {

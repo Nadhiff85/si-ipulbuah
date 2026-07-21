@@ -11,11 +11,11 @@
         v-for="p in products"
         :key="p.id"
         :to="`/produk/${p.slug}`"
-        class="bg-white rounded-xl2 border border-ink/5 overflow-hidden hover:shadow-md transition"
+        class="glass-card rounded-xl2 overflow-hidden hover:shadow-md transition cursor-pointer"
       >
         <div class="aspect-square bg-primary/5 flex items-center justify-center text-4xl">
           <img v-if="p.images?.[0]" :src="p.images[0].image_path" class="w-full h-full object-cover" />
-          <span v-else>🥭</span>
+          <PhotoIcon v-else class="w-10 h-10 text-primary/40" stroke-width="1.5" />
         </div>
         <div class="p-3">
           <p class="font-medium text-sm truncate">{{ p.name }}</p>
@@ -29,6 +29,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { PhotoIcon } from '@heroicons/vue/24/outline'
 
 const products = ref([])
 const loading = ref(true)

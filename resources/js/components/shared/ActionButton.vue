@@ -2,7 +2,7 @@
   <button
     @click="$emit('click')"
     type="button"
-    class="text-xs font-medium px-3 py-1.5 rounded-full transition whitespace-nowrap"
+    class="text-xs font-medium px-3 py-1.5 rounded-full transition whitespace-nowrap cursor-pointer"
     :class="colorClass"
   >
     <slot />

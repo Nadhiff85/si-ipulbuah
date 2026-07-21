@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-surface-soft">
+  <div class="min-h-screen flex flex-col glass-panel-bg">
     <!-- Banner Mode Pratinjau - hanya tampil untuk staff yang sedang cek tampilan toko -->
     <div v-if="auth.isStaff && auth.previewMode" class="bg-ink text-white text-sm px-4 py-2.5 flex items-center justify-between sticky top-0 z-50">
       <span class="flex items-center gap-2">
@@ -15,7 +15,7 @@
     </div>
 
     <!-- ===== Header / Navbar (Satu Baris & Huruf Navigasi Ekstra Besar) ===== -->
-    <header class="bg-white sticky top-0 z-40 shadow-sm border-b border-ink/5">
+    <header class="bg-white sticky top-0 z-40 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
         
         <!-- Bagian Kiri: Logo -->
@@ -30,17 +30,17 @@
         <!-- Bagian Tengah: Menu Utama Navigasi (HURUF JAUH LEBIH BESAR & TEBAL) -->
         <nav class="hidden md:flex flex-1 justify-center items-center gap-10 text-lg lg:text-xl font-bold">
           <router-link to="/" class="text-ink hover:text-primary transition-colors">Beranda</router-link>
-          <button @click="goToProtected('/katalog')" class="text-ink/70 hover:text-primary transition-colors">Katalog</button>
-          <button @click="goToProtected('/paket-buah')" class="text-ink/70 hover:text-primary transition-colors">Paket & Hampers</button>
+          <button @click="goToProtected('/katalog')" class="text-ink/70 hover:text-primary transition-colors cursor-pointer">Katalog</button>
+          <button @click="goToProtected('/paket-buah')" class="text-ink/70 hover:text-primary transition-colors cursor-pointer">Paket & Hampers</button>
         </nav>
 
         <!-- Bagian Kanan: Menu Pengguna / Akun (Ikut Diperbesar Menjadi text-base) -->
         <div class="flex items-center gap-6 text-base font-semibold shrink-0">
-          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center gap-1 text-ink/70 hover:text-primary transition-colors">
-            ❤ Wishlist
+          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center gap-1.5 text-ink/70 hover:text-primary transition-colors cursor-pointer">
+            <HeartIcon class="w-5 h-5" stroke-width="1.75" /> Wishlist
           </button>
-          <button @click="goToProtected('/keranjang')" class="flex items-center gap-1 text-ink/70 hover:text-primary transition-colors">
-            🛒 Keranjang
+          <button @click="goToProtected('/keranjang')" class="flex items-center gap-1.5 text-ink/70 hover:text-primary transition-colors cursor-pointer">
+            <ShoppingCartIcon class="w-5 h-5" stroke-width="1.75" /> Keranjang
           </button>
 
           <template v-if="auth.isLoggedIn">
@@ -83,8 +83,8 @@
         <div>
           <p class="font-semibold mb-3">Lokasi Toko</p>
           <p class="text-white/70 leading-relaxed">{{ storeInfo.address }}</p>
-          <a :href="storeInfo.googleMapsLink" target="_blank" class="inline-block mt-2 text-badge hover:underline">
-            📍 Lihat di Google Maps
+          <a :href="storeInfo.googleMapsLink" target="_blank" class="inline-flex items-center gap-1.5 mt-2 text-badge hover:underline cursor-pointer">
+            <MapPinIcon class="w-4 h-4" stroke-width="1.75" /> Lihat di Google Maps
           </a>
         </div>
 
@@ -98,16 +98,16 @@
         <div>
           <p class="font-semibold mb-3">Layanan & Informasi</p>
           <ul class="space-y-2 mb-4 text-white/70">
-            <li><button @click="goToProtected('/promo')" class="hover:text-badge transition-colors text-left w-full">Promo</button></li>
-            <li><button @click="goToProtected('/musiman')" class="hover:text-badge transition-colors text-left w-full">Musiman</button></li>
+            <li><button @click="goToProtected('/promo')" class="hover:text-badge transition-colors text-left w-full cursor-pointer">Promo</button></li>
+            <li><button @click="goToProtected('/musiman')" class="hover:text-badge transition-colors text-left w-full cursor-pointer">Musiman</button></li>
             <li><router-link to="/tentang-kami" class="hover:text-badge transition-colors block">Tentang Kami</router-link></li>
             <li><router-link to="/faq" class="hover:text-badge transition-colors block">FAQ & Bantuan</router-link></li>
             <li><router-link to="/kontak" class="hover:text-badge transition-colors block">Kontak</router-link></li>
           </ul>
           
           <p class="font-semibold mb-2">Butuh Bantuan?</p>
-          <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 bg-success/20 text-success px-3 py-2 rounded-lg hover:bg-success/30 transition-all">
-            💬 Chat WhatsApp
+          <a :href="storeInfo.whatsappUrl" target="_blank" class="inline-flex items-center gap-2 bg-white/10 text-white px-3 py-2 rounded-lg hover:bg-white/20 transition-all cursor-pointer">
+            <WhatsAppIcon size="w-4 h-4" /> Chat WhatsApp
           </a>
         </div>
       </div>
@@ -122,10 +122,10 @@
     <a
       :href="storeInfo.whatsappUrl"
       target="_blank"
-      class="fixed bottom-5 right-5 z-50 bg-success text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-lg hover:scale-105 transition"
+      class="fixed bottom-5 right-5 z-50 bg-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg border border-black/5 hover:scale-105 transition cursor-pointer"
       title="Chat via WhatsApp"
     >
-      💬
+      <WhatsAppIcon size="w-7 h-7" />
     </a>
   </div>
 </template>
@@ -135,7 +135,8 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useStoreInfoStore } from '../stores/store'
-import { EyeIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { EyeIcon, ArrowLeftIcon, HeartIcon, ShoppingCartIcon, MapPinIcon } from '@heroicons/vue/24/outline'
+import WhatsAppIcon from '../components/shared/WhatsAppIcon.vue'
 
 const router = useRouter()
 const auth = useAuthStore()

@@ -2,7 +2,7 @@
   <div>
     <h2 class="font-semibold text-ink text-[15px] mb-5">Verifikasi Pembayaran</h2>
 
-    <div class="bg-white rounded-xl2 border border-ink/5 overflow-hidden">
+    <div class="bg-white rounded-xl2 border border-ink/5 shadow-sm overflow-hidden">
       <table class="w-full text-sm">
         <thead class="bg-primary/5 text-ink/60">
           <tr>
@@ -12,16 +12,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="p in payments" :key="p.id" class="border-t border-ink/5">
+          <tr v-for="p in payments" :key="p.id" class="border-t border-ink/5 hover:bg-primary/[0.03] transition-colors">
             <td class="p-3 font-medium text-ink">{{ p.order?.order_number }}</td>
             <td class="p-3 uppercase text-ink/70 text-xs">{{ p.method }}</td>
-            <td class="p-3 text-ink/70">Rp {{ formatPrice(p.amount) }}</td>
+            <td class="p-3 text-ink/70 tabular-nums">Rp {{ formatPrice(p.amount) }}</td>
             <td class="p-3">
-              <ActionButton v-if="p.proof_image" variant="primary" @click="window.open(p.proof_image, '_blank')">Lihat Bukti</ActionButton>
+              <ActionButton v-if="p.proof_image" variant="primary" @click="window.open(p.proof_image, '_blank')">
+                <span class="inline-flex items-center gap-1"><PhotoIcon class="w-3.5 h-3.5" stroke-width="1.75" /> Lihat Bukti</span>
+              </ActionButton>
               <span v-else class="text-ink/40 text-xs">-</span>
             </td>
             <td class="p-3">
-              <span class="text-xs font-medium px-2.5 py-1 rounded-full" :class="statusBadge(p.status)">{{ p.status }}</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center gap-1" :class="statusBadge(p.status)">
+                <ClockIcon v-if="p.status === 'pending'" class="w-3.5 h-3.5" stroke-width="1.75" />
+                <CheckCircleIcon v-else-if="p.status === 'confirmed'" class="w-3.5 h-3.5" stroke-width="1.75" />
+                <XCircleIcon v-else class="w-3.5 h-3.5" stroke-width="1.75" />
+                {{ statusLabel(p.status) }}
+              </span>
             </td>
             <td class="p-3" v-if="p.status === 'pending'">
               <div class="flex gap-2">
@@ -40,6 +47,7 @@
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
 import ActionButton from '../../components/shared/ActionButton.vue'
+import { PhotoIcon, ClockIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/outline'
 
 const payments = ref([])
 
@@ -55,6 +63,10 @@ async function confirm(payment, status) {
 
 function statusBadge(s) {
   return { pending: 'bg-warning/15 text-warning', confirmed: 'bg-success/15 text-success', rejected: 'bg-danger/10 text-danger' }[s] || 'bg-ink/5 text-ink/60'
+}
+
+function statusLabel(s) {
+  return { pending: 'Menunggu', confirmed: 'Terkonfirmasi', rejected: 'Ditolak' }[s] || s
 }
 
 function formatPrice(v) {

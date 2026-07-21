@@ -2,44 +2,44 @@
   <div class="max-w-7xl mx-auto px-4 py-8 grid md:grid-cols-4 gap-6">
     <!-- ===== Sidebar Filter ===== -->
     <aside class="md:col-span-1 space-y-6">
-      <div class="bg-white rounded-xl2 border border-ink/5 p-4">
+      <div class="glass-card rounded-xl2 p-4">
         <p class="font-semibold text-ink mb-3">Kategori</p>
         <label
           v-for="cat in categories"
           :key="cat.id"
-          class="flex items-center gap-2 py-1.5 text-sm cursor-pointer"
+          class="flex items-center gap-2 py-1.5 text-sm cursor-pointer hover:text-primary transition-colors"
         >
           <input type="radio" :value="cat.id" v-model="filters.category_id" @change="fetchProducts" class="accent-primary" />
           {{ cat.name }}
         </label>
-        <button @click="filters.category_id = null; fetchProducts()" class="text-xs text-primary mt-1 hover:underline">
+        <button @click="filters.category_id = null; fetchProducts()" class="text-xs text-primary mt-1 hover:underline cursor-pointer">
           Reset kategori
         </button>
       </div>
 
-      <div class="bg-white rounded-xl2 border border-ink/5 p-4">
+      <div class="glass-card rounded-xl2 p-4">
         <p class="font-semibold text-ink mb-3">Asal Buah</p>
-        <label v-for="opt in [{v:'lokal',l:'Lokal'},{v:'impor',l:'Impor'}]" :key="opt.v" class="flex items-center gap-2 py-1.5 text-sm cursor-pointer">
+        <label v-for="opt in [{v:'lokal',l:'Lokal'},{v:'impor',l:'Impor'}]" :key="opt.v" class="flex items-center gap-2 py-1.5 text-sm cursor-pointer hover:text-primary transition-colors">
           <input type="radio" :value="opt.v" v-model="filters.origin_type" @change="fetchProducts" class="accent-primary" />
           {{ opt.l }}
         </label>
       </div>
 
-      <div class="bg-white rounded-xl2 border border-ink/5 p-4">
+      <div class="glass-card rounded-xl2 p-4">
         <p class="font-semibold text-ink mb-3">Label</p>
-        <label v-for="opt in [{v:'segar',l:'Segar'},{v:'best_seller',l:'Best Seller'},{v:'musiman',l:'Musiman'},{v:'promo',l:'Promo'}]" :key="opt.v" class="flex items-center gap-2 py-1.5 text-sm cursor-pointer">
+        <label v-for="opt in [{v:'segar',l:'Segar'},{v:'best_seller',l:'Best Seller'},{v:'musiman',l:'Musiman'},{v:'promo',l:'Promo'}]" :key="opt.v" class="flex items-center gap-2 py-1.5 text-sm cursor-pointer hover:text-primary transition-colors">
           <input type="radio" :value="opt.v" v-model="filters.label" @change="fetchProducts" class="accent-primary" />
           {{ opt.l }}
         </label>
       </div>
 
-      <div class="bg-white rounded-xl2 border border-ink/5 p-4">
+      <div class="glass-card rounded-xl2 p-4">
         <p class="font-semibold text-ink mb-3">Rentang Harga</p>
         <div class="flex gap-2">
           <input v-model.number="filters.min_price" type="number" placeholder="Min" class="input-sm" />
           <input v-model.number="filters.max_price" type="number" placeholder="Max" class="input-sm" />
         </div>
-        <button @click="fetchProducts" class="w-full mt-2 bg-primary/10 text-primary text-sm font-medium py-1.5 rounded-lg hover:bg-primary/20">
+        <button @click="fetchProducts" class="w-full mt-2 bg-primary/10 text-primary text-sm font-medium py-1.5 rounded-lg hover:bg-primary/20 transition-colors cursor-pointer">
           Terapkan
         </button>
       </div>
@@ -49,15 +49,16 @@
     <section class="md:col-span-3">
       <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between mb-5">
         <div class="relative flex-1">
+          <MagnifyingGlassIcon class="w-4 h-4 text-ink/40 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" stroke-width="1.75" />
           <input
             v-model="filters.search"
             @keyup.enter="fetchProducts"
             type="text"
             placeholder="Cari buah favoritmu..."
-            class="w-full border border-ink/15 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40"
+            class="w-full bg-white border border-ink/10 rounded-full pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/40"
           />
         </div>
-        <select v-model="filters.sort" @change="fetchProducts" class="border border-ink/15 rounded-full px-4 py-2.5 text-sm">
+        <select v-model="filters.sort" @change="fetchProducts" class="bg-white border border-ink/10 rounded-full px-4 py-2.5 text-sm cursor-pointer">
           <option value="terbaru">Terbaru</option>
           <option value="harga_termurah">Harga Terendah</option>
           <option value="harga_termahal">Harga Tertinggi</option>
@@ -65,7 +66,7 @@
       </div>
 
       <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div v-for="i in 6" :key="i" class="bg-white rounded-xl2 overflow-hidden animate-pulse">
+        <div v-for="i in 6" :key="i" class="glass-card rounded-xl2 overflow-hidden animate-pulse">
           <div class="aspect-square bg-ink/10"></div>
           <div class="p-3 space-y-2">
             <div class="h-3 bg-ink/10 rounded w-3/4"></div>
@@ -80,11 +81,11 @@
           v-for="p in products"
           :key="p.id"
           :to="`/produk/${p.slug}`"
-          class="bg-white rounded-xl2 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden"
+          class="glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden"
         >
-          <div class="aspect-square bg-primary/5 flex items-center justify-center text-5xl relative overflow-hidden">
+          <div class="aspect-square bg-primary/5 flex items-center justify-center relative overflow-hidden">
             <img v-if="p.images?.[0]" :src="p.images[0].image_path" class="w-full h-full object-cover" />
-            <span v-else>🍎</span>
+            <PhotoIcon v-else class="w-10 h-10 text-ink/20" stroke-width="1.5" />
             <span
               v-for="label in p.labels || []"
               :key="label"
@@ -110,8 +111,8 @@
           v-for="page in meta.last_page"
           :key="page"
           @click="goToPage(page)"
-          class="w-9 h-9 rounded-full text-sm font-medium"
-          :class="page === meta.current_page ? 'bg-primary text-white' : 'bg-white border border-ink/10 text-ink/70'"
+          class="w-9 h-9 rounded-full text-sm font-medium transition-colors cursor-pointer"
+          :class="page === meta.current_page ? 'bg-primary text-white' : 'bg-white border border-ink/20 text-ink/70 hover:border-accent/40'"
         >
           {{ page }}
         </button>
@@ -123,6 +124,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '../../services/api'
+import { MagnifyingGlassIcon, PhotoIcon } from '@heroicons/vue/24/outline'
 
 const categories = ref([])
 const products = ref([])
@@ -177,6 +179,6 @@ onMounted(() => {
 
 <style scoped>
 .input-sm {
-  @apply w-1/2 border border-ink/15 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40;
+  @apply w-1/2 bg-white border border-ink/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/40;
 }
 </style>

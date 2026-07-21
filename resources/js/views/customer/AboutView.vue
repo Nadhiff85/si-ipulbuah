@@ -18,25 +18,28 @@
     </template>
 
     <div class="grid sm:grid-cols-3 gap-4 mb-8">
-      <div class="bg-white rounded-xl2 border border-ink/5 p-5 text-center">
-        <p class="text-3xl mb-2">🌿</p>
+      <div class="glass-card rounded-xl2 p-5 text-center">
+        <SparklesIcon class="w-8 h-8 mx-auto mb-2 text-primary" stroke-width="1.5" />
         <p class="font-semibold text-sm">100% Segar</p>
       </div>
-      <div class="bg-white rounded-xl2 border border-ink/5 p-5 text-center">
-        <p class="text-3xl mb-2">🚚</p>
+      <div class="glass-card rounded-xl2 p-5 text-center">
+        <TruckIcon class="w-8 h-8 mx-auto mb-2 text-primary" stroke-width="1.5" />
         <p class="font-semibold text-sm">Pengiriman Cepat</p>
       </div>
-      <div class="bg-white rounded-xl2 border border-ink/5 p-5 text-center">
-        <p class="text-3xl mb-2">🔒</p>
+      <div class="glass-card rounded-xl2 p-5 text-center">
+        <LockClosedIcon class="w-8 h-8 mx-auto mb-2 text-primary" stroke-width="1.5" />
         <p class="font-semibold text-sm">Bayar Aman (QRIS)</p>
       </div>
     </div>
 
-    <div class="bg-primary/5 rounded-xl2 p-5">
-      <p class="font-semibold text-ink mb-1">📍 Lokasi Toko</p>
+    <div class="glass-card-soft bg-primary/5 rounded-xl2 p-5">
+      <p class="font-semibold text-ink mb-1 flex items-center gap-1.5">
+        <MapPinIcon class="w-5 h-5 text-primary" stroke-width="1.75" /> Lokasi Toko
+      </p>
       <p class="text-ink/70 text-sm mb-2">{{ storeInfo.address }}</p>
-      <a :href="storeInfo.googleMapsLink" target="_blank" class="text-primary text-sm font-medium hover:underline">
-        Lihat di Google Maps →
+      <a :href="storeInfo.googleMapsLink" target="_blank" class="inline-flex items-center gap-1 text-primary text-sm font-medium hover:underline transition-colors cursor-pointer">
+        Lihat di Google Maps
+        <ArrowRightIcon class="w-3.5 h-3.5" stroke-width="1.75" />
       </a>
     </div>
   </div>
@@ -45,6 +48,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useStoreInfoStore } from '../../stores/store'
+import { SparklesIcon, TruckIcon, LockClosedIcon, MapPinIcon, ArrowRightIcon } from '@heroicons/vue/24/outline'
 
 const storeInfo = useStoreInfoStore()
 onMounted(() => storeInfo.fetchStoreInfo())

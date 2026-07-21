@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- ===== Hero Banner (TEKS MAKIN BESAR & MEGAH) ===== -->
-    <section class="relative overflow-hidden bg-surface-soft">
-      <span class="absolute top-5 right-5 z-20 bg-accent text-white text-xs font-bold px-4 py-2 rounded-full shadow">
+    <section class="relative overflow-hidden bg-accent">
+      <span class="absolute top-5 right-5 z-20 bg-ink text-badge text-xs font-bold px-4 py-2 rounded-full shadow">
         Gratis Ongkir*
       </span>
 
@@ -25,40 +25,44 @@
       </div>
 
       <!-- Overlay gradasi -->
-      <div class="absolute inset-0 bg-gradient-to-r from-surface-soft via-surface-soft/90 to-surface-soft/60"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-accent via-accent/95 to-accent/75"></div>
+
+      <!-- Bulatan dekoratif -->
+      <div class="absolute -bottom-20 -right-14 w-64 h-64 rounded-full bg-badge/90 z-[5]"></div>
+      <div class="absolute -bottom-24 -left-10 w-56 h-56 rounded-full bg-primary/85 z-[5]"></div>
 
       <!-- Konten Teks Banner Utama yang Diperbesar Ekstra -->
       <div class="relative z-10 max-w-7xl mx-auto px-4 py-24 md:py-28">
         <div class="max-w-3xl"> <!-- Diperlebar agar menampung teks raksasa -->
-          <span class="inline-block bg-badge/20 text-accent font-black px-4 py-2 rounded-full text-xs mb-5 uppercase tracking-widest">
+          <span class="inline-block bg-ink text-badge font-black px-4 py-2 rounded-full text-xs mb-5 uppercase tracking-widest">
             100% SEGAR
           </span>
-          
+
           <!-- Judul Utama Raksasa (text-5xl / md:text-6xl) -->
-          <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6 tracking-tight">
-            <span class="text-primary">Buah Segar Pilihan</span><br />
-            <span class="text-ink">Langsung dari Petani Lokal</span>
+          <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6 tracking-tight text-white">
+            <span class="bg-badge text-ink px-3 rounded-xl inline-block">Buah Segar</span> Pilihan<br />
+            Langsung dari Petani Lokal
           </h1>
-          
+
           <!-- Deskripsi Sub-judul (text-lg / md:text-xl) -->
-          <p class="text-ink/80 text-lg md:text-xl mb-10 leading-relaxed font-medium">
+          <p class="text-white/85 text-lg md:text-xl mb-10 leading-relaxed font-medium">
             Kualitas terbaik untuk keluarga sehat dan bahagia. Melayani Kota Palu,
             Kabupaten Sigi & Kabupaten Donggala.
           </p>
-          
+
           <div class="flex flex-wrap gap-3 mb-10">
             <span class="trust-badge text-sm"><CheckCircleIcon class="w-5 h-5" stroke-width="2" /> 100% Segar</span>
             <span class="trust-badge text-sm"><TruckIcon class="w-5 h-5" stroke-width="2" /> Pengiriman Cepat</span>
             <span class="trust-badge text-sm"><LockClosedIcon class="w-5 h-5" stroke-width="2" /> Bayar Aman (QRIS)</span>
             <span class="trust-badge text-sm"><ShieldCheckIcon class="w-5 h-5" stroke-width="2" /> Garansi Kualitas</span>
           </div>
-          
+
           <!-- Tombol Aksi yang Proporsional -->
           <div class="flex flex-wrap gap-4">
-            <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-extrabold text-base md:text-lg px-10 py-4 rounded-full transition shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+            <button @click="goLogin('/katalog')" class="bg-ink hover:bg-primary-dark text-badge font-extrabold text-base md:text-lg px-10 py-4 rounded-full transition shadow-lg hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
               Mulai Belanja
             </button>
-            <button @click="goLogin('/parsel-kustom')" class="bg-white border-2 border-primary text-primary font-extrabold text-base md:text-lg px-10 py-4 rounded-full hover:bg-primary/5 transition inline-flex items-center gap-2 shadow-md hover:-translate-y-0.5 active:translate-y-0">
+            <button @click="goLogin('/parsel-kustom')" class="bg-transparent border-2 border-white/60 text-white font-extrabold text-base md:text-lg px-10 py-4 rounded-full hover:bg-white/10 transition inline-flex items-center gap-2 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
               <GiftIcon class="w-5 h-5" stroke-width="2.5" /> Buat Parsel Kustom
             </button>
           </div>
@@ -84,7 +88,7 @@
           v-for="cat in categories"
           :key="cat.id"
           @click="goLogin('/katalog')"
-          class="flex flex-col items-center gap-2 group"
+          class="flex flex-col items-center gap-2 group cursor-pointer"
         >
           <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition">
             <img v-if="cat.image" :src="cat.image" :alt="cat.name" class="w-full h-full object-cover" />
@@ -99,11 +103,11 @@
     <section class="max-w-7xl mx-auto px-4 py-10">
       <div class="flex items-center justify-between mb-5">
         <h2 class="text-xl font-bold text-ink">Produk Terlaris</h2>
-        <button @click="goLogin('/katalog')" class="text-primary text-sm font-medium hover:underline">Lihat Semua →</button>
+        <button @click="goLogin('/katalog')" class="text-primary text-sm font-medium hover:underline cursor-pointer">Lihat Semua →</button>
       </div>
 
       <div v-if="loadingFeatured" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-        <div v-for="i in 6" :key="i" class="bg-white rounded-xl2 overflow-hidden animate-pulse">
+        <div v-for="i in 6" :key="i" class="glass-card rounded-xl2 overflow-hidden animate-pulse">
           <div class="aspect-square bg-ink/10"></div>
           <div class="p-3 space-y-2">
             <div class="h-3 bg-ink/10 rounded w-3/4"></div>
@@ -119,7 +123,7 @@
           v-for="p in featuredProducts"
           :key="p.id"
           @click="goLogin(`/produk/${p.slug}`)"
-          class="text-left bg-white rounded-xl2 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden"
+          class="text-left glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden cursor-pointer"
         >
           <div class="aspect-square bg-primary/5 flex items-center justify-center relative overflow-hidden">
             <img v-if="p.images?.[0]?.image_path" :src="p.images[0].image_path" :alt="p.name" class="w-full h-full object-cover" />
@@ -140,7 +144,7 @@
     <section class="max-w-7xl mx-auto px-4 py-4 grid md:grid-cols-2 gap-5">
       <button
         @click="goLogin('/parsel-kustom')"
-        class="text-left bg-primary rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-primary-dark transition"
+        class="text-left bg-primary rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-primary-dark transition cursor-pointer"
       >
         <div>
           <p class="font-bold text-lg mb-1">Buat Parsel Kustom</p>
@@ -150,7 +154,7 @@
       </button>
       <button
         @click="goLogin('/musiman')"
-        class="text-left bg-accent rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-accent-light transition"
+        class="text-left bg-accent rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-accent-light transition cursor-pointer"
       >
         <div>
           <p class="font-bold text-lg mb-1">Buah Musiman</p>
@@ -167,7 +171,7 @@
 
       <div class="grid md:grid-cols-3 gap-5">
         <div class="md:col-span-2">
-          <div class="rounded-xl2 overflow-hidden shadow-sm border border-ink/5">
+          <div class="rounded-xl2 overflow-hidden shadow-sm border border-ink/10">
             <iframe
               :src="storeInfo.googleMapsEmbedUrl"
               class="w-full h-80 md:h-96"
@@ -176,7 +180,7 @@
             ></iframe>
           </div>
 
-          <div class="mt-3 bg-white rounded-xl2 border border-ink/5 p-3 flex items-center justify-between gap-3">
+          <div class="mt-3 glass-card rounded-xl2 p-3 flex items-center justify-between gap-3">
             <div class="min-w-0">
               <p class="font-semibold text-sm text-ink truncate">{{ storeInfo.storeName }}</p>
               <p class="text-xs text-ink/50 truncate">{{ storeInfo.address }}</p>
@@ -202,7 +206,7 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl2 shadow-sm border border-ink/5 p-5 space-y-4">
+        <div class="glass-card rounded-xl2 p-5 space-y-4">
           <div>
             <p class="text-xs text-ink/50 mb-1">Status Toko</p>
             <span

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex bg-surface-soft">
+  <div class="min-h-screen flex glass-panel-bg">
     <!-- ===== Sidebar ===== -->
     <aside class="w-64 bg-primary-dark text-white shrink-0 hidden lg:flex flex-col">
       <div class="px-5 py-4 flex items-center gap-2.5 border-b border-white/10">
@@ -50,7 +50,7 @@
 
     <!-- ===== Konten ===== -->
     <div class="flex-1 min-w-0">
-      <header class="bg-white sticky top-0 z-30 border-b border-ink/5 px-6 py-3.5 flex items-center justify-between">
+      <header class="bg-white sticky top-0 z-30 shadow-sm px-6 py-3.5 flex items-center justify-between">
         <div>
           <h1 class="font-semibold text-ink text-[15px]">{{ pageTitle }}</h1>
           <p class="text-xs text-ink/45 mt-0.5">Selamat datang kembali, {{ auth.user?.name }}</p>
@@ -58,7 +58,7 @@
         <div class="flex items-center gap-4">
           <button
             @click="previewStore"
-            class="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full transition"
+            class="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-full transition cursor-pointer"
           >
             <EyeIcon class="w-4 h-4" stroke-width="1.75" /> Lihat Tampilan Toko
           </button>
@@ -69,10 +69,10 @@
             <span class="w-1.5 h-1.5 rounded-full" :class="storeInfo.isOpenNow ? 'bg-success' : 'bg-danger'"></span>
             Toko {{ storeInfo.isOpenNow ? 'Buka' : 'Tutup' }}
           </span>
-          <button class="text-ink/40 hover:text-ink/70 transition">
+          <button class="text-ink/40 hover:text-ink/70 transition cursor-pointer" aria-label="Notifikasi">
             <BellIcon class="w-5 h-5" stroke-width="1.75" />
           </button>
-          <button @click="logout" class="flex items-center gap-2 text-sm text-ink/60 hover:text-danger transition">
+          <button @click="logout" class="flex items-center gap-2 text-sm text-ink/60 hover:text-danger transition cursor-pointer" aria-label="Keluar">
             <ArrowRightStartOnRectangleIcon class="w-5 h-5" stroke-width="1.75" />
           </button>
         </div>

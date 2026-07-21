@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="to" class="bg-white rounded-xl2 border border-ink/5 p-4 hover:shadow-sm hover:border-primary/20 transition">
+  <router-link :to="to" class="glass-card rounded-xl2 p-4 hover:shadow-md hover:border-primary/20 transition cursor-pointer">
     <div class="w-9 h-9 rounded-lg bg-ink/5 flex items-center justify-center mb-2.5">
       <component :is="icon" class="w-5 h-5 text-ink/60" stroke-width="1.75" />
     </div>

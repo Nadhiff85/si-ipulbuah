@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex bg-surface-soft">
+  <div class="min-h-screen flex glass-panel-bg">
     <aside class="w-64 bg-primary-dark text-white shrink-0 hidden lg:flex flex-col">
       <div class="px-5 py-4 flex items-center gap-2.5 border-b border-white/10">
         <img src="/logo.png" class="h-8 w-8 object-contain rounded-full bg-white p-1" />
@@ -52,7 +52,7 @@
     </aside>
 
     <div class="flex-1 min-w-0">
-      <header class="bg-white sticky top-0 z-30 border-b border-ink/5 px-6 py-3.5 flex items-center justify-between">
+      <header class="bg-white sticky top-0 z-30 shadow-sm px-6 py-3.5 flex items-center justify-between">
         <div>
           <h1 class="font-semibold text-ink text-[15px]">{{ pageTitle }}</h1>
           <p class="text-xs text-ink/45 mt-0.5">Selamat datang kembali, {{ auth.user?.name }}</p>

@@ -3,62 +3,68 @@
     <h1 class="text-xl font-bold text-ink mb-6">Akun Saya</h1>
 
     <div class="flex gap-2 mb-6">
-      <button @click="tab = 'profil'" class="tab-btn" :class="tab === 'profil' && 'tab-active'">Profil</button>
-      <button @click="tab = 'alamat'" class="tab-btn" :class="tab === 'alamat' && 'tab-active'">Alamat Pengiriman</button>
+      <button @click="tab = 'profil'" class="tab-btn" :class="tab === 'profil' && 'tab-active'">
+        <UserIcon class="w-4 h-4" stroke-width="1.75" /> Profil
+      </button>
+      <button @click="tab = 'alamat'" class="tab-btn" :class="tab === 'alamat' && 'tab-active'">
+        <MapPinIcon class="w-4 h-4" stroke-width="1.75" /> Alamat Pengiriman
+      </button>
     </div>
 
     <!-- Tab Profil -->
     <div v-if="tab === 'profil'" class="space-y-5">
-      <form @submit.prevent="saveProfile" class="bg-white rounded-xl2 border border-ink/5 p-6 space-y-4">
+      <form @submit.prevent="saveProfile" class="glass-card rounded-xl2 p-6 space-y-4">
         <p class="font-semibold text-ink">Data Diri</p>
         <div>
-          <label class="text-sm font-medium block mb-1">Nama</label>
+          <label class="text-sm font-medium block mb-1 flex items-center gap-1.5"><UserIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Nama</label>
           <input v-model="profileForm.name" class="input" />
         </div>
         <div>
-          <label class="text-sm font-medium block mb-1">Email</label>
+          <label class="text-sm font-medium block mb-1 flex items-center gap-1.5"><EnvelopeIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Email</label>
           <input :value="auth.user.email" class="input" disabled />
           <p class="text-xs text-ink/40 mt-1">Email tidak dapat diubah.</p>
         </div>
         <div>
-          <label class="text-sm font-medium block mb-1">No. WhatsApp</label>
+          <label class="text-sm font-medium block mb-1 flex items-center gap-1.5"><DevicePhoneMobileIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> No. WhatsApp</label>
           <input v-model="profileForm.phone" class="input" />
         </div>
-        <button type="submit" :disabled="savingProfile" class="bg-primary text-white px-5 py-2.5 rounded-full text-sm font-medium">
+        <button type="submit" :disabled="savingProfile" class="bg-primary text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors hover:bg-primary-dark cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
           {{ savingProfile ? 'Menyimpan...' : 'Simpan Perubahan' }}
         </button>
       </form>
 
-      <form @submit.prevent="changePassword" class="bg-white rounded-xl2 border border-ink/5 p-6 space-y-4">
+      <form @submit.prevent="changePassword" class="glass-card rounded-xl2 p-6 space-y-4">
         <p class="font-semibold text-ink">Ubah Password</p>
         <div>
-          <label class="text-sm font-medium block mb-1">Password Saat Ini</label>
+          <label class="text-sm font-medium block mb-1 flex items-center gap-1.5"><LockClosedIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Password Saat Ini</label>
           <input v-model="passwordForm.current_password" type="password" required class="input" />
         </div>
         <div>
-          <label class="text-sm font-medium block mb-1">Password Baru</label>
+          <label class="text-sm font-medium block mb-1 flex items-center gap-1.5"><LockClosedIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Password Baru</label>
           <input v-model="passwordForm.password" type="password" required minlength="8" class="input" />
         </div>
         <div>
-          <label class="text-sm font-medium block mb-1">Konfirmasi Password Baru</label>
+          <label class="text-sm font-medium block mb-1 flex items-center gap-1.5"><LockClosedIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Konfirmasi Password Baru</label>
           <input v-model="passwordForm.password_confirmation" type="password" required class="input" />
         </div>
         <p v-if="passwordError" class="text-danger text-sm">{{ passwordError }}</p>
-        <button type="submit" :disabled="savingPassword" class="bg-accent text-white px-5 py-2.5 rounded-full text-sm font-medium">
+        <button type="submit" :disabled="savingPassword" class="bg-accent text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors hover:bg-accent-light cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
           {{ savingPassword ? 'Menyimpan...' : 'Ubah Password' }}
         </button>
       </form>
 
-      <button @click="logout" class="text-danger text-sm font-medium hover:underline">Keluar dari Akun</button>
+      <button @click="logout" class="text-danger text-sm font-medium hover:underline cursor-pointer inline-flex items-center gap-1.5">
+        <ArrowRightOnRectangleIcon class="w-4 h-4" stroke-width="1.75" /> Keluar dari Akun
+      </button>
     </div>
 
     <!-- Tab Alamat -->
     <div v-else>
-      <button @click="showForm = !showForm" class="mb-4 bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
+      <button @click="showForm = !showForm" class="mb-4 bg-primary text-white px-4 py-2 rounded-full text-sm font-medium transition-colors hover:bg-primary-dark cursor-pointer">
         {{ showForm ? 'Batal' : '+ Tambah Alamat' }}
       </button>
 
-      <form v-if="showForm" @submit.prevent="saveAddress" class="bg-white rounded-xl2 border border-ink/5 p-5 space-y-3 mb-5">
+      <form v-if="showForm" @submit.prevent="saveAddress" class="glass-card rounded-xl2 p-5 space-y-3 mb-5">
         <input v-model="form.label" placeholder="Label (Rumah/Kantor)" class="input" />
         <input v-model="form.recipient_name" placeholder="Nama Penerima" required class="input" />
         <input v-model="form.phone" placeholder="No. WhatsApp" required class="input" />
@@ -67,19 +73,21 @@
           <option value="" disabled selected>Pilih Kecamatan</option>
           <option v-for="r in regions" :key="r.id" :value="r.id">{{ r.regency }} - {{ r.district }}</option>
         </select>
-        <label class="flex items-center gap-2 text-sm">
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
           <input type="checkbox" v-model="form.is_default" /> Jadikan alamat utama
         </label>
-        <button type="submit" class="bg-accent text-white px-5 py-2 rounded-full text-sm font-medium">Simpan Alamat</button>
+        <button type="submit" class="bg-accent text-white px-5 py-2 rounded-full text-sm font-medium transition-colors hover:bg-accent-light cursor-pointer">Simpan Alamat</button>
       </form>
 
       <div class="space-y-3">
-        <div v-for="addr in addresses" :key="addr.id" class="bg-white rounded-xl2 border border-ink/5 p-4 flex justify-between">
+        <div v-for="addr in addresses" :key="addr.id" class="glass-card rounded-xl2 p-4 flex justify-between">
           <div class="text-sm">
             <p class="font-medium">{{ addr.label }} — {{ addr.recipient_name }} <span v-if="addr.is_default" class="text-xs text-primary">(Utama)</span></p>
             <p class="text-ink/60">{{ addr.full_address }}</p>
           </div>
-          <button @click="removeAddress(addr)" class="text-danger text-xs h-fit hover:underline">Hapus</button>
+          <button @click="removeAddress(addr)" class="text-danger text-xs h-fit hover:underline cursor-pointer inline-flex items-center gap-1">
+            <TrashIcon class="w-3.5 h-3.5" stroke-width="1.75" /> Hapus
+          </button>
         </div>
       </div>
     </div>
@@ -91,6 +99,15 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import api from '../../services/api'
+import {
+  UserIcon,
+  MapPinIcon,
+  EnvelopeIcon,
+  DevicePhoneMobileIcon,
+  LockClosedIcon,
+  ArrowRightOnRectangleIcon,
+  TrashIcon,
+} from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -175,10 +192,10 @@ onMounted(() => {
 
 <style scoped>
 .input {
-  @apply w-full border border-ink/15 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40;
+  @apply w-full bg-white border border-ink/10 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/40;
 }
 .tab-btn {
-  @apply px-4 py-2 rounded-full text-sm font-medium text-ink/60 border border-ink/10;
+  @apply px-4 py-2 rounded-full text-sm font-medium text-ink/60 border border-ink/20 bg-white hover:border-accent/40 transition-colors cursor-pointer inline-flex items-center gap-1.5;
 }
 .tab-active {
   @apply bg-primary text-white border-primary;

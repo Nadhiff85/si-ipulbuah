@@ -112,6 +112,8 @@ npm run dev
 ```
 Buka **http://localhost:8000** (BUKAN port 5173 — itu cuma proses compile Vite di background).
 
+> **Catatan (dev gotcha)**: kalau edit `tailwind.config.js` (misal ganti warna `primary`/`accent`) saat `npm run dev` sudah jalan, kadang log Vite terlihat sukses HMR (`page reload tailwind.config.js`, lalu `hmr update .../app.css`) tapi browser tetap render warna LAMA — walau sudah hard-reload & clear cache. Kalau ini terjadi: matikan proses Vite, hapus folder `node_modules/.vite`, lalu `npm run dev` ulang. Warna baru langsung muncul setelah itu.
+
 **Mode Produksi** (build sekali jadi, tanpa perlu `npm run dev` terus aktif):
 ```bash
 npm run build

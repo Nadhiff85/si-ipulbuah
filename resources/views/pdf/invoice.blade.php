@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <style>
-        body { font-family: sans-serif; font-size: 12px; color: #2C2C2C; }
-        h1 { color: #2E7D32; margin-bottom: 0; }
+        body { font-family: sans-serif; font-size: 12px; color: #1F1206; }
+        h1 { color: #FF5A36; margin-bottom: 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border-bottom: 1px solid #eee; padding: 6px; text-align: left; }
-        .total-row td { font-weight: bold; border-top: 2px solid #2E7D32; }
+        .total-row td { font-weight: bold; border-top: 2px solid #123524; }
     </style>
 </head>
 <body>

@@ -7,25 +7,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Palet "Fresh Orchard" - IPUL BUAH
+        // Palet "IPUL BUAH" - "Tropical Bold": coral berani + hijau tua + lime
         primary: {
-          DEFAULT: '#2E7D32', // hijau segar - header, sidebar, tombol utama
-          light: '#4CAF50',
-          dark: '#14401A',    // sidebar admin/superadmin (digelapkan sedikit)
+          DEFAULT: '#123524', // hijau tua - header, sidebar, tombol utama
+          light: '#1F5C3D',
+          dark: '#081C10',    // sidebar admin/superadmin (digelapkan)
         },
         accent: {
-          DEFAULT: '#FB8C00', // oranye hangat - CTA (checkout, beli)
-          light: '#FF9800',
+          DEFAULT: '#FF5A36', // coral berani - CTA (checkout, beli)
+          light: '#FF7A55',
         },
-        badge: '#FFC107',     // kuning lembut - best seller/promo/musiman
+        badge: '#7CA300',      // lime tua - best seller/promo/musiman (tetap terbaca sbg teks)
         surface: {
           DEFAULT: '#FFFFFF',
-          soft: '#FAFAF7',
+          soft: '#FFF6EC',
         },
-        ink: '#2C2C2C',       // teks utama
-        success: '#81C784',
-        warning: '#FFA726',
-        danger: '#E53935',
+        ink: '#1F1206',       // teks utama
+        success: '#34D399',
+        warning: '#F2A900',
+        danger: '#E63946',
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui'],
