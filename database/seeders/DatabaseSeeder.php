@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             DeliveryRegionSeeder::class,
             DeliverySlotSeeder::class,
             StoreSettingSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }
