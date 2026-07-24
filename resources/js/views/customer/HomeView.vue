@@ -1,101 +1,92 @@
 <template>
   <div>
-    <!-- ===== Hero Banner (TEKS MAKIN BESAR & MEGAH) ===== -->
-    <section class="relative overflow-hidden bg-accent">
-      <span class="absolute top-5 right-5 z-20 bg-ink text-badge text-xs font-bold px-4 py-2 rounded-full shadow">
-        Gratis Ongkir*
-      </span>
+    <!-- ===== Film "Belah Buah" - hero sinematik yang discrub scroll =====
+         Satu layar di-pin oleh GSAP ScrollTrigger; tiga babak (SEGAR/LENGKAP/MURAH)
+         terbuka bergantian lewat wipe clip-path diagonal seperti irisan pisau,
+         lalu larut ke krem konten di bawahnya. Dengan prefers-reduced-motion,
+         hanya babak pembuka yang tampil sebagai hero statis biasa. -->
+    <section ref="filmRef" class="relative h-screen overflow-hidden bg-primary">
 
-      <!-- Background marquee -->
-      <div class="hero-marquee-mask absolute inset-0 flex flex-col justify-center gap-6 py-6">
-        <div class="flex whitespace-nowrap animate-marquee-left">
-          <div v-for="n in 4" :key="`row1-${n}`" class="flex gap-6 pr-6 shrink-0">
-            <div v-for="fruit in heroFruits" :key="`${n}-${fruit}`" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden shrink-0 shadow-sm">
-              <img :src="`/images/marquee/${fruit}`" class="w-full h-full object-cover" loading="lazy" />
-            </div>
-          </div>
-        </div>
-        <div class="flex whitespace-nowrap animate-marquee-right">
-          <div v-for="n in 4" :key="`row2-${n}`" class="flex gap-6 pr-6 shrink-0">
-            <div v-for="fruit in heroFruitsReversed" :key="`${n}-${fruit}`" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden shrink-0 shadow-sm">
-              <img :src="`/images/marquee/${fruit}`" class="w-full h-full object-cover" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Babak 0: pembuka -->
+      <div class="absolute inset-0">
+        <img src="/images/alpukat.png" alt="" class="absolute -bottom-6 -right-6 w-72 h-72 md:w-80 md:h-80 object-contain drop-shadow-xl" />
+        <div class="absolute -bottom-24 -left-10 w-56 h-56 rounded-full bg-gradient-to-tr from-accent to-badge"></div>
 
-      <!-- Overlay gradasi -->
-      <div class="absolute inset-0 bg-gradient-to-r from-accent via-accent/95 to-accent/75"></div>
-
-      <!-- Bulatan dekoratif -->
-      <div class="absolute -bottom-20 -right-14 w-64 h-64 rounded-full bg-badge/90 z-[5]"></div>
-      <div class="absolute -bottom-24 -left-10 w-56 h-56 rounded-full bg-primary/85 z-[5]"></div>
-
-      <!-- Konten Teks Banner Utama yang Diperbesar Ekstra -->
-      <div class="relative z-10 max-w-7xl mx-auto px-4 py-24 md:py-28">
-        <div class="max-w-3xl"> <!-- Diperlebar agar menampung teks raksasa -->
-          <span class="inline-block bg-ink text-badge font-black px-4 py-2 rounded-full text-xs mb-5 uppercase tracking-widest">
-            100% SEGAR
+        <div class="film-intro-inner relative h-full max-w-3xl mx-auto px-4 flex flex-col items-center justify-center text-center">
+          <span class="film-intro-soft inline-block bg-ink text-badge font-black px-4 py-2 rounded-full text-xs mb-6 uppercase tracking-widest">
+            Fresh • Lengkap • Murah
           </span>
 
-          <!-- Judul Utama Raksasa (text-5xl / md:text-6xl) -->
-          <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6 tracking-tight text-white">
-            <span class="bg-badge text-ink px-3 rounded-xl inline-block">Buah Segar</span> Pilihan<br />
-            Langsung dari Petani Lokal
+          <h1 class="font-display font-extrabold text-white text-6xl md:text-8xl tracking-tight leading-none mb-5 overflow-hidden" aria-label="IPUL BUAH">
+            <span v-for="(ch, i) in 'IPUL BUAH'" :key="i" class="film-char inline-block" aria-hidden="true">{{ ch === ' ' ? ' ' : ch }}</span>
           </h1>
 
-          <!-- Deskripsi Sub-judul (text-lg / md:text-xl) -->
-          <p class="text-white/85 text-lg md:text-xl mb-10 leading-relaxed font-medium">
-            Kualitas terbaik untuk keluarga sehat dan bahagia. Melayani Kota Palu,
+          <p class="film-intro-soft text-white/90 text-lg md:text-xl mb-9 leading-relaxed font-medium max-w-lg">
+            Pilihan buah paling lengkap dengan harga terjangkau. Melayani Kota Palu,
             Kabupaten Sigi & Kabupaten Donggala.
           </p>
 
-          <div class="flex flex-wrap gap-3 mb-10">
-            <span class="trust-badge text-sm"><CheckCircleIcon class="w-5 h-5" stroke-width="2" /> 100% Segar</span>
-            <span class="trust-badge text-sm"><TruckIcon class="w-5 h-5" stroke-width="2" /> Pengiriman Cepat</span>
-            <span class="trust-badge text-sm"><LockClosedIcon class="w-5 h-5" stroke-width="2" /> Bayar Aman (QRIS)</span>
-            <span class="trust-badge text-sm"><ShieldCheckIcon class="w-5 h-5" stroke-width="2" /> Garansi Kualitas</span>
-          </div>
-
-          <!-- Tombol Aksi yang Proporsional -->
-          <div class="flex flex-wrap gap-4">
-            <button @click="goLogin('/katalog')" class="bg-ink hover:bg-primary-dark text-badge font-extrabold text-base md:text-lg px-10 py-4 rounded-full transition shadow-lg hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
+          <div class="film-intro-soft flex flex-wrap justify-center gap-4 mb-5">
+            <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-extrabold text-base md:text-lg px-10 py-4 rounded-full transition shadow-lg hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
               Mulai Belanja
             </button>
             <button @click="goLogin('/parsel-kustom')" class="bg-transparent border-2 border-white/60 text-white font-extrabold text-base md:text-lg px-10 py-4 rounded-full hover:bg-white/10 transition inline-flex items-center gap-2 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
               <GiftIcon class="w-5 h-5" stroke-width="2.5" /> Buat Parsel Kustom
             </button>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- ===== Kategori ===== -->
-    <section class="max-w-7xl mx-auto px-4 py-10">
-      <h2 class="text-xl font-bold text-ink mb-5">Jelajahi Kategori</h2>
-
-      <div v-if="loadingCategories" class="grid grid-cols-3 sm:grid-cols-6 gap-4">
-        <div v-for="i in 6" :key="i" class="flex flex-col items-center gap-2 animate-pulse">
-          <div class="w-16 h-16 rounded-full bg-ink/10"></div>
-          <div class="h-3 w-12 bg-ink/10 rounded"></div>
+          <button @click="goLogin('/parsel-kustom')" class="film-intro-soft inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 text-white text-sm font-semibold pl-2.5 pr-4 py-2 rounded-full transition cursor-pointer">
+            <span class="bg-badge text-ink text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide">Baru</span>
+            <SparklesIcon class="w-4 h-4 text-badge shrink-0" stroke-width="2" />
+            Rangkai sendiri parsel buah untuk hadiah & momen spesial
+          </button>
         </div>
       </div>
 
-      <p v-else-if="categories.length === 0" class="text-ink/40 text-sm">Belum ada kategori tersedia.</p>
+      <!-- Babak 1: SEGAR - irisan dari kiri -->
+      <div class="film-panel panel-segar absolute inset-0" :class="reducedMotion ? 'hidden' : ''" style="clip-path: polygon(0% 0%, 0% 0%, -22% 100%, -22% 100%); will-change: clip-path;">
+        <img src="/images/marquee/Jeruk.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover" style="will-change: transform;" />
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/25 to-primary/45"></div>
+        <div class="film-blade absolute inset-y-0 -left-1/3 w-48 -skew-x-12 bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+          <h2 class="film-word font-display font-extrabold text-white text-7xl md:text-9xl tracking-tight drop-shadow-lg">SEGAR.</h2>
+          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-4 drop-shadow-md">Dipetik & masuk etalase di hari yang sama</p>
+        </div>
+      </div>
 
-      <div v-else class="grid grid-cols-3 sm:grid-cols-6 gap-4">
-        <button
-          v-for="cat in categories"
-          :key="cat.id"
-          @click="goLogin('/katalog')"
-          class="flex flex-col items-center gap-2 group cursor-pointer"
-        >
-          <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition">
-            <img v-if="cat.image" :src="cat.image" :alt="cat.name" class="w-full h-full object-cover" />
-            <TagIcon v-else class="w-6 h-6 text-primary" stroke-width="1.5" />
+      <!-- Babak 2: LENGKAP - irisan dari kanan -->
+      <div class="film-panel panel-lengkap absolute inset-0" :class="reducedMotion ? 'hidden' : ''" style="clip-path: polygon(122% 0%, 122% 0%, 100% 100%, 100% 100%); will-change: clip-path;">
+        <img src="/images/marquee/Salad.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover" style="will-change: transform;" />
+        <div class="absolute inset-0 bg-gradient-to-t from-accent/85 via-accent/20 to-accent/45"></div>
+        <div class="film-blade absolute inset-y-0 -right-1/3 w-48 skew-x-12 bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+          <h2 class="film-word font-display font-extrabold text-white text-7xl md:text-9xl tracking-tight drop-shadow-lg">LENGKAP.</h2>
+          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-4 drop-shadow-md">Lokal, impor, buah potong, sampai jus — semua ada</p>
+        </div>
+      </div>
+
+      <!-- Babak 3: MURAH - irisan dari bawah, ditutup ajakan belanja -->
+      <div class="film-panel panel-murah absolute inset-0" :class="reducedMotion ? 'hidden' : ''" style="clip-path: polygon(0% 122%, 100% 122%, 100% 100%, 0% 100%); will-change: clip-path;">
+        <img src="/images/marquee/buahpotong.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover" style="will-change: transform;" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/45 to-ink/60"></div>
+        <div class="film-blade absolute inset-x-0 -bottom-1/3 h-40 bg-gradient-to-t from-transparent via-white/70 to-transparent"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+          <h2 class="film-word font-display font-extrabold text-badge text-7xl md:text-9xl tracking-tight drop-shadow-lg">MURAH.</h2>
+          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-4 drop-shadow-md">Harga bersahabat setiap hari, gratis ongkir*</p>
+          <div class="film-word flex flex-wrap justify-center gap-4 mt-8">
+            <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-extrabold px-10 py-4 rounded-full transition shadow-lg cursor-pointer">
+              Mulai Belanja
+            </button>
+            <button @click="goLogin('/parsel-kustom')" class="border-2 border-white/60 text-white font-extrabold px-10 py-4 rounded-full hover:bg-white/10 transition inline-flex items-center gap-2 cursor-pointer">
+              <GiftIcon class="w-5 h-5" stroke-width="2.5" /> Buat Parsel Kustom
+            </button>
           </div>
-          <span class="text-xs text-ink/70">{{ cat.name }}</span>
-        </button>
+        </div>
+      </div>
+
+      <!-- Petunjuk scroll -->
+      <div class="film-hint absolute bottom-5 left-1/2 -translate-x-1/2 text-white/70 text-xs font-semibold tracking-widest uppercase animate-bounce" :class="reducedMotion ? 'hidden' : ''">
+        Scroll ↓
       </div>
     </section>
 
@@ -106,10 +97,10 @@
         <button @click="goLogin('/katalog')" class="text-primary text-sm font-medium hover:underline cursor-pointer">Lihat Semua →</button>
       </div>
 
-      <div v-if="loadingFeatured" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-        <div v-for="i in 6" :key="i" class="glass-card rounded-xl2 overflow-hidden animate-pulse">
-          <div class="aspect-square bg-ink/10"></div>
-          <div class="p-3 space-y-2">
+      <div v-if="loadingFeatured" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div v-for="i in 4" :key="i" class="glass-card rounded-xl2 overflow-hidden animate-pulse">
+          <div class="aspect-[4/3] bg-ink/10"></div>
+          <div class="p-4 space-y-2">
             <div class="h-3 bg-ink/10 rounded w-3/4"></div>
             <div class="h-3 bg-ink/10 rounded w-1/2"></div>
           </div>
@@ -118,40 +109,76 @@
 
       <p v-else-if="featuredProducts.length === 0" class="text-ink/40 text-sm">Belum ada produk terlaris yang dikurasi.</p>
 
-      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
         <button
           v-for="p in featuredProducts"
           :key="p.id"
           @click="goLogin(`/produk/${p.slug}`)"
-          class="text-left glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden cursor-pointer"
+          class="text-left glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-1 transition-all overflow-hidden cursor-pointer group"
         >
-          <div class="aspect-square bg-primary/5 flex items-center justify-center relative overflow-hidden">
-            <img v-if="p.images?.[0]?.image_path" :src="p.images[0].image_path" :alt="p.name" class="w-full h-full object-cover" />
-            <PhotoIcon v-else class="w-8 h-8 text-ink/20" stroke-width="1.5" />
-            <span v-if="p.labels?.[0]" class="absolute top-2 left-2 bg-badge text-ink text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+          <div class="aspect-[4/3] bg-primary/5 flex items-center justify-center relative overflow-hidden">
+            <img
+              v-if="p.images?.[0]?.image_path"
+              :src="p.images[0].image_path"
+              :alt="p.name"
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <PhotoIcon v-else class="w-10 h-10 text-ink/20" stroke-width="1.5" />
+            <span v-if="p.labels?.[0]" class="absolute top-2.5 left-2.5 bg-badge text-ink text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow-sm">
               {{ labelText(p.labels[0]) }}
             </span>
           </div>
-          <div class="p-3">
-            <p class="font-medium text-sm text-ink truncate">{{ p.name }}</p>
-            <p class="text-accent font-bold text-sm mt-1">Rp {{ formatPrice(p.price_unit) }}<span class="text-ink/40 font-normal">/{{ p.unit }}</span></p>
+          <div class="p-4">
+            <p class="font-semibold text-sm text-ink truncate">{{ p.name }}</p>
+            <p class="text-ink/40 text-xs mt-0.5">{{ p.origin_region }}</p>
+            <p class="text-accent font-bold text-base mt-2 tabular-nums">Rp {{ formatPrice(p.price_unit) }}<span class="text-ink/40 font-normal text-xs">/{{ p.unit }}</span></p>
           </div>
         </button>
       </div>
     </section>
 
-    <!-- ===== Banner Parsel Kustom & Musiman ===== -->
-    <section class="max-w-7xl mx-auto px-4 py-4 grid md:grid-cols-2 gap-5">
-      <button
-        @click="goLogin('/parsel-kustom')"
-        class="text-left bg-primary rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-primary-dark transition cursor-pointer"
-      >
-        <div>
-          <p class="font-bold text-lg mb-1">Buat Parsel Kustom</p>
-          <p class="text-white/80 text-sm">Rangkai sendiri hampers buah sesuai keinginanmu</p>
+    <!-- ===== Ulasan Pelanggan (hanya tampil kalau sudah ada ulasan asli disetujui) ===== -->
+    <section v-if="recentReviews.length > 0" class="max-w-7xl mx-auto px-4 py-10">
+      <h2 class="text-xl font-bold text-ink mb-5">Kata Pelanggan Kami</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div v-for="r in recentReviews" :key="r.id" class="glass-card rounded-xl2 p-5">
+          <div class="flex gap-0.5 mb-3">
+            <StarIcon v-for="star in 5" :key="star" class="w-4 h-4" :class="star <= r.rating ? 'text-badge' : 'text-ink/15'" />
+          </div>
+          <p class="text-sm text-ink/80 leading-relaxed mb-4">"{{ r.comment }}"</p>
+          <p class="text-xs font-semibold text-ink">{{ r.customer_name }}<span v-if="r.product_name" class="text-ink/40 font-normal"> · {{ r.product_name }}</span></p>
         </div>
-        <span><GiftIcon class="w-9 h-9" stroke-width="1.5" /></span>
-      </button>
+      </div>
+    </section>
+
+    <!-- ===== Buat Parsel Kustom ===== -->
+    <section class="max-w-7xl mx-auto px-4 py-10">
+      <div class="bg-primary rounded-xl2 overflow-hidden grid md:grid-cols-2 items-stretch">
+        <div class="p-8 md:p-10 flex flex-col justify-center text-white">
+          <span class="inline-flex items-center gap-1.5 bg-white/15 text-badge font-bold px-3 py-1.5 rounded-full text-xs uppercase tracking-wide w-fit mb-4">
+            <GiftIcon class="w-4 h-4" stroke-width="2" /> Parsel Kustom
+          </span>
+          <h2 class="text-2xl md:text-3xl font-black mb-3 leading-tight">Rangkai Sendiri Parsel Buahmu</h2>
+          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">
+            Pilih sendiri isi, kemasan, dan kartu ucapan — cocok untuk hadiah ulang tahun,
+            parsel lebaran, atau kado sehat untuk orang tersayang.
+          </p>
+          <button
+            @click="goLogin('/parsel-kustom')"
+            class="bg-accent hover:bg-accent-light text-white font-bold px-6 py-3 rounded-full transition w-fit inline-flex items-center gap-2 cursor-pointer"
+          >
+            Mulai Rangkai Parsel <ArrowRightIcon class="w-4 h-4" stroke-width="2.5" />
+          </button>
+        </div>
+        <div class="relative min-h-[220px] hidden md:block">
+          <img src="/images/marquee/Buah%20Musiman.jpg" alt="Parsel buah kustom" class="absolute inset-0 w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-l from-transparent to-primary/40"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Banner Musiman & Promo ===== -->
+    <section class="max-w-7xl mx-auto px-4 py-4 grid md:grid-cols-2 gap-5">
       <button
         @click="goLogin('/musiman')"
         class="text-left bg-accent rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-accent-light transition cursor-pointer"
@@ -161,6 +188,16 @@
           <p class="text-white/80 text-sm">Segar, enak & sedang musim sekarang!</p>
         </div>
         <span><SunIcon class="w-9 h-9" stroke-width="1.5" /></span>
+      </button>
+      <button
+        @click="goLogin('/promo')"
+        class="text-left bg-badge rounded-xl2 p-6 text-primary-dark flex items-center justify-between hover:opacity-90 transition cursor-pointer"
+      >
+        <div>
+          <p class="font-bold text-lg mb-1">Promo Spesial</p>
+          <p class="text-primary-dark/80 text-sm">Cek penawaran & diskon minggu ini</p>
+        </div>
+        <span><TagIcon class="w-9 h-9" stroke-width="1.5" /></span>
       </button>
     </section>
 
@@ -263,27 +300,146 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import { useStoreInfoStore } from '../../stores/store'
 import api from '../../services/api'
 import {
-  PhotoIcon, TagIcon, GiftIcon, SunIcon, CheckCircleIcon, TruckIcon,
-  LockClosedIcon, ShieldCheckIcon, MapPinIcon, ChatBubbleLeftRightIcon, ArrowTopRightOnSquareIcon,
+  PhotoIcon, TagIcon, GiftIcon, SunIcon, MapPinIcon, ChatBubbleLeftRightIcon, ArrowTopRightOnSquareIcon,
+  ArrowRightIcon, SparklesIcon,
 } from '@heroicons/vue/24/outline'
+import { StarIcon } from '@heroicons/vue/24/solid'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Lenis from 'lenis'
 
-const heroFruits = ['Jeruk.jpeg', 'Anggur.jpeg', 'Apel.jpeg']
-const heroFruitsReversed = [...heroFruits].reverse()
+gsap.registerPlugin(ScrollTrigger)
 
 const router = useRouter()
 const auth = useAuthStore()
 const storeInfo = useStoreInfoStore()
 
+// ===== Film "Belah Buah" =====
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const filmRef = ref(null)
+let lenis = null
+let filmCtx = null
+let introSafety = null
+const lenisTick = (t) => lenis?.raf(t * 1000)
+
+function initFilm() {
+  // Kontrak dev: ?jump=<y> mendarat langsung di posisi scroll itu (untuk verifikasi),
+  // window.__ready menandai halaman siap di-screenshot.
+  const jump = new URLSearchParams(location.search).get('jump')
+  if (jump !== null) history.scrollRestoration = 'manual'
+
+  if (reducedMotion || !filmRef.value) {
+    window.__ready = true
+    return
+  }
+
+  lenis = new Lenis({ lerp: 0.09, smoothWheel: true })
+  lenis.on('scroll', ScrollTrigger.update)
+  gsap.ticker.add(lenisTick)
+  gsap.ticker.lagSmoothing(0)
+
+  filmCtx = gsap.context(() => {
+    // Sembunyikan elemen intro & kata SEBELUM paint (gsap.set = inline style,
+    // menang atas class Tailwind - ini yang bikin reveal dulu selalu blank).
+    gsap.set('.film-char', { yPercent: 120, autoAlpha: 0 })
+    gsap.set('.film-intro-soft', { y: 18, autoAlpha: 0 })
+    gsap.set('.film-word', { autoAlpha: 0 })
+
+    // Reveal pembuka saat load (sekali jalan, bukan scroll-driven)
+    const introTl = gsap.timeline({ delay: 0.15 })
+    introTl.to('.film-char', { yPercent: 0, autoAlpha: 1, stagger: 0.045, duration: 0.9, ease: 'power4.out' })
+    introTl.to('.film-intro-soft', { y: 0, autoAlpha: 1, stagger: 0.08, duration: 0.7, ease: 'power3.out' }, 0.4)
+
+    // Jaring pengaman keandalan demo: kalau rAF sempat beku saat load (tab
+    // belum fokus) dan reveal tak sempat selesai, paksa tampil - progress(1)
+    // sinkron, tak butuh rAF. Di kondisi normal ini no-op (sudah selesai).
+    introSafety = setTimeout(() => { if (introTl.progress() < 1) introTl.progress(1) }, 2600)
+
+    // HUKUM URUTAN ScrollTrigger: scene yang di-pin HARUS dibuat lebih dulu -
+    // trigger yang dibuat setelahnya baru menghitung posisi dengan benar
+    // terhadap pin spacer.
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: filmRef.value,
+        start: 'top top',
+        end: '+=200%',
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    })
+
+    tl.to('.film-hint', { autoAlpha: 0, duration: 0.03, ease: 'none' }, 0.01)
+    tl.to('.film-intro-inner', { scale: 0.9, autoAlpha: 0.25, duration: 0.22, ease: 'power1.in' }, 0.02)
+
+    // Helper satu babak: bilah pisau menyapu -> irisan clip terbuka -> foto
+    // ken-burns -> kata muncul overshoot. "at" = titik mulai di timeline 0..1.
+    const babak = (sel, clipTo, bladeTo, at) => {
+      tl.fromTo(`${sel} .film-blade`,
+        { autoAlpha: 0, [bladeTo.axis]: bladeTo.from },
+        { autoAlpha: 1, [bladeTo.axis]: bladeTo.mid, duration: 0.06, ease: 'none' }, at)
+      tl.to(`${sel} .film-blade`,
+        { [bladeTo.axis]: bladeTo.to, autoAlpha: 0, duration: 0.16, ease: 'none' }, at + 0.06)
+      tl.fromTo(sel,
+        { clipPath: clipTo.from },
+        { clipPath: clipTo.to, duration: 0.22, ease: 'power2.inOut' }, at + 0.02)
+      tl.fromTo(`${sel} .film-img`,
+        { scale: 1.25 }, { scale: 1.03, duration: 0.5, ease: 'none' }, at + 0.02)
+      tl.fromTo(`${sel} .film-word`,
+        { yPercent: 55, autoAlpha: 0, scale: 0.9 },
+        { yPercent: 0, autoAlpha: 1, scale: 1, stagger: 0.05, duration: 0.16, ease: 'back.out(1.6)' }, at + 0.12)
+    }
+
+    // Babak 1: SEGAR - irisan diagonal dari kiri, bilah sapu kiri->kanan
+    babak('.panel-segar',
+      { from: 'polygon(0% 0%, 0% 0%, -22% 100%, -22% 100%)', to: 'polygon(0% 0%, 122% 0%, 100% 100%, -22% 100%)' },
+      { axis: 'xPercent', from: -120, mid: 40, to: 260 }, 0.06)
+
+    // Babak 2: LENGKAP - irisan diagonal dari kanan, bilah sapu kanan->kiri
+    babak('.panel-lengkap',
+      { from: 'polygon(122% 0%, 122% 0%, 100% 100%, 100% 100%)', to: 'polygon(-22% 0%, 122% 0%, 100% 100%, 0% 100%)' },
+      { axis: 'xPercent', from: 120, mid: -40, to: -260 }, 0.34)
+
+    // Babak 3: MURAH (penutup) - irisan naik dari bawah, bilah sapu bawah->atas.
+    // Selesai reveal ~0.84 lalu DITAHAN sampai ujung pin (1.0) supaya tidak
+    // gampang terlewat saat scroll pelan. Fotonya terus zoom pelan biar hidup.
+    babak('.panel-murah',
+      { from: 'polygon(0% 122%, 100% 122%, 100% 100%, 0% 100%)', to: 'polygon(0% -22%, 100% -22%, 100% 100%, 0% 100%)' },
+      { axis: 'yPercent', from: 120, mid: -40, to: -280 }, 0.60)
+    tl.to('.panel-murah .film-img', { scale: 1.08, duration: 0.16, ease: 'none' }, 0.84)
+
+    // TANPA fade krem: begitu MURAH selesai ditahan, pin lepas dan langsung
+    // masuk ke "Produk Terlaris" - tidak ada lagi scroll kosong.
+  }, filmRef.value)
+
+  if (jump !== null) {
+    lenis.scrollTo(+jump || 0, { immediate: true })
+    ScrollTrigger.update()
+  }
+  window.__ready = true
+}
+
 onMounted(() => {
   storeInfo.fetchStoreInfo()
   fetchFeaturedProducts()
-  fetchCategories()
+  fetchRecentReviews()
+  initFilm()
+})
+
+onUnmounted(() => {
+  // Bersihkan pin/trigger & smooth-scroll saat pindah halaman SPA,
+  // supaya halaman lain tidak ikut terpengaruh.
+  clearTimeout(introSafety)
+  filmCtx?.revert()
+  gsap.ticker.remove(lenisTick)
+  lenis?.destroy()
+  lenis = null
 })
 
 // Fungsi login check
@@ -295,19 +451,6 @@ function goLogin(path) {
       path: '/login',
       query: { redirect: path, reason: 'Masuk atau daftar dulu untuk melihat detail produk dan mulai belanja 🍊' },
     })
-  }
-}
-
-const categories = ref([])
-const loadingCategories = ref(true)
-
-async function fetchCategories() {
-  loadingCategories.value = true
-  try {
-    const { data } = await api.get('/categories/glimpse')
-    categories.value = data.categories
-  } finally {
-    loadingCategories.value = false
   }
 }
 
@@ -324,6 +467,17 @@ async function fetchFeaturedProducts() {
   }
 }
 
+const recentReviews = ref([])
+
+async function fetchRecentReviews() {
+  try {
+    const { data } = await api.get('/reviews/recent')
+    recentReviews.value = data.reviews
+  } catch {
+    recentReviews.value = []
+  }
+}
+
 function labelText(label) {
   return { segar: 'Segar', best_seller: 'Best Seller', musiman: 'Musiman', promo: 'Promo' }[label] || label
 }
@@ -332,9 +486,3 @@ function formatPrice(v) {
   return new Intl.NumberFormat('id-ID').format(v)
 }
 </script>
-
-<style scoped>
-.trust-badge {
-  @apply bg-white text-ink/70 font-semibold px-4 py-2 rounded-full border border-ink/10 inline-flex items-center gap-1.5 shadow-sm;
-}
-</style>

@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-primary-dark flex items-center justify-center px-4">
     <div class="w-full max-w-md">
       <div class="text-center mb-6">
-        <img src="/logo.png" alt="IPUL BUAH" class="h-16 w-16 mx-auto mb-3 bg-white rounded-full p-2" />
+        <span class="h-16 w-16 mx-auto mb-3 rounded-2xl bg-white text-primary font-black text-xl flex items-center justify-center shadow">IB</span>
         <h1 class="text-xl font-bold text-white">Portal Staff IPUL BUAH</h1>
         <p class="text-white/60 text-sm mt-1">Khusus Admin Toko & Superadmin</p>
       </div>

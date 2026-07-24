@@ -3,7 +3,7 @@
     <!-- ===== Sidebar ===== -->
     <aside class="w-64 bg-primary-dark text-white shrink-0 hidden lg:flex flex-col">
       <div class="px-5 py-4 flex items-center gap-2.5 border-b border-white/10">
-        <img src="/logo.png" class="h-8 w-8 object-contain rounded-full bg-white p-1" />
+        <span class="h-8 w-8 rounded-lg bg-accent text-white font-black text-xs flex items-center justify-center shrink-0">IB</span>
         <div class="leading-tight">
           <p class="font-semibold text-[15px]">IPUL BUAH</p>
           <p class="text-[11px] text-white/45">Admin Toko</p>

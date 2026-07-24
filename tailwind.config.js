@@ -28,7 +28,8 @@ export default {
         danger: '#E63946',
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+        sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui'],
+        display: ['Bricolage Grotesque', 'Plus Jakarta Sans', 'ui-sans-serif'],
       },
       borderRadius: {
         xl2: '1.25rem',

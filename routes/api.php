@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\Superadmin\SystemLogController;
 use App\Http\Controllers\Api\Superadmin\SystemSettingController;
 use App\Http\Controllers\Api\PublicCategoryController;
 use App\Http\Controllers\Api\PublicProductController;
+use App\Http\Controllers\Api\PublicReviewController;
 use App\Http\Controllers\Api\StoreSettingsController;
 use App\Http\Controllers\Api\MidtransWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::get('/store-settings', [StoreSettingsController::class, 'show']);
 Route::get('/faqs', [StoreSettingsController::class, 'faqs']);
 Route::get('/products/featured', [PublicProductController::class, 'featured']);
 Route::get('/categories/glimpse', [PublicCategoryController::class, 'index']);
+Route::get('/reviews/recent', [PublicReviewController::class, 'recent']);
 
 // Webhook Midtrans (dipanggil server Midtrans, bukan pengguna - tanpa auth)
 Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle']);

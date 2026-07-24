@@ -14,46 +14,43 @@
       </button>
     </div>
 
-    <!-- ===== Header / Navbar (Satu Baris & Huruf Navigasi Ekstra Besar) ===== -->
+    <!-- ===== Header / Navbar (ringkas & rapi) ===== -->
     <header class="bg-white sticky top-0 z-40 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
-        
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+
         <!-- Bagian Kiri: Logo -->
         <router-link to="/" class="flex items-center gap-2 shrink-0">
-          <img src="/logo.png" alt="IPUL BUAH" class="h-11 w-11 object-contain" />
-          <div class="leading-tight">
-            <p class="font-black text-primary text-xl -mb-0.5">IPUL BUAH</p>
-            <p class="text-xs text-ink/60">Segar setiap hari</p>
-          </div>
+          <span class="h-9 w-9 rounded-xl bg-accent text-white font-black text-sm flex items-center justify-center shrink-0">IB</span>
+          <p class="font-black text-primary text-lg leading-none">IPUL BUAH</p>
         </router-link>
 
-        <!-- Bagian Tengah: Menu Utama Navigasi (HURUF JAUH LEBIH BESAR & TEBAL) -->
-        <nav class="hidden md:flex flex-1 justify-center items-center gap-10 text-lg lg:text-xl font-bold">
-          <router-link to="/" class="text-ink hover:text-primary transition-colors">Beranda</router-link>
-          <button @click="goToProtected('/katalog')" class="text-ink/70 hover:text-primary transition-colors cursor-pointer">Katalog</button>
-          <button @click="goToProtected('/paket-buah')" class="text-ink/70 hover:text-primary transition-colors cursor-pointer">Paket & Hampers</button>
+        <!-- Bagian Tengah: Menu Utama Navigasi -->
+        <nav class="hidden md:flex flex-1 justify-center items-center gap-8 text-sm font-semibold">
+          <router-link to="/" class="text-ink hover:text-accent transition-colors">Beranda</router-link>
+          <button @click="goToProtected('/katalog')" class="text-ink/70 hover:text-accent transition-colors cursor-pointer">Katalog</button>
+          <button @click="goToProtected('/paket-buah')" class="text-ink/70 hover:text-accent transition-colors cursor-pointer">Paket & Hampers</button>
         </nav>
 
-        <!-- Bagian Kanan: Menu Pengguna / Akun (Ikut Diperbesar Menjadi text-base) -->
-        <div class="flex items-center gap-6 text-base font-semibold shrink-0">
-          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center gap-1.5 text-ink/70 hover:text-primary transition-colors cursor-pointer">
-            <HeartIcon class="w-5 h-5" stroke-width="1.75" /> Wishlist
+        <!-- Bagian Kanan: Menu Pengguna / Akun -->
+        <div class="flex items-center gap-4 text-sm font-medium shrink-0">
+          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center gap-1.5 text-ink/70 hover:text-accent transition-colors cursor-pointer">
+            <HeartIcon class="w-4.5 h-4.5" stroke-width="1.75" /> Wishlist
           </button>
-          <button @click="goToProtected('/keranjang')" class="flex items-center gap-1.5 text-ink/70 hover:text-primary transition-colors cursor-pointer">
-            <ShoppingCartIcon class="w-5 h-5" stroke-width="1.75" /> Keranjang
+          <button @click="goToProtected('/keranjang')" class="flex items-center gap-1.5 text-ink/70 hover:text-accent transition-colors cursor-pointer">
+            <ShoppingCartIcon class="w-4.5 h-4.5" stroke-width="1.75" /> Keranjang
           </button>
 
           <template v-if="auth.isLoggedIn">
-            <router-link to="/akun" class="font-bold text-ink hover:text-primary transition-colors">
+            <router-link to="/akun" class="font-semibold text-ink hover:text-accent transition-colors">
               Halo, {{ auth.user?.name?.split(' ')[0] }}
             </router-link>
           </template>
           <template v-else>
-            <div class="flex items-center gap-4">
-              <router-link to="/login" class="text-ink/70 hover:text-primary transition-colors">Masuk</router-link>
+            <div class="flex items-center gap-3">
+              <router-link to="/login" class="text-ink/70 hover:text-accent transition-colors">Masuk</router-link>
               <router-link
                 to="/register"
-                class="bg-primary text-white px-5 py-2 rounded-full font-bold hover:bg-primary-dark transition-all"
+                class="bg-primary text-white px-4 py-1.5 rounded-full font-semibold hover:bg-primary-dark transition-all"
               >
                 Daftar
               </router-link>
@@ -74,7 +71,7 @@
       <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
         <div>
           <div class="flex items-center gap-2 mb-3">
-            <img src="/logo.png" alt="IPUL BUAH" class="h-9 w-9 object-contain bg-white rounded-full p-1" />
+            <span class="h-9 w-9 rounded-xl bg-badge text-primary-dark font-black text-sm flex items-center justify-center shrink-0">IB</span>
             <span class="font-bold text-lg">IPUL BUAH</span>
           </div>
           <p class="text-white/70">{{ storeInfo.tagline }}</p>
