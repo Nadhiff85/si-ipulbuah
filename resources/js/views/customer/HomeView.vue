@@ -5,12 +5,26 @@
          terbuka bergantian lewat wipe clip-path diagonal seperti irisan pisau,
          lalu larut ke krem konten di bawahnya. Dengan prefers-reduced-motion,
          hanya babak pembuka yang tampil sebagai hero statis biasa. -->
-    <section ref="filmRef" class="relative h-screen overflow-hidden bg-primary">
+    <section ref="filmRef" class="relative h-screen overflow-hidden bg-primary-dark">
 
-      <!-- Babak 0: pembuka -->
+      <!-- Babak 0: pembuka. Latar hijau bergradasi kaya + buah cutout HD besar
+           tersebar tak beraturan, tiap buah "bernapas" (float kontinu). -->
       <div class="absolute inset-0">
-        <img src="/images/alpukat.png" alt="" class="absolute -bottom-6 -right-6 w-72 h-72 md:w-80 md:h-80 object-contain drop-shadow-xl" />
-        <div class="absolute -bottom-24 -left-10 w-56 h-56 rounded-full bg-gradient-to-tr from-accent to-badge"></div>
+        <!-- Latar bergradasi berlapis: glow hijau di atas-tengah, gelap di sudut -->
+        <div class="absolute inset-0" style="background:
+          radial-gradient(ellipse 75% 55% at 50% 18%, rgba(31,92,61,0.95), transparent 70%),
+          radial-gradient(ellipse 60% 60% at 88% 95%, rgba(8,28,16,0.9), transparent 65%),
+          radial-gradient(ellipse 55% 55% at 8% 90%, rgba(20,64,26,0.7), transparent 60%),
+          linear-gradient(160deg, #164A30 0%, #0E3020 45%, #081C10 100%);"></div>
+        <!-- Bintik lembut biar tidak flat -->
+        <div class="absolute inset-0 opacity-[0.15]" style="background-image: radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px); background-size: 42px 42px;"></div>
+
+        <!-- Buah tersebar tak beraturan, ukuran besar & jelas -->
+        <img src="/images/jeruk.webp" alt="" class="film-fruit absolute -top-10 -left-10 w-56 md:w-80 object-contain drop-shadow-2xl -rotate-[8deg]" />
+        <img src="/images/apple.png" alt="" class="film-fruit absolute top-[14%] left-[13%] w-40 md:w-56 object-contain drop-shadow-2xl rotate-[10deg]" />
+        <img src="/images/anggur.png" alt="" class="film-fruit absolute -top-6 right-[6%] w-56 md:w-80 object-contain drop-shadow-2xl rotate-[7deg]" />
+        <img src="/images/semangka.webp" alt="" class="film-fruit absolute -bottom-14 -left-12 w-72 md:w-[26rem] object-contain drop-shadow-2xl rotate-[6deg]" />
+        <img src="/images/alpukat.png" alt="" class="film-fruit absolute -bottom-10 right-[4%] w-72 md:w-96 object-contain drop-shadow-2xl -rotate-[6deg]" />
 
         <div class="film-intro-inner relative h-full max-w-3xl mx-auto px-4 flex flex-col items-center justify-center text-center">
           <span class="film-intro-soft inline-block bg-ink text-badge font-black px-4 py-2 rounded-full text-xs mb-6 uppercase tracking-widest">
@@ -43,41 +57,47 @@
         </div>
       </div>
 
-      <!-- Babak 1: SEGAR - irisan dari kiri -->
+      <!-- Babak 1: SEGAR - foto kelompok buah 1 full-bleed + scrim biar teks terbaca -->
       <div class="film-panel panel-segar absolute inset-0" :class="reducedMotion ? 'hidden' : ''" style="clip-path: polygon(0% 0%, 0% 0%, -22% 100%, -22% 100%); will-change: clip-path;">
-        <img src="/images/marquee/Jeruk.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover" style="will-change: transform;" />
-        <div class="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/25 to-primary/45"></div>
-        <div class="film-blade absolute inset-y-0 -left-1/3 w-48 -skew-x-12 bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
+        <img src="/images/kelompok-1.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover blur-[2px]" style="will-change: transform;" />
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-primary/65"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_48%,rgba(8,28,16,0.5),transparent_75%)]"></div>
+        <div class="film-blade absolute inset-y-0 -left-1/3 w-56 -skew-x-12 bg-gradient-to-r from-transparent via-white/85 to-transparent"></div>
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <h2 class="film-word font-display font-extrabold text-white text-7xl md:text-9xl tracking-tight drop-shadow-lg">SEGAR.</h2>
-          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-4 drop-shadow-md">Dipetik & masuk etalase di hari yang sama</p>
+          <h2 class="film-word font-display font-extrabold italic text-white text-8xl md:text-[11rem] leading-[0.85] tracking-tighter" style="text-shadow: 0 8px 40px rgba(0,0,0,0.6)">SEGAR</h2>
+          <span class="film-word block h-1.5 w-28 mt-5 rounded-full bg-accent"></span>
+          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-6 max-w-xl" style="text-shadow: 0 2px 14px rgba(0,0,0,0.7)">Dipetik &amp; masuk etalase di hari yang sama</p>
         </div>
       </div>
 
-      <!-- Babak 2: LENGKAP - irisan dari kanan -->
+      <!-- Babak 2: LENGKAP - foto kelompok buah 2 full-bleed -->
       <div class="film-panel panel-lengkap absolute inset-0" :class="reducedMotion ? 'hidden' : ''" style="clip-path: polygon(122% 0%, 122% 0%, 100% 100%, 100% 100%); will-change: clip-path;">
-        <img src="/images/marquee/Salad.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover" style="will-change: transform;" />
-        <div class="absolute inset-0 bg-gradient-to-t from-accent/85 via-accent/20 to-accent/45"></div>
-        <div class="film-blade absolute inset-y-0 -right-1/3 w-48 skew-x-12 bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
+        <img src="/images/kelompok-2.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover blur-[2px]" style="will-change: transform;" />
+        <div class="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/40 to-accent/65"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_55%_50%_at_50%_48%,rgba(90,25,10,0.45),transparent_75%)]"></div>
+        <div class="film-blade absolute inset-y-0 -right-1/3 w-56 skew-x-12 bg-gradient-to-r from-transparent via-white/85 to-transparent"></div>
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <h2 class="film-word font-display font-extrabold text-white text-7xl md:text-9xl tracking-tight drop-shadow-lg">LENGKAP.</h2>
-          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-4 drop-shadow-md">Lokal, impor, buah potong, sampai jus — semua ada</p>
+          <h2 class="film-word font-display font-extrabold italic text-white text-8xl md:text-[11rem] leading-[0.85] tracking-tighter" style="text-shadow: 0 8px 40px rgba(0,0,0,0.6)">LENGKAP</h2>
+          <span class="film-word block h-1.5 w-28 mt-5 rounded-full bg-white"></span>
+          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-6 max-w-xl" style="text-shadow: 0 2px 14px rgba(0,0,0,0.7)">Buah lokal, impor, musiman, sampai semangka & melon belah — semua ada</p>
         </div>
       </div>
 
-      <!-- Babak 3: MURAH - irisan dari bawah, ditutup ajakan belanja -->
+      <!-- Babak 3: MURAH (penutup) - foto kelompok buah 3 full-bleed, scrim gelap -->
       <div class="film-panel panel-murah absolute inset-0" :class="reducedMotion ? 'hidden' : ''" style="clip-path: polygon(0% 122%, 100% 122%, 100% 100%, 0% 100%); will-change: clip-path;">
-        <img src="/images/marquee/buahpotong.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover" style="will-change: transform;" />
-        <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/45 to-ink/60"></div>
-        <div class="film-blade absolute inset-x-0 -bottom-1/3 h-40 bg-gradient-to-t from-transparent via-white/70 to-transparent"></div>
+        <img src="/images/kelompok-3.jpeg" alt="" class="film-img absolute inset-0 w-full h-full object-cover blur-[2px]" style="will-change: transform;" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/55 to-ink/72"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,rgba(0,0,0,0.5),transparent_75%)]"></div>
+        <div class="film-blade absolute inset-x-0 -bottom-1/3 h-48 bg-gradient-to-t from-transparent via-white/75 to-transparent"></div>
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <h2 class="film-word font-display font-extrabold text-badge text-7xl md:text-9xl tracking-tight drop-shadow-lg">MURAH.</h2>
-          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-4 drop-shadow-md">Harga bersahabat setiap hari, gratis ongkir*</p>
+          <h2 class="film-word font-display font-extrabold italic text-white text-8xl md:text-[11rem] leading-[0.85] tracking-tighter" style="text-shadow: 0 8px 40px rgba(0,0,0,0.7)">MURAH</h2>
+          <span class="film-word block h-1.5 w-28 mt-5 rounded-full bg-badge"></span>
+          <p class="film-word text-white text-lg md:text-2xl font-semibold mt-6 max-w-xl" style="text-shadow: 0 2px 14px rgba(0,0,0,0.75)">Harga bersahabat setiap hari, gratis ongkir*</p>
           <div class="film-word flex flex-wrap justify-center gap-4 mt-8">
             <button @click="goLogin('/katalog')" class="bg-accent hover:bg-accent-light text-white font-extrabold px-10 py-4 rounded-full transition shadow-lg cursor-pointer">
               Mulai Belanja
             </button>
-            <button @click="goLogin('/parsel-kustom')" class="border-2 border-white/60 text-white font-extrabold px-10 py-4 rounded-full hover:bg-white/10 transition inline-flex items-center gap-2 cursor-pointer">
+            <button @click="goLogin('/parsel-kustom')" class="border-2 border-white/70 text-white font-extrabold px-10 py-4 rounded-full hover:bg-white/10 transition inline-flex items-center gap-2 cursor-pointer">
               <GiftIcon class="w-5 h-5" stroke-width="2.5" /> Buat Parsel Kustom
             </button>
           </div>
@@ -351,6 +371,25 @@ function initFilm() {
     gsap.set('.film-intro-soft', { y: 18, autoAlpha: 0 })
     gsap.set('.film-word', { autoAlpha: 0 })
 
+    gsap.set('.film-fruit', { autoAlpha: 0, scale: 0.55 })
+    gsap.to('.film-fruit', {
+      autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power2.out',
+      stagger: { each: 0.08, from: 'random' }, delay: 0.15,
+      onComplete() {
+        gsap.utils.toArray('.film-fruit').forEach((el) => {
+          gsap.to(el, {
+            yPercent: gsap.utils.random(-9, -3),
+            xPercent: gsap.utils.random(-4, 4),
+            duration: gsap.utils.random(2.8, 4.4),
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: -1,
+            delay: gsap.utils.random(0, 0.4),
+          })
+        })
+      },
+    })
+
     // Reveal pembuka saat load (sekali jalan, bukan scroll-driven)
     const introTl = gsap.timeline({ delay: 0.15 })
     introTl.to('.film-char', { yPercent: 0, autoAlpha: 1, stagger: 0.045, duration: 0.9, ease: 'power4.out' })
@@ -359,7 +398,10 @@ function initFilm() {
     // Jaring pengaman keandalan demo: kalau rAF sempat beku saat load (tab
     // belum fokus) dan reveal tak sempat selesai, paksa tampil - progress(1)
     // sinkron, tak butuh rAF. Di kondisi normal ini no-op (sudah selesai).
-    introSafety = setTimeout(() => { if (introTl.progress() < 1) introTl.progress(1) }, 2600)
+    introSafety = setTimeout(() => {
+      if (introTl.progress() < 1) introTl.progress(1)
+      gsap.set('.film-fruit', { autoAlpha: 1, scale: 1 })
+    }, 2600)
 
     // HUKUM URUTAN ScrollTrigger: scene yang di-pin HARUS dibuat lebih dulu -
     // trigger yang dibuat setelahnya baru menghitung posisi dengan benar

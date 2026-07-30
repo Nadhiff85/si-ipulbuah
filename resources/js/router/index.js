@@ -82,6 +82,11 @@ const routes = [
     name: 'staff-login',
     component: () => import('../views/StaffLoginView.vue'),
   },
+  {
+    path: '/lupa-password',
+    name: 'forgot-password',
+    component: () => import('../views/ForgotPasswordView.vue'),
+  },
 
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue') },
 ]

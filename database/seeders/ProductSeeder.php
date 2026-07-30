@@ -16,28 +16,26 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $products = [
-            ['category' => 'Buah Lokal', 'name' => 'Mangga Harum Manis', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 22500, 'stock' => 60, 'freshness' => 5, 'labels' => ['best_seller'], 'featured' => true],
-            ['category' => 'Buah Lokal', 'name' => 'Jeruk Baby Pontianak', 'origin' => 'Pontianak', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 18000, 'stock' => 50, 'freshness' => 7, 'labels' => ['segar'], 'featured' => true],
+            ['category' => 'Buah Lokal', 'name' => 'Mangga Harum Manis', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 22500, 'stock' => 60, 'freshness' => 5, 'labels' => ['best_seller'], 'featured' => true, 'image' => '/images/produk-mangga.webp'],
+            ['category' => 'Buah Lokal', 'name' => 'Jeruk Baby Pontianak', 'origin' => 'Pontianak', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 18000, 'stock' => 50, 'freshness' => 7, 'labels' => ['segar'], 'featured' => true, 'image' => '/images/produk-jeruk-baby.jpeg'],
             ['category' => 'Buah Lokal', 'name' => 'Pisang Kepok', 'origin' => 'Sigi', 'origin_type' => 'lokal', 'unit' => 'sisir', 'price' => 15000, 'stock' => 40, 'freshness' => 4, 'labels' => ['segar'], 'featured' => false],
             ['category' => 'Buah Lokal', 'name' => 'Pepaya California', 'origin' => 'Donggala', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 12000, 'stock' => 35, 'freshness' => 5, 'labels' => [], 'featured' => false],
             ['category' => 'Buah Lokal', 'name' => 'Nanas Palu', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'pcs', 'price' => 10000, 'stock' => 30, 'freshness' => 6, 'labels' => ['segar'], 'featured' => false],
             ['category' => 'Buah Lokal', 'name' => 'Rambutan Binjai', 'origin' => 'Sigi', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 20000, 'stock' => 25, 'freshness' => 4, 'labels' => [], 'featured' => false],
 
-            ['category' => 'Buah Impor', 'name' => 'Apel Fuji', 'origin' => 'Tiongkok', 'origin_type' => 'impor', 'unit' => 'kg', 'price' => 38000, 'stock' => 40, 'freshness' => 14, 'labels' => ['best_seller'], 'featured' => true, 'image' => 'Apel.jpeg'],
-            ['category' => 'Buah Impor', 'name' => 'Anggur Red Globe', 'origin' => 'Australia', 'origin_type' => 'impor', 'unit' => 'kg', 'price' => 65000, 'stock' => 25, 'freshness' => 10, 'labels' => ['best_seller'], 'featured' => true, 'image' => 'Anggur.jpeg'],
-            ['category' => 'Buah Impor', 'name' => 'Jeruk Sunkist', 'origin' => 'Amerika Serikat', 'origin_type' => 'impor', 'unit' => 'kg', 'price' => 42000, 'stock' => 30, 'freshness' => 12, 'labels' => [], 'featured' => false, 'image' => 'Jeruk.jpeg'],
+            ['category' => 'Buah Impor', 'name' => 'Apel Fuji', 'origin' => 'Tiongkok', 'origin_type' => 'impor', 'unit' => 'kg', 'price' => 38000, 'stock' => 40, 'freshness' => 14, 'labels' => ['best_seller'], 'featured' => true, 'image' => '/images/produk-apel.webp'],
+            ['category' => 'Buah Impor', 'name' => 'Anggur Red Globe', 'origin' => 'Australia', 'origin_type' => 'impor', 'unit' => 'kg', 'price' => 65000, 'stock' => 25, 'freshness' => 10, 'labels' => ['best_seller'], 'featured' => true, 'image' => '/images/produk-anggur.jpeg'],
+            ['category' => 'Buah Impor', 'name' => 'Jeruk Sunkist', 'origin' => 'Amerika Serikat', 'origin_type' => 'impor', 'unit' => 'kg', 'price' => 42000, 'stock' => 30, 'freshness' => 12, 'labels' => [], 'featured' => false, 'image' => '/images/produk-jeruk-baby.jpeg'],
             ['category' => 'Buah Impor', 'name' => 'Kiwi Zespri', 'origin' => 'Selandia Baru', 'origin_type' => 'impor', 'unit' => 'pcs', 'price' => 8000, 'stock' => 45, 'freshness' => 10, 'labels' => [], 'featured' => false],
 
-            ['category' => 'Buah Musiman', 'name' => 'Durian Montong', 'origin' => 'Sigi', 'origin_type' => 'lokal', 'unit' => 'pcs', 'price' => 85000, 'stock' => 15, 'freshness' => 3, 'labels' => ['musiman'], 'featured' => true, 'seasonal' => true, 'image' => 'Buah Musiman.jpg'],
+            ['category' => 'Buah Musiman', 'name' => 'Durian Montong', 'origin' => 'Sigi', 'origin_type' => 'lokal', 'unit' => 'pcs', 'price' => 85000, 'stock' => 15, 'freshness' => 3, 'labels' => ['musiman'], 'featured' => true, 'seasonal' => true, 'image' => '/images/produk-durian.jpeg'],
             ['category' => 'Buah Musiman', 'name' => 'Duku Palembang', 'origin' => 'Palembang', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 28000, 'stock' => 20, 'freshness' => 4, 'labels' => ['musiman'], 'featured' => false, 'seasonal' => true],
             ['category' => 'Buah Musiman', 'name' => 'Mangga Manalagi', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'kg', 'price' => 25000, 'stock' => 20, 'freshness' => 5, 'labels' => ['musiman'], 'featured' => false, 'seasonal' => true],
 
-            ['category' => 'Buah Potong', 'name' => 'Semangka Potong', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'pack', 'price' => 15000, 'stock' => 30, 'freshness' => 2, 'labels' => ['segar'], 'featured' => true, 'image' => 'buahpotong.jpeg'],
-            ['category' => 'Buah Potong', 'name' => 'Melon Potong', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'pack', 'price' => 17000, 'stock' => 25, 'freshness' => 2, 'labels' => ['segar'], 'featured' => false, 'image' => 'buahpotong.jpeg'],
-            ['category' => 'Buah Potong', 'name' => 'Rujak Buah Segar', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'pack', 'price' => 20000, 'stock' => 20, 'freshness' => 1, 'labels' => ['promo'], 'featured' => false, 'image' => 'Salad.jpeg'],
-
-            ['category' => 'Jus & Olahan Buah', 'name' => 'Jus Alpukat', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'botol', 'price' => 18000, 'stock' => 30, 'freshness' => 2, 'labels' => [], 'featured' => false, 'image' => 'jus.jpeg'],
-            ['category' => 'Jus & Olahan Buah', 'name' => 'Jus Mangga', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'botol', 'price' => 16000, 'stock' => 30, 'freshness' => 2, 'labels' => [], 'featured' => false, 'image' => 'jus.jpeg'],
+            // Semangka & melon dijual dalam bentuk BELAH (dipotong memanjang jadi
+            // 5-6 juring), bukan potong dadu dalam wadah plastik.
+            ['category' => 'Buah Belah', 'name' => 'Semangka Belah', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'pcs', 'price' => 15000, 'stock' => 30, 'freshness' => 2, 'labels' => ['segar'], 'featured' => true, 'image' => '/images/semangka_potong.webp', 'description' => 'Semangka merah manis dibelah memanjang jadi 5-6 juring, siap santap tanpa perlu dipotong lagi.'],
+            ['category' => 'Buah Belah', 'name' => 'Melon Belah', 'origin' => 'Palu', 'origin_type' => 'lokal', 'unit' => 'pcs', 'price' => 17000, 'stock' => 25, 'freshness' => 2, 'labels' => ['segar'], 'featured' => false, 'description' => 'Melon harum dibelah memanjang jadi 5-6 juring, praktis langsung dinikmati.'],
         ];
 
         foreach ($products as $p) {
@@ -53,7 +51,7 @@ class ProductSeeder extends Seeder
                 [
                     'category_id' => $category->id,
                     'name' => $p['name'],
-                    'description' => $p['name'] . ' segar pilihan, langsung dari ' . $p['origin'] . '.',
+                    'description' => $p['description'] ?? ($p['name'] . ' segar pilihan, langsung dari ' . $p['origin'] . '.'),
                     'origin_region' => $p['origin'],
                     'origin_type' => $p['origin_type'],
                     'unit' => $p['unit'],
@@ -78,9 +76,15 @@ class ProductSeeder extends Seeder
             // di hero Beranda) supaya katalog & "Produk Terlaris" tidak tampil ikon
             // placeholder polos - bukan gambar baru, cuma dipetakan ke produk yang cocok.
             if (!empty($p['image']) && !$product->images()->exists()) {
+                // Path yang diawali "/" dipakai apa adanya (foto produk asli di
+                // /images/*), selain itu diperlakukan sebagai file di folder marquee.
+                $path = str_starts_with($p['image'], '/')
+                    ? $p['image']
+                    : '/images/marquee/' . rawurlencode($p['image']);
+
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image_path' => '/images/marquee/' . rawurlencode($p['image']),
+                    'image_path' => $path,
                     'is_primary' => true,
                     'sort_order' => 0,
                 ]);

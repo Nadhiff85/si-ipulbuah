@@ -14,8 +14,9 @@ class CategorySeeder extends Seeder
             ['name' => 'Buah Lokal', 'type' => 'lokal', 'sort_order' => 1],
             ['name' => 'Buah Impor', 'type' => 'impor', 'sort_order' => 2],
             ['name' => 'Buah Musiman', 'type' => 'musiman', 'sort_order' => 3],
-            ['name' => 'Buah Potong', 'type' => 'lokal', 'sort_order' => 4],
-            ['name' => 'Jus & Olahan Buah', 'type' => 'lokal', 'sort_order' => 5],
+            // IPUL BUAH hanya menjual buah utuh + semangka/melon yang dibelah
+            // (bukan buah potong dadu dalam wadah, bukan jus/olahan).
+            ['name' => 'Buah Belah', 'type' => 'lokal', 'sort_order' => 4],
         ];
 
         foreach ($categories as $category) {
