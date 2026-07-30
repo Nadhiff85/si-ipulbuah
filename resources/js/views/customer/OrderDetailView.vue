@@ -58,8 +58,23 @@
         </div>
       </div>
 
+      <!-- Banner sukses pasca bayar QRIS -->
+      <div v-if="paymentCompleted" class="rounded-xl2 p-5 mb-6 text-center border" :class="order.payment?.status !== 'pending' ? 'bg-success/10 border-success/30' : 'bg-primary/8 border-primary/20'">
+        <CheckCircleIcon class="w-10 h-10 mx-auto mb-2" :class="order.payment?.status !== 'pending' ? 'text-success' : 'text-primary'" stroke-width="1.5" />
+        <p class="font-bold text-base" :class="order.payment?.status !== 'pending' ? 'text-success' : 'text-primary'">
+          {{ order.payment?.status !== 'pending' ? 'Pembayaran Dikonfirmasi!' : 'Pembayaran Sedang Diverifikasi...' }}
+        </p>
+        <p class="text-sm text-ink/60 mt-1">
+          <span v-if="order.payment?.status !== 'pending'">Status pesanan telah diperbarui menjadi <strong>{{ statusText(order.status) }}</strong>.</span>
+          <span v-else>Sistem sedang memverifikasi pembayaran Anda secara otomatis. Mohon tunggu sebentar.</span>
+        </p>
+        <router-link v-if="order.payment?.status !== 'pending'" to="/pesanan" class="inline-block mt-3 text-sm font-semibold text-primary hover:underline">
+          ← Kembali ke Pesanan Saya
+        </router-link>
+      </div>
+
       <!-- Instruksi Pembayaran QRIS (otomatis via Midtrans Snap) -->
-      <div v-if="order.payment?.method === 'qris' && order.payment?.status === 'pending'" class="glass-card-soft rounded-xl2 p-5 mb-6 text-center">
+      <div v-if="!paymentCompleted && order.payment?.method === 'qris' && order.payment?.status === 'pending'" class="glass-card-soft rounded-xl2 p-5 mb-6 text-center">
         <p class="text-sm font-medium mb-3 flex items-center justify-center gap-1.5">
           <QrCodeIcon class="w-4 h-4 text-primary" stroke-width="1.75" /> Scan QRIS untuk membayar
           <span class="font-bold text-primary tabular-nums">Rp {{ formatPrice(order.total) }}</span>
@@ -146,7 +161,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../../services/api'
 import { useStoreInfoStore } from '../../stores/store'
@@ -170,6 +185,8 @@ const timeline = ref({})
 const reviewForms = ref({})
 const loadingSnap = ref(true)
 const snapError = ref('')
+const paymentCompleted = ref(false)
+let pollingInterval = null
 
 const statusOrder = ['menunggu_bayar', 'dikonfirmasi', 'diproses', 'dikirim_siap_ambil', 'selesai']
 
@@ -181,8 +198,33 @@ async function fetchOrder() {
     if (!reviewForms.value[item.id]) reviewForms.value[item.id] = { rating: 0, comment: '' }
   })
 
-  if (data.order.payment?.method === 'qris' && data.order.payment?.status === 'pending') {
+  // Hanya init Snap kalau belum pernah berhasil bayar — cegah reinit pada token yang sudah dipakai
+  if (!paymentCompleted.value && data.order.payment?.method === 'qris' && data.order.payment?.status === 'pending') {
     initMidtransSnap()
+  }
+}
+
+// Refresh data order tanpa menyentuh state Snap — dipakai saat polling pasca bayar
+async function refreshOrderSilent() {
+  try {
+    const { data } = await api.get(`/orders/${route.params.id}`)
+    order.value = data.order
+    timeline.value = data.timeline
+    // Hentikan polling begitu webhook sudah memperbarui status di DB
+    if (data.order.payment?.status !== 'pending') {
+      clearInterval(pollingInterval)
+      pollingInterval = null
+    }
+  } catch (_) {}
+}
+
+// Dipanggil Snap saat pembayaran berhasil di sisi frontend
+async function handlePaymentSuccess() {
+  paymentCompleted.value = true
+  await refreshOrderSilent()
+  // Jika webhook belum tiba (karena localhost), poll tiap 4 detik
+  if (order.value?.payment?.status === 'pending') {
+    pollingInterval = setInterval(refreshOrderSilent, 4000)
   }
 }
 
@@ -224,7 +266,7 @@ async function initMidtransSnap() {
     await nextTick()
     window.snap.embed(data.snap_token, {
       embedId: 'midtrans-snap-container',
-      onSuccess: fetchOrder,
+      onSuccess: handlePaymentSuccess,
       onPending: () => {},
       onError: () => { snapError.value = 'Gagal memuat pembayaran QRIS. Coba muat ulang halaman.' },
     })
@@ -287,5 +329,9 @@ function paymentMethodText(m) {
 onMounted(() => {
   fetchOrder()
   storeInfo.fetchStoreInfo()
+})
+
+onUnmounted(() => {
+  if (pollingInterval) clearInterval(pollingInterval)
 })
 </script>

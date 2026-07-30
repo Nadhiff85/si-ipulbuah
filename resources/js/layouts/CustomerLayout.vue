@@ -33,11 +33,11 @@
 
         <!-- Bagian Kanan: Menu Pengguna / Akun -->
         <div class="flex items-center gap-4 text-sm font-medium shrink-0">
-          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center gap-1.5 text-ink/70 hover:text-accent transition-colors cursor-pointer">
-            <HeartIcon class="w-4.5 h-4.5" stroke-width="1.75" /> Wishlist
+          <button @click="goToProtected('/wishlist')" class="hidden sm:flex items-center justify-center text-ink/70 hover:text-accent transition-colors cursor-pointer" title="Wishlist">
+            <HeartIcon class="w-6 h-6" stroke-width="1.75" />
           </button>
-          <button @click="goToProtected('/keranjang')" class="flex items-center gap-1.5 text-ink/70 hover:text-accent transition-colors cursor-pointer">
-            <ShoppingCartIcon class="w-4.5 h-4.5" stroke-width="1.75" /> Keranjang
+          <button @click="goToProtected('/keranjang')" class="flex items-center justify-center text-ink/70 hover:text-accent transition-colors cursor-pointer" title="Keranjang">
+            <ShoppingCartIcon class="w-6 h-6" stroke-width="1.75" />
           </button>
 
           <template v-if="auth.isLoggedIn">
@@ -115,15 +115,26 @@
       </div>
     </footer>
 
-    <!-- Tombol WhatsApp mengambang -->
-    <a
-      :href="storeInfo.whatsappUrl"
-      target="_blank"
-      class="fixed bottom-5 right-5 z-50 bg-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg border border-black/5 hover:scale-105 transition cursor-pointer"
-      title="Chat via WhatsApp"
-    >
-      <WhatsAppIcon size="w-7 h-7" />
-    </a>
+    <!-- Tombol Bantuan WhatsApp mengambang -->
+    <div class="fixed bottom-6 right-5 z-50 flex items-center gap-3 group">
+      <!-- Label muncul saat hover -->
+      <div class="bg-white text-ink text-sm font-bold px-4 py-2 rounded-full shadow-lg opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 pointer-events-none whitespace-nowrap border border-ink/8">
+        💬 Butuh bantuan?
+      </div>
+      <!-- Tombol WA -->
+      <a
+        :href="storeInfo.whatsappUrl"
+        target="_blank"
+        rel="noopener"
+        class="relative w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+        style="background-color: #25D366;"
+        title="Chat WhatsApp"
+      >
+        <!-- Ring pulse -->
+        <span class="absolute inset-0 rounded-full animate-ping opacity-30" style="background-color: #25D366;"></span>
+        <WhatsAppIcon size="w-7 h-7" class="brightness-0 invert relative z-10" />
+      </a>
+    </div>
   </div>
 </template>
 
