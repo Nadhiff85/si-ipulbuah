@@ -12,7 +12,11 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable, HasRoles;
 
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'avatar', 'outlet_id', 'is_active',
+        'name', 'email', 'password', 'phone', 'avatar', 'outlet_id', 'is_active', 'email_verified_at',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     protected $hidden = ['password', 'remember_token'];

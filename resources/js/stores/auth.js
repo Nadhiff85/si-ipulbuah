@@ -24,16 +24,44 @@ export const useAuthStore = defineStore('auth', {
       this.previewMode = false
       sessionStorage.removeItem('ipulbuah_preview_mode')
     },
-    async login(credentials) {
+    // Langkah 1: kirim email+password. Kredensial benar -> backend mengirim
+    // kode OTP ke email dan mengembalikan { otp_required, challenge, ... }
+    // TANPA token - sesi baru dibuat setelah verifyLoginOtp() berhasil.
+    async requestLogin(credentials) {
       const { data } = await api.post('/login', credentials)
+      return data
+    },
+
+    // Langkah 2: kode OTP dikonfirmasi -> token diterbitkan & sesi disimpan
+    async verifyLoginOtp(challenge, code) {
+      const { data } = await api.post('/login/verify-otp', { challenge, code })
       this.setSession(data.user, data.token)
       return data.user
     },
 
-    async register(payload) {
+    async resendLoginOtp(challenge) {
+      const { data } = await api.post('/login/resend-otp', { challenge })
+      return data
+    },
+
+    // Langkah 1: kirim data pendaftaran. Sukses -> backend mengirim kode OTP
+    // ke email dan mengembalikan { otp_required, challenge, ... } TANPA
+    // token - sesi baru dibuat setelah verifyRegisterOtp() berhasil.
+    async requestRegister(payload) {
       const { data } = await api.post('/register', payload)
+      return data
+    },
+
+    // Langkah 2: kode OTP dikonfirmasi -> email terverifikasi, token diterbitkan
+    async verifyRegisterOtp(challenge, code) {
+      const { data } = await api.post('/register/verify-otp', { challenge, code })
       this.setSession(data.user, data.token)
       return data.user
+    },
+
+    async resendRegisterOtp(challenge) {
+      const { data } = await api.post('/register/resend-otp', { challenge })
+      return data
     },
 
     async logout() {

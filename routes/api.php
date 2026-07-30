@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\PasswordResetController;
 use App\Http\Controllers\Api\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Api\Admin\CustomerController as AdminCustomerController;
@@ -52,6 +53,19 @@ use Illuminate\Support\Facades\Route;
 // ===================== PUBLIK (tanpa login) =====================
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// Registrasi - langkah 2 (verifikasi email lewat kode OTP)
+Route::post('/register/verify-otp', [AuthController::class, 'verifyRegisterOtp']);
+Route::post('/register/resend-otp', [AuthController::class, 'resendRegisterOtp']);
+
+// Login 2FA - langkah 2 (verifikasi kode OTP yang dikirim ke email)
+Route::post('/login/verify-otp', [AuthController::class, 'verifyLoginOtp']);
+Route::post('/login/resend-otp', [AuthController::class, 'resendLoginOtp']);
+
+// Lupa Kata Sandi - berbasis OTP email (3 langkah)
+Route::post('/forgot-password', [PasswordResetController::class, 'forgot']);
+Route::post('/forgot-password/resend', [PasswordResetController::class, 'resend']);
+Route::post('/forgot-password/reset', [PasswordResetController::class, 'reset']);
 Route::get('/store-settings', [StoreSettingsController::class, 'show']);
 Route::get('/faqs', [StoreSettingsController::class, 'faqs']);
 Route::get('/products/featured', [PublicProductController::class, 'featured']);
