@@ -27,7 +27,11 @@ class HamperController extends Controller
     public function customOptions()
     {
         return response()->json([
-            'products' => Product::where('is_active', true)->get(['id', 'name', 'price_unit', 'unit']),
+            // Ikut kirim foto produk supaya wizard Parsel Kustom bisa menampilkan
+            // gambar buah asli (kartu pilihan & pratinjau isi keranjang).
+            'products' => Product::where('is_active', true)
+                ->with(['images' => fn ($q) => $q->orderByDesc('is_primary')->orderBy('sort_order')])
+                ->get(['id', 'name', 'price_unit', 'unit']),
             'containers' => HamperContainer::where('is_active', true)->get(),
             'cards' => HamperCard::where('is_active', true)->get(),
         ]);

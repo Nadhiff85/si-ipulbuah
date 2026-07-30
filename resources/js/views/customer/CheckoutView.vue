@@ -13,7 +13,7 @@
             <p class="font-semibold text-ink mb-3">1. Cara Terima Barang</p>
             <div class="grid grid-cols-2 gap-3">
               <button
-                @click="form.fulfillment_type = 'delivery'"
+                @click="setFulfillment('delivery')"
                 class="border-2 rounded-xl2 p-4 text-left transition cursor-pointer"
                 :class="form.fulfillment_type === 'delivery' ? 'border-primary bg-primary/10' : 'border-ink/20 bg-white hover:border-accent/40'"
               >
@@ -21,7 +21,7 @@
                 <p class="text-xs text-ink/50">Diantar ke rumah (Kota Palu/Sigi/Donggala)</p>
               </button>
               <button
-                @click="form.fulfillment_type = 'pickup'"
+                @click="setFulfillment('pickup')"
                 class="border-2 rounded-xl2 p-4 text-left transition cursor-pointer"
                 :class="form.fulfillment_type === 'pickup' ? 'border-primary bg-primary/10' : 'border-ink/20 bg-white hover:border-accent/40'"
               >
@@ -79,61 +79,49 @@
           <!-- Step 4: Pembayaran -->
           <div class="glass-card rounded-xl2 p-5">
             <p class="font-semibold text-ink mb-3">4. Metode Pembayaran</p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+            <div class="grid grid-cols-1 gap-3 mb-4" :class="form.fulfillment_type === 'pickup' ? 'sm:grid-cols-2' : ''">
               <button
                 type="button"
                 @click="form.payment_method = 'qris'"
-                class="border-2 rounded-xl2 p-3 text-center transition cursor-pointer"
+                class="border-2 rounded-xl2 p-4 text-left transition cursor-pointer flex items-center gap-3"
                 :class="form.payment_method === 'qris' ? 'border-primary bg-primary/10' : 'border-ink/20 bg-white hover:border-accent/40'"
               >
-                <QrCodeIcon class="w-7 h-7 mx-auto mb-1 text-primary" stroke-width="1.5" />
-                <p class="text-sm font-medium">QRIS</p>
-                <p class="text-[11px] text-ink/50">Semua e-wallet & m-banking</p>
-              </button>
-              <button
-                type="button"
-                @click="form.payment_method = 'transfer_bank'"
-                class="border-2 rounded-xl2 p-3 text-center transition cursor-pointer"
-                :class="form.payment_method === 'transfer_bank' ? 'border-primary bg-primary/10' : 'border-ink/20 bg-white hover:border-accent/40'"
-              >
-                <BuildingLibraryIcon class="w-7 h-7 mx-auto mb-1 text-primary" stroke-width="1.5" />
-                <p class="text-sm font-medium">Transfer Bank</p>
-                <p class="text-[11px] text-ink/50">Konfirmasi manual admin</p>
+                <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <CreditCardIcon class="w-6 h-6 text-primary" stroke-width="1.5" />
+                </div>
+                <div>
+                  <p class="text-sm font-semibold">Pembayaran Online</p>
+                  <p class="text-[11px] text-ink/50 leading-snug">QRIS, transfer bank, e-wallet & kartu</p>
+                </div>
               </button>
               <button
                 v-if="form.fulfillment_type === 'pickup'"
                 type="button"
                 @click="form.payment_method = 'bayar_di_tempat'"
-                class="border-2 rounded-xl2 p-3 text-center transition cursor-pointer"
+                class="border-2 rounded-xl2 p-4 text-left transition cursor-pointer flex items-center gap-3"
                 :class="form.payment_method === 'bayar_di_tempat' ? 'border-primary bg-primary/10' : 'border-ink/20 bg-white hover:border-accent/40'"
               >
-                <BanknotesIcon class="w-7 h-7 mx-auto mb-1 text-primary" stroke-width="1.5" />
-                <p class="text-sm font-medium">Bayar di Tempat</p>
-                <p class="text-[11px] text-ink/50">Khusus Pickup</p>
+                <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <BanknotesIcon class="w-6 h-6 text-primary" stroke-width="1.5" />
+                </div>
+                <div>
+                  <p class="text-sm font-semibold">Bayar di Tempat</p>
+                  <p class="text-[11px] text-ink/50 leading-snug">Khusus ambil sendiri</p>
+                </div>
               </button>
             </div>
 
-            <!-- Preview QRIS -->
-            <div v-if="form.payment_method === 'qris'" class="glass-card-soft rounded-xl2 p-5 text-center">
-              <p class="text-sm font-medium mb-3">Scan kode QRIS berikut setelah pesanan dibuat</p>
-              <div class="w-44 h-44 mx-auto rounded-xl2 bg-white border border-ink/10 shadow-sm flex items-center justify-center p-2">
-                <img v-if="storeInfo.qrisImage" :src="storeInfo.qrisImage" class="w-full h-full object-contain rounded-lg" />
-                <QrCodeIcon v-else class="w-16 h-16 text-ink/30" stroke-width="1" />
+            <!-- Info Pembayaran Online -->
+            <div v-if="form.payment_method === 'qris'" class="glass-card-soft rounded-xl2 p-4">
+              <p class="text-sm font-medium text-ink mb-2.5">Pilih metode bayar setelah pesanan dibuat</p>
+              <div class="flex flex-wrap gap-1.5 mb-3">
+                <span v-for="m in onlineMethods" :key="m" class="text-[11px] font-medium bg-white border border-ink/10 text-ink/60 px-2.5 py-1 rounded-full">
+                  {{ m }}
+                </span>
               </div>
-              <p class="text-xs text-ink/50 mt-3">Kode QR akan tampil kembali di halaman Detail Pesanan setelah Anda klik "Buat Pesanan"</p>
-            </div>
-
-            <!-- Preview Rekening Bank -->
-            <div v-if="form.payment_method === 'transfer_bank'" class="glass-card-soft rounded-xl2 p-4">
-              <p class="text-sm font-medium mb-3">Transfer ke salah satu rekening berikut:</p>
-              <div v-if="storeInfo.bankAccounts?.length" class="space-y-2">
-                <div v-for="(bank, i) in storeInfo.bankAccounts" :key="i" class="bg-white rounded-lg p-3 text-sm border border-ink/10">
-                  <p class="font-semibold">{{ bank.bank }}</p>
-                  <p class="text-ink/70">{{ bank.no_rek }} a.n. {{ bank.atas_nama }}</p>
-                </div>
-              </div>
-              <p v-else class="text-xs text-ink/50">Info rekening akan tersedia di halaman Detail Pesanan.</p>
-              <p class="text-xs text-ink/50 mt-2">Setelah transfer, unggah bukti pembayaran di halaman Detail Pesanan.</p>
+              <p class="text-xs text-ink/50 leading-relaxed">
+                Halaman pembayaran akan terbuka otomatis di Detail Pesanan. Pembayaran terverifikasi otomatis begitu selesai.
+              </p>
             </div>
           </div>
         </div>
@@ -179,10 +167,12 @@ import api from '../../services/api'
 import {
   TruckIcon,
   BuildingStorefrontIcon,
-  QrCodeIcon,
-  BuildingLibraryIcon,
+  CreditCardIcon,
   BanknotesIcon,
 } from '@heroicons/vue/24/outline'
+
+// Metode yang tersedia di dalam halaman pembayaran Midtrans
+const onlineMethods = ['QRIS', 'Transfer Bank / VA', 'GoPay', 'ShopeePay', 'Kartu Kredit']
 
 const router = useRouter()
 const cart = useCartStore()
@@ -209,6 +199,15 @@ const shippingCost = computed(() => {
   const addr = addresses.value.find((a) => a.id === form.value.address_id)
   return Number(addr?.delivery_region?.shipping_cost) || 0
 })
+
+// "Bayar di Tempat" hanya berlaku untuk pickup, jadi saat pindah ke delivery
+// metode bayarnya dikembalikan ke online supaya tidak ditolak backend (422).
+function setFulfillment(type) {
+  form.value.fulfillment_type = type
+  if (type !== 'pickup' && form.value.payment_method === 'bayar_di_tempat') {
+    form.value.payment_method = 'qris'
+  }
+}
 
 const canSubmit = computed(() => {
   if (!form.value.delivery_slot_id || !form.value.scheduled_date) return false
