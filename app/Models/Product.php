@@ -38,6 +38,11 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function priceHistories()
+    {
+        return $this->hasMany(PriceHistory::class)->orderByDesc('effective_at');
+    }
+
     // Estimasi margin: harga jual - harga modal (fitur unggulan dashboard admin)
     public function getEstimatedMarginAttribute()
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PriceHistory;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
@@ -54,6 +55,24 @@ class ProductController extends Controller
 
         $stockBefore = $product->stock;
         $wasOutOfStock = $stockBefore === 0;
+
+        $priceChanged = (float) $product->price_unit !== (float) ($data['price_unit'] ?? $product->price_unit)
+            || (float) ($product->price_wholesale ?? 0) !== (float) ($data['price_wholesale'] ?? $product->price_wholesale ?? 0)
+            || (float) ($product->cost_price ?? 0) !== (float) ($data['cost_price'] ?? $product->cost_price ?? 0);
+
+        if ($priceChanged) {
+            PriceHistory::create([
+                'product_id' => $product->id,
+                'changed_by' => $request->user()->id,
+                'old_price_unit' => $product->price_unit,
+                'new_price_unit' => $data['price_unit'] ?? $product->price_unit,
+                'old_price_wholesale' => $product->price_wholesale,
+                'new_price_wholesale' => $data['price_wholesale'] ?? $product->price_wholesale,
+                'old_cost_price' => $product->cost_price,
+                'new_cost_price' => $data['cost_price'] ?? $product->cost_price,
+                'reason' => $request->input('price_change_reason') ?: 'Penyesuaian harga oleh Admin',
+            ]);
+        }
 
         $product->update($data);
 
