@@ -116,6 +116,8 @@
   </div>
 
   <div v-else class="max-w-6xl mx-auto px-4 py-16 text-center text-ink/50">Memuat produk...</div>
+
+  <SuccessPopup ref="successPopup" />
 </template>
 
 <script setup>
@@ -132,8 +134,10 @@ import {
   ChatBubbleLeftRightIcon,
 } from '@heroicons/vue/24/outline'
 import { HeartIcon as HeartIconSolid } from '@heroicons/vue/24/solid'
+import SuccessPopup from '../../components/shared/SuccessPopup.vue'
 
 const route = useRoute()
+const successPopup = ref(null)
 const product = ref(null)
 const wholesale = ref(null)
 const freshnessRemaining = ref(null)
@@ -162,7 +166,10 @@ async function addToCart() {
       qty: qty.value,
       note: note.value || null,
     })
-    alert('Berhasil ditambahkan ke keranjang!')
+    successPopup.value?.show(`${product.value.name} (${qty.value}x) ditambahkan ke keranjang`)
+  } catch (err) {
+    const msg = err.response?.data?.message || 'Gagal menambahkan ke keranjang'
+    successPopup.value?.show(msg, 'Oops!')
   } finally {
     adding.value = false
   }

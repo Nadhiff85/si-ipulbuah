@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Faq;
+use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 
 class ContentController extends Controller
 {
+    public function __construct(private ImageUploadService $imageUpload) {}
+
     // Manajemen Konten (fitur B.11): banner/slider beranda & FAQ
     public function banners()
     {
@@ -17,13 +20,29 @@ class ContentController extends Controller
 
     public function storeBanner(Request $request)
     {
-        $banner = Banner::create($request->validate([
+        $request->validate([
             'title' => 'nullable|string|max:255',
-            'image' => 'required|string',
+            'image' => 'required_without:image_file|nullable|string',
+            'image_file' => 'required_without:image|nullable|image|max:5120',
             'link' => 'nullable|string',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
-        ]));
+        ]);
+
+        $imagePath = $request->input('image');
+
+        if ($request->hasFile('image_file')) {
+            $filename = 'banners/' . uniqid() . '.webp';
+            $imagePath = $this->imageUpload->saveAsWebp($request->file('image_file'), $filename, maxWidth: 1920, quality: 85);
+        }
+
+        $banner = Banner::create([
+            'title' => $request->input('title'),
+            'image' => $imagePath,
+            'link' => $request->input('link'),
+            'sort_order' => $request->input('sort_order', 0),
+            'is_active' => $request->boolean('is_active', true),
+        ]);
 
         return response()->json(['banner' => $banner], 201);
     }
