@@ -187,13 +187,35 @@
                   <CheckIcon class="w-3 h-3" stroke-width="3" />
                 </span>
               </Transition>
-              <span class="w-9 h-9 rounded-lg bg-badge/15 flex items-center justify-center mb-2">
-                <ArchiveBoxIcon class="w-5 h-5 text-badge" stroke-width="1.75" />
+              <span class="w-14 h-14 rounded-lg bg-badge/10 flex items-center justify-center mb-2 overflow-hidden">
+                <img v-if="c.image" :src="c.image" :alt="c.name" class="w-full h-full object-contain" loading="lazy" />
+                <ArchiveBoxIcon v-else class="w-6 h-6 text-badge" stroke-width="1.75" />
               </span>
               <p class="font-semibold text-ink text-sm leading-snug pr-5">{{ c.name }}</p>
               <p class="text-ink/45 text-xs tabular-nums mt-0.5">+Rp {{ formatPrice(c.extra_price) }}</p>
+              <p v-if="c.max_weight_kg" class="text-[11px] text-ink/40 tabular-nums mt-0.5">Maks {{ formatQty(Number(c.max_weight_kg)) }} kg buah</p>
             </button>
           </div>
+
+          <!-- Peringatan kapasitas wadah -->
+          <Transition name="expand">
+            <div
+              v-if="selectedContainer?.max_weight_kg"
+              class="mt-3 rounded-xl px-3.5 py-2.5 text-xs flex items-center gap-2 transition-colors"
+              :class="containerOverweight
+                ? 'bg-danger/10 text-danger'
+                : 'bg-primary/8 text-ink/60'"
+            >
+              <ExclamationTriangleIcon v-if="containerOverweight" class="w-4 h-4 shrink-0" stroke-width="2" />
+              <ScaleIcon v-else class="w-4 h-4 shrink-0 text-primary" stroke-width="1.75" />
+              <span>
+                Berat buah (kg): <strong class="tabular-nums">{{ formatQty(selectedKgWeight) }} kg</strong>
+                / maks <strong class="tabular-nums">{{ formatQty(Number(selectedContainer.max_weight_kg)) }} kg</strong>
+                untuk {{ selectedContainer.name }}
+                <template v-if="containerOverweight">— kurangi buah atau pilih wadah lain</template>
+              </span>
+            </div>
+          </Transition>
         </section>
 
         <!-- ===== 3. Kartu Ucapan ===== -->
@@ -209,7 +231,7 @@
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <button
               type="button"
-              @click="selectedCard = null; cardMessage = ''"
+              @click="selectedCard = null; cardMessage = ''; cardFrom = ''; cardFont = 'elegant'; cardSize = 'md'"
               class="option-card relative rounded-xl2 border-2 p-3.5 text-left cursor-pointer transition-all duration-200 active:scale-[0.97]"
               :class="!selectedCard ? 'border-primary bg-primary/8 shadow-sm' : 'border-ink/10 bg-white hover:border-primary/35'"
               :aria-pressed="!selectedCard"
@@ -226,36 +248,114 @@
               :key="c.id"
               type="button"
               @click="selectedCard = c"
-              class="option-card relative rounded-xl2 border-2 p-3.5 text-left cursor-pointer transition-all duration-200 active:scale-[0.97]"
+              class="option-card relative rounded-xl2 border-2 p-2 text-left cursor-pointer transition-all duration-200 active:scale-[0.97]"
               :class="selectedCard?.id === c.id ? 'border-primary bg-primary/8 shadow-sm' : 'border-ink/10 bg-white hover:border-primary/35'"
               :aria-pressed="selectedCard?.id === c.id"
             >
               <Transition name="pop">
-                <span v-if="selectedCard?.id === c.id" class="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center">
+                <span v-if="selectedCard?.id === c.id" class="absolute top-3 right-3 z-10 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center shadow">
                   <CheckIcon class="w-3 h-3" stroke-width="3" />
                 </span>
               </Transition>
-              <span class="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center mb-2">
-                <EnvelopeIcon class="w-5 h-5 text-accent" stroke-width="1.75" />
+              <span class="block w-full aspect-[3/2] rounded-lg overflow-hidden mb-2 ring-1 ring-ink/8">
+                <img v-if="c.image" :src="c.image" :alt="c.name" class="w-full h-full object-cover" loading="lazy" />
+                <span v-else class="w-full h-full flex items-center justify-center bg-accent/10">
+                  <EnvelopeIcon class="w-5 h-5 text-accent" stroke-width="1.75" />
+                </span>
               </span>
-              <p class="font-semibold text-ink text-sm leading-snug pr-5">{{ c.name }}</p>
-              <p class="text-ink/45 text-xs tabular-nums mt-0.5">+Rp {{ formatPrice(c.extra_price) }}</p>
+              <p class="font-semibold text-ink text-xs leading-snug px-1 truncate">{{ c.name }}</p>
+              <p class="text-ink/45 text-[11px] tabular-nums px-1">+Rp {{ formatPrice(c.extra_price) }}</p>
             </button>
           </div>
 
           <Transition name="expand">
             <div v-if="selectedCard" class="overflow-hidden">
-              <div class="mt-4">
-                <label for="card-message" class="block text-xs font-semibold text-ink/60 mb-1.5">Pesan Ucapan</label>
-                <textarea
-                  id="card-message"
-                  v-model="cardMessage"
-                  rows="3"
-                  maxlength="200"
-                  placeholder="mis. Selamat ulang tahun, semoga sehat selalu!"
-                  class="w-full bg-white border border-ink/12 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition"
-                ></textarea>
-                <p class="text-[11px] text-ink/40 text-right mt-1 tabular-nums">{{ cardMessage.length }}/200</p>
+              <div class="mt-5 grid sm:grid-cols-2 gap-4">
+                <!-- Pratinjau kartu langsung -->
+                <div>
+                  <p class="text-xs font-semibold text-ink/60 mb-1.5">Pratinjau Kartu</p>
+                  <div class="relative w-full aspect-[3/2] rounded-xl overflow-hidden shadow-sm ring-1 ring-ink/8">
+                    <img :src="selectedCard.image" :alt="selectedCard.name" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 flex flex-col items-center justify-center px-6 py-5 text-center">
+                      <p
+                        class="font-semibold text-ink leading-snug break-words line-clamp-4"
+                        :class="activeFontOption.class"
+                        :style="{ fontSize: previewMessageSize + 'px' }"
+                      >
+                        {{ cardMessage || 'Pesan ucapanmu akan tampil di sini...' }}
+                      </p>
+                    </div>
+                    <p
+                      v-if="cardFrom"
+                      class="absolute bottom-3 right-4 text-ink/70 font-semibold"
+                      :class="activeFontOption.class"
+                      :style="{ fontSize: previewSignatureSize + 'px' }"
+                    >
+                      — {{ cardFrom }}
+                    </p>
+                  </div>
+
+                  <!-- Pilihan gaya tulisan -->
+                  <p class="text-xs font-semibold text-ink/60 mt-3 mb-1.5">Gaya Tulisan</p>
+                  <div class="grid grid-cols-3 gap-2 mb-3">
+                    <button
+                      v-for="f in FONT_OPTIONS"
+                      :key="f.key"
+                      type="button"
+                      @click="cardFont = f.key"
+                      class="rounded-lg border-2 py-2 px-1.5 text-center transition-all duration-200 cursor-pointer active:scale-[0.97]"
+                      :class="cardFont === f.key ? 'border-primary bg-primary/8' : 'border-ink/10 bg-white hover:border-primary/35'"
+                      :aria-pressed="cardFont === f.key"
+                    >
+                      <span class="block text-lg leading-none" :class="f.class">Aa</span>
+                      <span class="block text-[10px] font-semibold text-ink/60 mt-1">{{ f.label }}</span>
+                    </button>
+                  </div>
+
+                  <!-- Pilihan ukuran tulisan -->
+                  <p class="text-xs font-semibold text-ink/60 mb-1.5">Ukuran Tulisan</p>
+                  <div class="grid grid-cols-3 gap-2">
+                    <button
+                      v-for="s in SIZE_OPTIONS"
+                      :key="s.key"
+                      type="button"
+                      @click="cardSize = s.key"
+                      class="rounded-lg border-2 py-2 px-1.5 text-center transition-all duration-200 cursor-pointer active:scale-[0.97] flex flex-col items-center justify-end"
+                      :class="cardSize === s.key ? 'border-primary bg-primary/8' : 'border-ink/10 bg-white hover:border-primary/35'"
+                      :aria-pressed="cardSize === s.key"
+                    >
+                      <span class="block font-bold text-ink leading-none" :style="{ fontSize: s.sampleSize + 'px' }">A</span>
+                      <span class="block text-[10px] font-semibold text-ink/60 mt-1">{{ s.label }}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Mini form -->
+                <div class="space-y-3">
+                  <div>
+                    <label for="card-from" class="block text-xs font-semibold text-ink/60 mb-1.5">Dari</label>
+                    <input
+                      id="card-from"
+                      v-model="cardFrom"
+                      type="text"
+                      maxlength="40"
+                      placeholder="mis. Keluarga Budi"
+                      class="w-full bg-white border border-ink/12 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition"
+                    />
+                  </div>
+                  <div>
+                    <label for="card-message" class="block text-xs font-semibold text-ink/60 mb-1.5">Pesan Ucapan</label>
+                    <textarea
+                      id="card-message"
+                      v-model="cardMessage"
+                      rows="4"
+                      maxlength="200"
+                      placeholder="mis. Selamat ulang tahun, semoga sehat selalu!"
+                      class="w-full bg-white border border-ink/12 rounded-xl px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition"
+                    ></textarea>
+                    <p class="text-[11px] text-ink/40 text-right mt-1 tabular-nums">{{ cardMessage.length }}/200</p>
+                  </div>
+                </div>
               </div>
             </div>
           </Transition>
@@ -276,7 +376,7 @@
                  ini, jadi tetap pas di dalam bowl berapa pun lebar sidebar. -->
             <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[215px]">
               <img
-                src="/images/keranjang.webp"
+                :src="previewBasketImage"
                 alt="Keranjang parsel"
                 class="w-full h-auto select-none pointer-events-none"
                 draggable="false"
@@ -376,7 +476,7 @@
 
             <button
               @click="addCustomHamperToCart"
-              :disabled="selectedCount === 0 || adding"
+              :disabled="selectedCount === 0 || adding || containerOverweight"
               class="w-full inline-flex items-center justify-center gap-2 text-white font-bold py-3.5 rounded-full transition-all duration-200 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-sm hover:shadow-md"
               style="background: linear-gradient(135deg, #FF5A36, #E8431F);"
             >
@@ -387,6 +487,9 @@
 
             <p v-if="selectedCount === 0" class="text-[11px] text-ink/40 text-center mt-2">
               Pilih minimal satu buah untuk melanjutkan
+            </p>
+            <p v-else-if="containerOverweight" class="text-[11px] text-danger text-center mt-2">
+              Berat buah melebihi kapasitas wadah yang dipilih
             </p>
           </div>
         </div>
@@ -410,6 +513,8 @@ import {
   EnvelopeIcon,
   NoSymbolIcon,
   ArrowPathIcon,
+  ExclamationTriangleIcon,
+  ScaleIcon,
 } from '@heroicons/vue/24/outline'
 
 const products = ref([])
@@ -421,8 +526,33 @@ const selectedProducts = ref({}) // { [product_id]: { product, qty } }
 const selectedContainer = ref(null)
 const selectedCard = ref(null)
 const cardMessage = ref('')
+const cardFrom = ref('')
 const adding = ref(false)
 const successPopup = ref(null)
+
+// ── Gaya & ukuran tulisan kartu ucapan ───────────────────────────────────────
+// baseSize = ukuran dasar (px) pesan saat "Sedang" dipilih. Font kursif
+// (Dancing Script/Caveat) butuh angka lebih besar dari serif supaya
+// bobot visualnya terasa setara di mata, bukan cuma sama-sama 16px.
+const FONT_OPTIONS = [
+  { key: 'elegant', label: 'Elegan', class: 'font-elegant', baseSize: 22 },
+  { key: 'formal', label: 'Profesional', class: 'font-formal italic', baseSize: 15 },
+  { key: 'cute', label: 'Imut', class: 'font-cute', baseSize: 22 },
+]
+const cardFont = ref('elegant')
+const activeFontOption = computed(() => FONT_OPTIONS.find((f) => f.key === cardFont.value) ?? FONT_OPTIONS[0])
+
+const SIZE_OPTIONS = [
+  { key: 'sm', label: 'Kecil', scale: 0.72, sampleSize: 13 },
+  { key: 'md', label: 'Sedang', scale: 1, sampleSize: 17 },
+  { key: 'lg', label: 'Besar', scale: 1.4, sampleSize: 21 },
+]
+const cardSize = ref('md')
+const activeSizeOption = computed(() => SIZE_OPTIONS.find((s) => s.key === cardSize.value) ?? SIZE_OPTIONS[1])
+
+const previewMessageSize = computed(() => Math.round(activeFontOption.value.baseSize * activeSizeOption.value.scale))
+// Tanda tangan "Dari" selalu lebih kecil dari pesan utama, tapi tetap ikut skala ukuran
+const previewSignatureSize = computed(() => Math.round(previewMessageSize.value * 0.6))
 
 // ── Warna buah ────────────────────────────────────────────────────────────────
 // Tiap buah dapat gradien khas supaya pratinjau parsel terbaca sekilas
@@ -520,17 +650,41 @@ const totalPrice = computed(() => {
   return total
 })
 
+// ── Kapasitas wadah ──────────────────────────────────────────────────────────
+// Wadah punya batas berat (kg) - keranjang bergagang maks 3kg, tanpa gagang
+// maks 4kg. Cuma buah bersatuan "kg" yang dihitung ke batas ini; buah
+// bersatuan lain (sisir/pcs/pack) tidak diukur dalam kg jadi tidak ikut dijumlah.
+const selectedKgWeight = computed(() =>
+  selectedList.value
+    .filter((sp) => sp.product.unit === 'kg')
+    .reduce((sum, sp) => sum + sp.qty, 0)
+)
+
+const containerOverweight = computed(() => {
+  const limit = selectedContainer.value?.max_weight_kg
+  return !!limit && selectedKgWeight.value > Number(limit)
+})
+
 // ── Pratinjau keranjang ───────────────────────────────────────────────────────
 const MAX_PREVIEW = 8
 const previewFruits = computed(() => selectedList.value.slice(0, MAX_PREVIEW))
 const extraFruitCount = computed(() => Math.max(0, selectedCount.value - MAX_PREVIEW))
 
+// Foto keranjang yang tampil di pratinjau: ikut wadah yang sedang dipilih
+// user, jatuh ke keranjang rotan bergagang (default) kalau belum ada yang
+// dipilih atau wadah yang dipilih kebetulan belum punya foto.
+const DEFAULT_BASKET_IMAGE = '/images/keranjang.webp'
+const previewBasketImage = computed(() => selectedContainer.value?.image || DEFAULT_BASKET_IMAGE)
+
 // Titik tengah tiap buah dalam PERSEN terhadap foto keranjang, jadi posisinya
-// tetap pas di dalam bowl berapa pun lebar sidebar. Bowl foto ini kira-kira
-// membentang di x 19-80% dan y 49-71%. Slot dibuat tetap per indeks supaya
-// buah tidak "melompat" saat daftar pilihan berubah.
+// tetap pas di dalam bowl berapa pun lebar sidebar. Slot dibuat tetap per
+// indeks supaya buah tidak "melompat" saat daftar pilihan berubah. Tiap
+// bentuk keranjang beda proporsi bowl-nya, jadi presetnya dipisah per foto.
 const FRUIT_SIZE = 36
-const PREVIEW_SLOTS = [
+
+// Keranjang rotan bergagang (default) - bowl bulat & dalam, kira-kira
+// membentang di x 19-80% dan y 49-71%.
+const SLOTS_DEFAULT = [
   { x: 50, y: 52 },
   { x: 36, y: 54 },
   { x: 64, y: 54 },
@@ -541,10 +695,27 @@ const PREVIEW_SLOTS = [
   { x: 50, y: 67 },
 ]
 
+// Keranjang anyaman tanpa gagang - lebih lebar & pipih (oval), jadi buah
+// disebar lebih ke samping dan tidak setinggi preset default.
+const SLOTS_WIDE = [
+  { x: 50, y: 42 },
+  { x: 32, y: 45 },
+  { x: 68, y: 45 },
+  { x: 18, y: 53 },
+  { x: 82, y: 53 },
+  { x: 38, y: 56 },
+  { x: 62, y: 56 },
+  { x: 50, y: 62 },
+]
+
+const activeSlots = computed(() =>
+  previewBasketImage.value === '/images/keranjang2.webp' ? SLOTS_WIDE : SLOTS_DEFAULT
+)
+
 // Posisi dipasang lewat left/top + margin (bukan transform) supaya transform
 // tetap bebas dipakai animasi pop saat buah masuk/keluar.
 function slotStyle(i) {
-  const slot = PREVIEW_SLOTS[i] ?? PREVIEW_SLOTS[PREVIEW_SLOTS.length - 1]
+  const slot = activeSlots.value[i] ?? activeSlots.value[activeSlots.value.length - 1]
   return {
     left: `${slot.x}%`,
     top: `${slot.y}%`,
@@ -578,6 +749,9 @@ async function addCustomHamperToCart() {
         container_id: selectedContainer.value?.id || null,
         card_id: selectedCard.value?.id || null,
         card_message: cardMessage.value || null,
+        card_from: cardFrom.value || null,
+        card_font: selectedCard.value ? cardFont.value : null,
+        card_size: selectedCard.value ? cardSize.value : null,
         estimated_price: totalPrice.value,
       },
       note: 'Parsel Kustom',

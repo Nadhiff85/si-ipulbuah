@@ -30,6 +30,10 @@ export default {
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui'],
         display: ['Bricolage Grotesque', 'Plus Jakarta Sans', 'ui-sans-serif'],
+        // Pilihan gaya tulisan kartu ucapan (Parsel Kustom)
+        elegant: ['"Dancing Script"', 'cursive'],
+        formal: ['"Playfair Display"', 'serif'],
+        cute: ['Caveat', 'cursive'],
       },
       borderRadius: {
         xl2: '1.25rem',
