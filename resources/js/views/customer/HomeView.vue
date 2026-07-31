@@ -172,52 +172,42 @@
     </section>
 
     <!-- ===== Buat Parsel Kustom ===== -->
-    <section class="max-w-7xl mx-auto px-4 py-10">
-      <div class="bg-primary rounded-xl2 overflow-hidden grid md:grid-cols-2 items-stretch">
-        <div class="p-8 md:p-10 flex flex-col justify-center text-white">
-          <span class="inline-flex items-center gap-1.5 bg-white/15 text-badge font-bold px-3 py-1.5 rounded-full text-xs uppercase tracking-wide w-fit mb-4">
-            <GiftIcon class="w-4 h-4" stroke-width="2" /> Parsel Kustom
+    <section class="max-w-7xl mx-auto px-4 py-6">
+      <div class="bg-primary rounded-xl2 overflow-hidden grid md:grid-cols-2 md:h-56">
+        <div class="p-6 md:p-7 flex flex-col justify-center text-white">
+          <span class="inline-flex items-center gap-1.5 bg-white/15 text-badge font-bold px-2.5 py-1 rounded-full text-[11px] uppercase tracking-wide w-fit mb-2.5">
+            <GiftIcon class="w-3.5 h-3.5" stroke-width="2" /> Parsel Kustom
           </span>
-          <h2 class="text-2xl md:text-3xl font-black mb-3 leading-tight">Rangkai Sendiri Parsel Buahmu</h2>
-          <p class="text-white/80 text-sm md:text-base mb-6 leading-relaxed">
+          <h2 class="text-xl md:text-2xl font-black mb-2 leading-tight">Rangkai Sendiri Parsel Buahmu</h2>
+          <p class="text-white/80 text-sm mb-4 leading-relaxed">
             Pilih sendiri isi, kemasan, dan kartu ucapan — cocok untuk hadiah ulang tahun,
             parsel lebaran, atau kado sehat untuk orang tersayang.
           </p>
           <button
             @click="goLogin('/parsel-kustom')"
-            class="bg-accent hover:bg-accent-light text-white font-bold px-6 py-3 rounded-full transition w-fit inline-flex items-center gap-2 cursor-pointer"
+            class="bg-accent hover:bg-accent-light text-white font-bold px-5 py-2.5 rounded-full transition w-fit inline-flex items-center gap-2 cursor-pointer text-sm"
           >
             Mulai Rangkai Parsel <ArrowRightIcon class="w-4 h-4" stroke-width="2.5" />
           </button>
         </div>
-        <div class="relative min-h-[220px] hidden md:block">
-          <img src="/images/marquee/Buah%20Musiman.jpg" alt="Parsel buah kustom" class="absolute inset-0 w-full h-full object-cover" />
-          <div class="absolute inset-0 bg-gradient-to-l from-transparent to-primary/40"></div>
+        <div class="relative hidden md:flex items-center justify-center overflow-hidden bg-white">
+          <img src="/images/parsel-buah.webp" alt="Parsel buah kustom" class="relative h-40 w-auto object-contain" />
+          <div class="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-primary/20 pointer-events-none"></div>
         </div>
       </div>
     </section>
 
-    <!-- ===== Banner Musiman & Promo ===== -->
-    <section class="max-w-7xl mx-auto px-4 py-4 grid md:grid-cols-2 gap-5">
+    <!-- ===== Banner Musiman ===== -->
+    <section class="max-w-7xl mx-auto px-4 py-4">
       <button
         @click="goLogin('/musiman')"
-        class="text-left bg-accent rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-accent-light transition cursor-pointer"
+        class="w-full text-left bg-accent rounded-xl2 p-6 text-white flex items-center justify-between hover:bg-accent-light transition cursor-pointer"
       >
         <div>
           <p class="font-bold text-lg mb-1">Buah Musiman</p>
           <p class="text-white/80 text-sm">Segar, enak & sedang musim sekarang!</p>
         </div>
         <span><SunIcon class="w-9 h-9" stroke-width="1.5" /></span>
-      </button>
-      <button
-        @click="goLogin('/promo')"
-        class="text-left bg-badge rounded-xl2 p-6 text-primary-dark flex items-center justify-between hover:opacity-90 transition cursor-pointer"
-      >
-        <div>
-          <p class="font-bold text-lg mb-1">Promo Spesial</p>
-          <p class="text-primary-dark/80 text-sm">Cek penawaran & diskon minggu ini</p>
-        </div>
-        <span><TagIcon class="w-9 h-9" stroke-width="1.5" /></span>
       </button>
     </section>
 
@@ -326,7 +316,7 @@ import { useAuthStore } from '../../stores/auth'
 import { useStoreInfoStore } from '../../stores/store'
 import api from '../../services/api'
 import {
-  PhotoIcon, TagIcon, GiftIcon, SunIcon, MapPinIcon, ChatBubbleLeftRightIcon, ArrowTopRightOnSquareIcon,
+  PhotoIcon, GiftIcon, SunIcon, MapPinIcon, ChatBubbleLeftRightIcon, ArrowTopRightOnSquareIcon,
   ArrowRightIcon, SparklesIcon,
 } from '@heroicons/vue/24/outline'
 import { StarIcon } from '@heroicons/vue/24/solid'
