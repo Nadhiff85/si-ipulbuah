@@ -2,7 +2,7 @@
   <div class="min-h-screen flex glass-panel-bg">
     <aside class="w-64 bg-primary-dark text-white shrink-0 hidden lg:flex flex-col">
       <div class="px-5 py-4 flex items-center gap-2.5 border-b border-white/10">
-        <span class="h-8 w-8 rounded-lg bg-badge text-primary-dark font-black text-xs flex items-center justify-center shrink-0">IB</span>
+        <img src="/images/logo.webp" alt="IPUL BUAH" class="h-8 w-8 object-contain shrink-0" />
         <div class="leading-tight">
           <p class="font-semibold text-[15px]">IPUL BUAH</p>
           <p class="text-[11px] text-white/45">Superadmin Panel</p>

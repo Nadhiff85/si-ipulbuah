@@ -5,7 +5,7 @@
     <div style="max-width:440px;margin:auto;">
 
         <div style="text-align:center;margin-bottom:20px;">
-            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:#123524;color:#fff;font-weight:800;font-size:15px;">IB</span>
+            <img src="{{ asset('images/logo.webp') }}" alt="IPUL BUAH" width="44" height="44" style="display:inline-block;width:44px;height:44px;object-fit:contain;" />
             <p style="margin:8px 0 0;font-weight:800;color:#123524;font-size:16px;letter-spacing:0.3px;">IPUL BUAH</p>
         </div>
 

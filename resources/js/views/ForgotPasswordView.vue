@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-surface-soft flex items-center justify-center px-4 py-12">
     <div class="w-full max-w-md">
       <div class="text-center mb-6">
-        <span class="h-16 w-16 mx-auto mb-3 rounded-2xl bg-primary text-white font-black text-xl flex items-center justify-center shadow-sm">IB</span>
+        <img src="/images/logo.webp" alt="IPUL BUAH" class="h-16 w-16 mx-auto mb-3 object-contain" />
         <h1 class="text-xl font-bold text-ink">
           {{ step === 'email' ? 'Lupa Kata Sandi' : step === 'reset' ? 'Verifikasi & Kata Sandi Baru' : 'Berhasil!' }}
         </h1>

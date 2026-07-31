@@ -20,7 +20,7 @@
 
         <!-- Bagian Kiri: Logo -->
         <router-link to="/" class="flex items-center gap-2 shrink-0">
-          <span class="h-9 w-9 rounded-xl bg-accent text-white font-black text-sm flex items-center justify-center shrink-0">IB</span>
+          <img src="/images/logo.webp" alt="IPUL BUAH" class="h-9 w-9 object-contain shrink-0" />
           <p class="font-black text-primary text-lg leading-none">IPUL BUAH</p>
         </router-link>
 
@@ -71,7 +71,7 @@
       <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
         <div>
           <div class="flex items-center gap-2 mb-3">
-            <span class="h-9 w-9 rounded-xl bg-badge text-primary-dark font-black text-sm flex items-center justify-center shrink-0">IB</span>
+            <img src="/images/logo.webp" alt="IPUL BUAH" class="h-9 w-9 object-contain shrink-0" />
             <span class="font-bold text-lg">IPUL BUAH</span>
           </div>
           <p class="text-white/70">{{ storeInfo.tagline }}</p>

@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-md mx-auto px-4 py-16">
     <div class="text-center mb-6">
-      <span class="h-16 w-16 mx-auto mb-3 rounded-2xl bg-accent text-white font-black text-xl flex items-center justify-center shadow-sm">IB</span>
+      <img src="/images/logo.webp" alt="IPUL BUAH" class="h-16 w-16 mx-auto mb-3 object-contain" />
       <h1 class="text-xl font-bold text-ink">{{ step === 'form' ? 'Buat Akun Baru' : 'Verifikasi Email Anda' }}</h1>
       <p class="text-ink/60 text-sm mt-1">
         {{ step === 'form' ? 'Daftar untuk mulai belanja buah segar dari rumah' : 'Masukkan kode OTP untuk membuktikan email ini benar milik Anda' }}
