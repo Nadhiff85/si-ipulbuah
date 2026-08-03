@@ -37,6 +37,16 @@ class BackupDatabase extends Command
 
         $process = new Process($command);
         $process->setTimeout(300);
+        $process->setWorkingDirectory(base_path());
+
+        // Windows: PHP tidak selalu mengisi SystemRoot ke $_ENV (walau ada di
+        // getenv()), padahal Winsock butuh variabel ini untuk init koneksi
+        // TCP. Tanpa baris ini, mysqldump.exe gagal dengan error 2004
+        // "Can't create TCP/IP socket" walau perintah yang sama berjalan
+        // normal ketika dijalankan manual langsung di terminal.
+        if (PHP_OS_FAMILY === 'Windows' && ($systemRoot = getenv('SystemRoot'))) {
+            $process->setEnv(['SystemRoot' => $systemRoot]);
+        }
 
         try {
             $process->mustRun(function ($type, $buffer) use ($filePath) {

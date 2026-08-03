@@ -7,6 +7,7 @@ use App\Models\DeliverySlotBooking;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\StockLog;
 use App\Models\StoreSetting;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -101,10 +102,22 @@ class CheckoutController extends Controller
                     'custom_hamper_config' => $item->custom_hamper_config,
                 ]);
 
-                // Kurangi stok produk
+                // Kurangi stok produk & catat riwayatnya (fitur B.14) - tanpa ini,
+                // laporan Riwayat Perubahan Stok cuma menampilkan edit manual admin,
+                // tidak pernah menampilkan pengurangan dari penjualan asli.
                 if ($item->product) {
+                    $stockBefore = $item->product->stock;
                     $item->product->decrement('stock', $item->qty);
                     $item->product->increment('sold_count', $item->qty);
+
+                    StockLog::create([
+                        'product_id' => $item->product_id,
+                        'user_id' => null, // otomatis oleh sistem, bukan admin
+                        'stock_before' => $stockBefore,
+                        'stock_after' => $stockBefore - $item->qty,
+                        'change' => -$item->qty,
+                        'reason' => 'Penjualan - ' . $order->order_number,
+                    ]);
                 }
             }
 

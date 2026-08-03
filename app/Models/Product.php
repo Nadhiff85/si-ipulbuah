@@ -54,7 +54,11 @@ class Product extends Model
     public function getFreshnessRemainingAttribute()
     {
         if (!$this->stock_in_date || !$this->freshness_days) return null;
-        $daysPassed = now()->diffInDays($this->stock_in_date);
+        // abs() wajib - Carbon::diffInDays() bisa mengembalikan nilai NEGATIF
+        // untuk tanggal yang sudah lewat (tergantung versi), yang tanpa abs()
+        // justru membuat "sisa hari kesegaran" makin BESAR seiring stok makin
+        // lama, kebalikan dari yang seharusnya.
+        $daysPassed = abs(now()->diffInDays($this->stock_in_date));
         return max(0, $this->freshness_days - $daysPassed);
     }
 }

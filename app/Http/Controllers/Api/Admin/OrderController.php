@@ -28,12 +28,31 @@ class OrderController extends Controller
         return response()->json(['order' => $order->load(['user', 'items.product', 'payment', 'address', 'deliverySlot'])]);
     }
 
+    // Alur status yang sah - kunci supaya admin (atau bug di frontend) tidak
+    // bisa meloncati tahapan, mis. "menunggu_bayar" langsung ke "selesai"
+    // tanpa pernah dikonfirmasi/diproses/dikirim.
+    private const ALLOWED_TRANSITIONS = [
+        'menunggu_bayar' => ['dikonfirmasi', 'dibatalkan'],
+        'dikonfirmasi' => ['diproses', 'dibatalkan'],
+        'diproses' => ['dikirim_siap_ambil', 'dibatalkan'],
+        'dikirim_siap_ambil' => ['selesai'],
+        'selesai' => [],
+        'dibatalkan' => [],
+    ];
+
     // Update status pesanan sepanjang alur: menunggu_bayar -> dikonfirmasi -> diproses -> dikirim_siap_ambil -> selesai
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
             'status' => 'required|in:dikonfirmasi,diproses,dikirim_siap_ambil,selesai,dibatalkan',
         ]);
+
+        $allowed = self::ALLOWED_TRANSITIONS[$order->status] ?? [];
+        if (!in_array($request->status, $allowed, true)) {
+            return response()->json([
+                'message' => "Pesanan berstatus \"{$order->status}\" tidak bisa langsung diubah ke \"{$request->status}\". Ikuti urutan alur pesanan.",
+            ], 422);
+        }
 
         $timestampField = [
             'dikonfirmasi' => 'confirmed_at',
@@ -71,6 +90,12 @@ class OrderController extends Controller
     {
         $order->load(['user', 'items', 'payment', 'address']);
         $pdf = Pdf::loadView('pdf.invoice', ['order' => $order]);
-        return $pdf->download("invoice-{$order->order_number}.pdf");
+
+        // order_number berformat "INV/20260803/0003" - "/" tidak boleh dipakai
+        // di header Content-Disposition (nama file unduhan), jadi disanitasi
+        // dulu supaya tidak 500 "filename cannot contain / and \" saat dicetak.
+        $safeFilename = str_replace(['/', '\\'], '-', $order->order_number);
+
+        return $pdf->download("invoice-{$safeFilename}.pdf");
     }
 }

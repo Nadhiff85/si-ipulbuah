@@ -44,7 +44,9 @@ class MidtransService
                 'email' => $order->user->email,
                 'phone' => $order->user->phone,
             ],
-            'enabled_payments' => ['qris'],
+            // Tidak dibatasi ke satu channel - Snap otomatis menampilkan semua
+            // metode yang aktif di akun Midtrans (QRIS, Transfer Bank/VA,
+            // GoPay, ShopeePay, dst), jadi pelanggan bebas pilih di popup.
         ];
 
         return Snap::getSnapToken($params);

@@ -26,7 +26,11 @@ class CheckProductFreshness extends Command
         $admins = User::role(['admin', 'superadmin'])->get();
 
         foreach ($products as $product) {
-            $daysPassed = now()->diffInDays($product->stock_in_date);
+            // abs() wajib - lihat catatan yang sama di Product::getFreshnessRemainingAttribute().
+            // Tanpa ini, $daysPassed selalu negatif untuk stok yang sudah lama masuk,
+            // sehingga produk TIDAK PERNAH otomatis dinonaktifkan walau sudah lewat
+            // batas hari kesegaran berapa pun lamanya.
+            $daysPassed = abs(now()->diffInDays($product->stock_in_date));
             $remaining = $product->freshness_days - $daysPassed;
 
             // Peringatan Dini Kesegaran (fitur B.19): sisa kesegaran <= 2 hari

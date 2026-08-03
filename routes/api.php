@@ -122,7 +122,10 @@ Route::middleware(['auth:sanctum', 'session.timeout'])->group(function () {
     });
 
     // ---------- Modul Admin Toko ----------
-    Route::middleware('role:admin,superadmin')->prefix('admin')->group(function () {
+    // "audit" mencatat setiap request POST/PUT/PATCH/DELETE ke tabel audit_logs -
+    // sebelumnya middleware ini sudah dibuat & didaftarkan tapi tidak pernah
+    // dipasang ke grup rute manapun, jadi Audit Trail Admin selalu kosong.
+    Route::middleware(['role:admin,superadmin', 'audit'])->prefix('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index']);
 
         Route::apiResource('products', AdminProductController::class);
@@ -180,7 +183,7 @@ Route::middleware(['auth:sanctum', 'session.timeout'])->group(function () {
     });
 
     // ---------- Modul Superadmin ----------
-    Route::middleware('role:superadmin')->prefix('superadmin')->group(function () {
+    Route::middleware(['role:superadmin', 'audit'])->prefix('superadmin')->group(function () {
         Route::get('/admins', [AdminManagementController::class, 'index']);
         Route::post('/admins', [AdminManagementController::class, 'store']);
         Route::patch('/admins/{admin}/toggle-active', [AdminManagementController::class, 'toggleActive']);
