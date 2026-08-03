@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  /* Pengaman: hero sinematik di beranda pakai GSAP ScrollTrigger pin, dan
+     wrapper ".pin-spacer" yang dibuat GSAP saat pinning kadang mengambil
+     lebar berdasarkan ukuran konten sebelum ter-clip, membuat scroll
+     horizontal muncul di layar sempit (mobile) walau section-nya sendiri
+     sudah overflow-hidden. Dikunci di sini supaya tidak bergantung pada
+     detail internal GSAP yang bisa berubah antar versi. */
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   @apply bg-surface-soft text-ink font-sans;
 }
