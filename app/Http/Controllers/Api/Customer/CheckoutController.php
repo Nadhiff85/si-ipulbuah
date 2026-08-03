@@ -44,12 +44,12 @@ class CheckoutController extends Controller
             return response()->json(['message' => 'Bayar di Tempat hanya tersedia untuk metode Pickup.'], 422);
         }
 
-        // Cek kuota slot pengiriman pada tanggal tsb (fitur B.18 - Manajemen Jadwal Pengiriman)
-        $slot = \App\Models\DeliverySlot::findOrFail($request->delivery_slot_id);
-        $bookedCount = DeliverySlotBooking::where('delivery_slot_id', $slot->id)
-            ->where('date', $request->scheduled_date)->count();
-
-        abort_if($bookedCount >= $slot->quota_per_day, 422, 'Kuota slot waktu tersebut sudah penuh, silakan pilih slot lain.');
+        // Kuota slot pengiriman (fitur B.18) dicek dengan lock DI DALAM
+        // transaksi di bawah, bukan di sini - kalau cuma dicek sekali di luar
+        // transaksi, dua checkout yang mepet kuota bisa sama-sama lolos
+        // sebelum salah satu sempat booking (race condition yang sama persis
+        // dengan kasus stok produk yang sudah diperbaiki). Keberadaan slot_id
+        // itu sendiri sudah dijamin valid oleh rule "exists:delivery_slots,id".
 
         $deliveryRegionId = null;
         $shippingCost = 0;
@@ -143,6 +143,15 @@ class CheckoutController extends Controller
                 'amount' => $order->total,
                 'status' => $request->payment_method === 'bayar_di_tempat' ? 'pending' : 'pending',
             ]);
+
+            // Kunci baris slot supaya dua checkout yang mepet kuota tidak bisa
+            // sama-sama membaca hitungan booking lama sebelum salah satu
+            // sempat menambah - lihat catatan lock stok produk di atas.
+            $slot = \App\Models\DeliverySlot::where('id', $request->delivery_slot_id)->lockForUpdate()->first();
+            $bookedCount = DeliverySlotBooking::where('delivery_slot_id', $slot->id)
+                ->where('date', $request->scheduled_date)->count();
+
+            abort_if($bookedCount >= $slot->quota_per_day, 422, 'Kuota slot waktu tersebut sudah penuh, silakan pilih slot lain.');
 
             DeliverySlotBooking::create([
                 'order_id' => $order->id,
