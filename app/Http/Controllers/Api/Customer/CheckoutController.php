@@ -7,6 +7,7 @@ use App\Models\DeliverySlotBooking;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\StockLog;
 use App\Models\StoreSetting;
 use App\Services\NotificationService;
@@ -106,9 +107,24 @@ class CheckoutController extends Controller
                 // laporan Riwayat Perubahan Stok cuma menampilkan edit manual admin,
                 // tidak pernah menampilkan pengurangan dari penjualan asli.
                 if ($item->product) {
-                    $stockBefore = $item->product->stock;
-                    $item->product->decrement('stock', $item->qty);
-                    $item->product->increment('sold_count', $item->qty);
+                    // lockForUpdate() WAJIB di sini - tanpa ini, dua checkout stok
+                    // terbatas yang terjadi bersamaan bisa sama-sama membaca stok
+                    // lama (mis. 1) sebelum salah satu sempat mengurangi, sehingga
+                    // KEDUANYA lolos dan stok berakhir minus (race condition
+                    // terverifikasi nyata: 2 checkout paralel utk stok=1 sama-sama
+                    // sukses, stok akhir -1). Row lock memaksa checkout kedua
+                    // menunggu giliran lalu melihat stok yang sudah ter-update.
+                    $lockedProduct = Product::where('id', $item->product_id)->lockForUpdate()->first();
+
+                    abort_if(
+                        !$lockedProduct || $lockedProduct->stock < $item->qty,
+                        422,
+                        "Stok \"{$item->product->name}\" tidak lagi mencukupi. Tersisa " . ($lockedProduct->stock ?? 0) . '.'
+                    );
+
+                    $stockBefore = $lockedProduct->stock;
+                    $lockedProduct->decrement('stock', $item->qty);
+                    $lockedProduct->increment('sold_count', $item->qty);
 
                     StockLog::create([
                         'product_id' => $item->product_id,
