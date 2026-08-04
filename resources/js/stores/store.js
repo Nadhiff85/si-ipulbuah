@@ -43,7 +43,8 @@ export const useStoreInfoStore = defineStore('storeInfo', {
     },
 
     whatsappUrl(state) {
-      return `https://wa.me/${state.whatsappNumber}`
+      const teks = encodeURIComponent('Halo IPUL BUAH 👋 Saya ingin bertanya. Boleh dibantu?')
+      return `https://api.whatsapp.com/send?phone=${state.whatsappNumber}&text=${teks}`
     },
   },
 

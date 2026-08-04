@@ -144,6 +144,6 @@ const templates = [
 
 function waLink(pesan) {
   const nomor = storeInfo.whatsappNumber || '6285244189949'
-  return `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`
+  return `https://api.whatsapp.com/send?phone=${nomor}&text=${encodeURIComponent(pesan)}`
 }
 </script>
