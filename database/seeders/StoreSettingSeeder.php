@@ -16,7 +16,7 @@ class StoreSettingSeeder extends Seeder
             'store_name' => 'IPUL BUAH',
             'tagline' => 'Segar Setiap Hari, Sehat untuk Keluarga',
             'address' => 'Jl. Kemiri No. 47, Siranindi, Kec. Palu Barat, Kota Palu, Sulawesi Tengah, 94111',
-            'whatsapp_number' => '6281200000000',
+            'whatsapp_number' => '6285244189949',
             'operating_hours' => ['buka' => '08:00', 'tutup' => '17:00'],
             'min_order_delivery' => 50000,
             'google_maps_link' => 'https://maps.app.goo.gl/Ux62N1vWpbXwpd8y7',

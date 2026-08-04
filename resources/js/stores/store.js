@@ -12,7 +12,7 @@ export const useStoreInfoStore = defineStore('storeInfo', {
     aboutContent: '',
     address: 'Jl. Kemiri No. 47, Siranindi, Kec. Palu Barat, Kota Palu, Sulawesi Tengah, 94111',
     googleMapsLink: 'https://maps.app.goo.gl/Ux62N1vWpbXwpd8y7',
-    whatsappNumber: '6281200000000',
+    whatsappNumber: '6285244189949',
     bankAccounts: [],
     qrisImage: null,
     operatingHours: {
