@@ -368,8 +368,19 @@ async function rejectPayment(payment) {
   }
 }
 
-function printInvoice(o) {
-  window.open(`/api/admin/orders/${o.id}/invoice`, '_blank')
+async function printInvoice(o) {
+  try {
+    const res = await api.get(`/admin/orders/${o.id}/invoice`, { responseType: 'blob' })
+    const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }))
+    const a = document.createElement('a')
+    const safe = (o.order_number || `order-${o.id}`).replace(/[/\\]/g, '-')
+    a.href = url
+    a.download = `invoice-${safe}.pdf`
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch (e) {
+    alert('Gagal mengunduh invoice. Coba lagi.')
+  }
 }
 
 // ── Label & warna ─────────────────────────────────────────────────────────────

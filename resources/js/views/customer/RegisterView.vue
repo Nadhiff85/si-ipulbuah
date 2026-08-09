@@ -25,11 +25,23 @@
       </div>
       <div>
         <label class="text-sm font-medium text-ink block mb-1 flex items-center gap-1.5"><LockClosedIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Kata Sandi</label>
-        <input v-model="form.password" type="password" required minlength="8" class="input" placeholder="Minimal 8 karakter" />
+        <div class="relative">
+          <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required minlength="8" class="input pr-10" placeholder="Minimal 8 karakter" />
+          <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink/70 transition cursor-pointer" tabindex="-1">
+            <EyeSlashIcon v-if="showPassword" class="w-4 h-4" stroke-width="1.75" />
+            <EyeIcon v-else class="w-4 h-4" stroke-width="1.75" />
+          </button>
+        </div>
       </div>
       <div>
         <label class="text-sm font-medium text-ink block mb-1 flex items-center gap-1.5"><LockClosedIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Konfirmasi Kata Sandi</label>
-        <input v-model="form.password_confirmation" type="password" required class="input" placeholder="Ulangi kata sandi" />
+        <div class="relative">
+          <input v-model="form.password_confirmation" :type="showPasswordConf ? 'text' : 'password'" required class="input pr-10" placeholder="Ulangi kata sandi" />
+          <button type="button" @click="showPasswordConf = !showPasswordConf" class="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink/70 transition cursor-pointer" tabindex="-1">
+            <EyeSlashIcon v-if="showPasswordConf" class="w-4 h-4" stroke-width="1.75" />
+            <EyeIcon v-else class="w-4 h-4" stroke-width="1.75" />
+          </button>
+        </div>
       </div>
 
       <p v-if="error" class="text-danger text-sm">{{ error }}</p>
@@ -93,7 +105,7 @@
 import { ref, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
-import { UserIcon, EnvelopeIcon, DevicePhoneMobileIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
+import { UserIcon, EnvelopeIcon, DevicePhoneMobileIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 import OtpInput from '../../components/shared/OtpInput.vue'
 
 const route = useRoute()
@@ -103,6 +115,8 @@ const auth = useAuthStore()
 const form = ref({ name: '', email: '', phone: '', password: '', password_confirmation: '' })
 const loading = ref(false)
 const error = ref('')
+const showPassword = ref(false)
+const showPasswordConf = ref(false)
 
 const step = ref('form') // 'form' | 'otp'
 const challenge = ref('')

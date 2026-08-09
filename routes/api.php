@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\ChatbotController;
 use App\Http\Controllers\Api\Auth\PasswordResetController;
 use App\Http\Controllers\Api\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Api\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Api\Admin\AiAssistantController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\DeliveryAreaController;
 use App\Http\Controllers\Api\Admin\HamperController as AdminHamperController;
@@ -72,6 +74,9 @@ Route::get('/products/featured', [PublicProductController::class, 'featured']);
 Route::get('/categories/glimpse', [PublicCategoryController::class, 'index']);
 Route::get('/reviews/recent', [PublicReviewController::class, 'recent']);
 
+// Chatbot AI (publik, rate limited)
+Route::post('/chatbot', [ChatbotController::class, 'chat'])->middleware('throttle:20,1');
+
 // Webhook Midtrans (dipanggil server Midtrans, bukan pengguna - tanpa auth)
 Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle']);
 
@@ -127,6 +132,9 @@ Route::middleware(['auth:sanctum', 'session.timeout'])->group(function () {
     // dipasang ke grup rute manapun, jadi Audit Trail Admin selalu kosong.
     Route::middleware(['role:admin,superadmin', 'audit'])->prefix('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index']);
+
+        // Asisten AI admin (read-only) - rate limit 15 req/menit per user
+        Route::post('/ai-assistant', [AiAssistantController::class, 'chat'])->middleware('throttle:15,1');
 
         Route::apiResource('products', AdminProductController::class);
         Route::apiResource('categories', AdminCategoryController::class)->except(['show']);

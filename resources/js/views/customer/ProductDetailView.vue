@@ -121,7 +121,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../../services/api'
 import {
@@ -155,6 +155,10 @@ async function fetchProduct() {
   freshnessRemaining.value = data.freshness_remaining
   activeImage.value = data.product.images?.[0]?.image_path || null
   selectedVariant.value = data.product.variants?.[0] || null
+  // Reset input pilihan supaya tidak terbawa dari produk sebelumnya
+  qty.value = 1
+  note.value = ''
+  inWishlist.value = false
 }
 
 async function addToCart() {
@@ -189,4 +193,15 @@ function labelText(label) {
 }
 
 onMounted(fetchProduct)
+
+// Vue Router memakai ulang komponen ini saat hanya slug yang berubah, sehingga
+// onMounted tidak jalan lagi - tanpa watch ini URL berganti tapi isi halaman
+// tetap menampilkan produk sebelumnya (mis. saat pindah produk dari chatbot).
+watch(() => route.params.slug, (slug) => {
+  if (slug) {
+    product.value = null
+    fetchProduct()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+})
 </script>

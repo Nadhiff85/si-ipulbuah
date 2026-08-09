@@ -306,6 +306,9 @@
       </div>
     </footer>
 
+    <!-- Chatbot Buah Pintar -->
+    <FruitChatbot />
+
     <!-- Tombol Bantuan WhatsApp mengambang -->
     <!-- bottom-24 md:bottom-6 → di atas bottom nav bar mobile -->
     <div class="fixed bottom-24 md:bottom-6 right-5 z-30 flex items-center gap-3 group">
@@ -409,6 +412,7 @@ import {
   CubeIcon,
 } from '@heroicons/vue/24/outline'
 import WhatsAppIcon from '../components/shared/WhatsAppIcon.vue'
+import FruitChatbot from '../components/shared/FruitChatbot.vue'
 
 const router = useRouter()
 const route = useRoute()

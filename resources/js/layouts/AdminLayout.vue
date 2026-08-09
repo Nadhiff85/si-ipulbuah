@@ -42,7 +42,6 @@
         </SidebarGroup>
 
         <SidebarGroup title="Pengaturan">
-          <SidebarLink to="/admin/konten" :icon="PhotoIcon" label="Konten (Banner/FAQ)" />
           <SidebarLink to="/admin/pengaturan-toko" :icon="Cog6ToothIcon" label="Pengaturan Toko" />
         </SidebarGroup>
       </nav>
@@ -82,6 +81,9 @@
         <router-view />
       </main>
     </div>
+
+    <!-- Asisten AI Admin (mengambang) -->
+    <AdminAiChatbot />
   </div>
 </template>
 
@@ -92,10 +94,11 @@ import { useAuthStore } from '../stores/auth'
 import { useStoreInfoStore } from '../stores/store'
 import SidebarLink from '../components/shared/SidebarLink.vue'
 import SidebarGroup from '../components/shared/SidebarGroup.vue'
+import AdminAiChatbot from '../components/shared/AdminAiChatbot.vue'
 import {
   Squares2X2Icon, ShoppingBagIcon, TagIcon, GiftIcon, ReceiptPercentIcon, MapPinIcon,
   ClipboardDocumentListIcon, CreditCardIcon, ClockIcon, UsersIcon, StarIcon,
-  ChatBubbleLeftRightIcon, BellAlertIcon, ChartBarIcon, PhotoIcon, Cog6ToothIcon,
+  ChatBubbleLeftRightIcon, BellAlertIcon, ChartBarIcon, Cog6ToothIcon,
   BellIcon, ArrowRightStartOnRectangleIcon, EyeIcon,
 } from '@heroicons/vue/24/outline'
 

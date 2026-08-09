@@ -21,7 +21,13 @@
           <label class="text-sm font-medium text-ink flex items-center gap-1.5"><LockClosedIcon class="w-4 h-4 text-ink/50" stroke-width="1.75" /> Kata Sandi</label>
           <router-link to="/lupa-password" class="text-xs text-primary font-medium hover:underline">Lupa kata sandi?</router-link>
         </div>
-        <input v-model="form.password" type="password" required class="input" placeholder="••••••••" />
+        <div class="relative">
+          <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required class="input pr-10" placeholder="••••••••" />
+          <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink/70 transition cursor-pointer" tabindex="-1">
+            <EyeSlashIcon v-if="showPassword" class="w-4 h-4" stroke-width="1.75" />
+            <EyeIcon v-else class="w-4 h-4" stroke-width="1.75" />
+          </button>
+        </div>
       </div>
 
       <p v-if="error" class="text-danger text-sm">{{ error }}</p>
@@ -89,7 +95,7 @@
 import { ref, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
-import { EnvelopeIcon, LockClosedIcon } from '@heroicons/vue/24/outline'
+import { EnvelopeIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 import OtpInput from '../../components/shared/OtpInput.vue'
 
 const route = useRoute()
@@ -111,6 +117,7 @@ const verifying = ref(false)
 const resending = ref(false)
 const resendCooldown = ref(0)
 let cooldownTimer = null
+const showPassword = ref(false)
 
 async function handleLogin() {
   loading.value = true

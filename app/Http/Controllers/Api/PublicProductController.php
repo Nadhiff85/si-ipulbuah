@@ -18,7 +18,7 @@ class PublicProductController extends Controller
             ->where('is_featured', true)
             ->with(['images' => fn ($q) => $q->where('is_primary', true)->limit(1)])
             ->orderByDesc('sold_count')
-            ->limit(6)
+            ->limit(8)
             ->get(['id', 'name', 'slug', 'unit', 'price_unit', 'labels']);
 
         return response()->json(['products' => $products]);

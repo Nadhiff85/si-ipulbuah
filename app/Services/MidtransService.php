@@ -20,6 +20,8 @@ class MidtransService
         Config::$isProduction = (bool) config('services.midtrans.is_production');
         Config::$isSanitized = true;
         Config::$is3ds = true;
+        // Paksa IPv4 — IPv6/NAT64 di jaringan lokal menyebabkan SSL handshake reset
+        Config::$curlOptions = [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4];
     }
 
     // Midtrans cuma izinkan alfanumerik + - _ ~ . pada order_id, sedangkan

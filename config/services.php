@@ -20,4 +20,8 @@ return [
         'client_key' => env('MIDTRANS_CLIENT_KEY'),
         'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
     ],
+
+    'groq' => [
+        'api_key' => env('GROQ_API_KEY'),
+    ],
 ];

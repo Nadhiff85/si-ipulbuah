@@ -225,32 +225,43 @@
         <p v-else-if="products.length === 0" class="text-ink/50 text-sm py-12 text-center">Produk tidak ditemukan.</p>
 
         <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 fade-in">
-          <router-link
+          <div
             v-for="p in products"
             :key="p.id"
-            :to="`/produk/${p.slug}`"
-            class="glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden"
+            class="glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden group"
           >
-            <div class="aspect-square bg-primary/5 flex items-center justify-center relative overflow-hidden">
-              <img v-if="p.images?.[0]" :src="p.images[0].image_path" class="w-full h-full object-cover" />
-              <PhotoIcon v-else class="w-10 h-10 text-ink/20" stroke-width="1.5" />
-              <span
-                v-for="label in p.labels || []"
-                :key="label"
-                class="absolute top-2 left-2 bg-badge text-ink text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
+            <router-link :to="`/produk/${p.slug}`">
+              <div class="aspect-square bg-primary/5 flex items-center justify-center relative overflow-hidden">
+                <img v-if="p.images?.[0]" :src="p.images[0].image_path" class="w-full h-full object-cover" />
+                <PhotoIcon v-else class="w-10 h-10 text-ink/20" stroke-width="1.5" />
+                <span
+                  v-for="label in p.labels || []"
+                  :key="label"
+                  class="absolute top-2 left-2 bg-badge text-ink text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
+                >
+                  {{ labelText(label) }}
+                </span>
+              </div>
+              <div class="p-3 pb-1.5">
+                <p class="font-medium text-sm text-ink truncate">{{ p.name }}</p>
+                <p class="text-xs text-ink/50">{{ p.unit }}</p>
+                <p class="text-accent font-bold mt-1 text-sm">Rp {{ formatPrice(p.price_unit) }}</p>
+                <p v-if="p.price_wholesale" class="text-[11px] text-ink/50">
+                  Grosir Rp {{ formatPrice(p.price_wholesale) }} (min. {{ p.wholesale_min_qty }})
+                </p>
+              </div>
+            </router-link>
+            <div class="px-3 pb-3 pt-0">
+              <button
+                @click="quickAdd(p)"
+                :disabled="addingId === p.id"
+                class="w-full flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-dark text-white text-xs font-semibold py-2 rounded-full transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {{ labelText(label) }}
-              </span>
+                <ShoppingCartIcon class="w-3.5 h-3.5" stroke-width="2" />
+                {{ addingId === p.id ? 'Menambahkan...' : '+ Keranjang' }}
+              </button>
             </div>
-            <div class="p-3">
-              <p class="font-medium text-sm text-ink truncate">{{ p.name }}</p>
-              <p class="text-xs text-ink/50">{{ p.unit }}</p>
-              <p class="text-accent font-bold mt-1 text-sm">Rp {{ formatPrice(p.price_unit) }}</p>
-              <p v-if="p.price_wholesale" class="text-[11px] text-ink/50">
-                Grosir Rp {{ formatPrice(p.price_wholesale) }} (min. {{ p.wholesale_min_qty }})
-              </p>
-            </div>
-          </router-link>
+          </div>
         </div>
 
         <!-- Pagination -->
@@ -273,19 +284,43 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../../stores/auth'
+import { useCartStore } from '../../stores/cart'
 import api from '../../services/api'
 import {
   MagnifyingGlassIcon,
   PhotoIcon,
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,
+  ShoppingCartIcon,
 } from '@heroicons/vue/24/outline'
+
+const router = useRouter()
+const auth = useAuthStore()
+const cart = useCartStore()
 
 const categories = ref([])
 const products = ref([])
 const meta = ref(null)
 const loading = ref(false)
 const showFilters = ref(false)
+const addingId = ref(null)
+
+async function quickAdd(p) {
+  if (!auth.isLoggedIn) {
+    router.push({ path: '/login', query: { redirect: '/katalog', reason: 'Masuk atau daftar dulu untuk mulai belanja 🍊' } })
+    return
+  }
+  addingId.value = p.id
+  try {
+    await cart.addItem({ product_id: p.id, qty: 1 })
+  } catch (e) {
+    alert(e.response?.data?.message || 'Gagal menambahkan ke keranjang')
+  } finally {
+    addingId.value = null
+  }
+}
 
 const filters = ref({
   search: '',

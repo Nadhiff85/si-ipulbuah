@@ -130,30 +130,41 @@
       <p v-else-if="featuredProducts.length === 0" class="text-ink/40 text-sm">Belum ada produk terlaris yang dikurasi.</p>
 
       <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-        <button
+        <div
           v-for="p in featuredProducts"
           :key="p.id"
-          @click="goLogin(`/produk/${p.slug}`)"
-          class="text-left glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-1 transition-all overflow-hidden cursor-pointer group"
+          class="glass-card rounded-xl2 hover:shadow-lg hover:-translate-y-1 transition-all overflow-hidden group"
         >
-          <div class="aspect-[4/3] bg-primary/5 flex items-center justify-center relative overflow-hidden">
-            <img
-              v-if="p.images?.[0]?.image_path"
-              :src="p.images[0].image_path"
-              :alt="p.name"
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-            />
-            <PhotoIcon v-else class="w-10 h-10 text-ink/20" stroke-width="1.5" />
-            <span v-if="p.labels?.[0]" class="absolute top-2.5 left-2.5 bg-badge text-ink text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow-sm">
-              {{ labelText(p.labels[0]) }}
-            </span>
+          <button @click="goLogin(`/produk/${p.slug}`)" class="text-left w-full cursor-pointer">
+            <div class="aspect-[4/3] bg-primary/5 flex items-center justify-center relative overflow-hidden">
+              <img
+                v-if="p.images?.[0]?.image_path"
+                :src="p.images[0].image_path"
+                :alt="p.name"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <PhotoIcon v-else class="w-10 h-10 text-ink/20" stroke-width="1.5" />
+              <span v-if="p.labels?.[0]" class="absolute top-2.5 left-2.5 bg-badge text-ink text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow-sm">
+                {{ labelText(p.labels[0]) }}
+              </span>
+            </div>
+            <div class="p-4 pb-2">
+              <p class="font-semibold text-sm text-ink truncate">{{ p.name }}</p>
+              <p class="text-ink/40 text-xs mt-0.5">{{ p.origin_region }}</p>
+              <p class="text-accent font-bold text-base mt-2 tabular-nums">Rp {{ formatPrice(p.price_unit) }}<span class="text-ink/40 font-normal text-xs">/{{ p.unit }}</span></p>
+            </div>
+          </button>
+          <div class="px-4 pb-4 pt-0">
+            <button
+              @click="quickAdd(p)"
+              :disabled="addingId === p.id"
+              class="w-full flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-dark text-white text-xs font-semibold py-2 rounded-full transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <ShoppingCartIcon class="w-3.5 h-3.5" stroke-width="2" />
+              {{ addingId === p.id ? 'Menambahkan...' : '+ Keranjang' }}
+            </button>
           </div>
-          <div class="p-4">
-            <p class="font-semibold text-sm text-ink truncate">{{ p.name }}</p>
-            <p class="text-ink/40 text-xs mt-0.5">{{ p.origin_region }}</p>
-            <p class="text-accent font-bold text-base mt-2 tabular-nums">Rp {{ formatPrice(p.price_unit) }}<span class="text-ink/40 font-normal text-xs">/{{ p.unit }}</span></p>
-          </div>
-        </button>
+        </div>
       </div>
     </section>
 
@@ -173,9 +184,9 @@
 
     <!-- ===== Buat Parsel Kustom ===== -->
     <section class="max-w-7xl mx-auto px-4 py-6">
-      <div class="bg-primary rounded-xl2 overflow-hidden grid md:grid-cols-2 md:h-56">
+      <div class="parsel-card bg-primary rounded-xl2 overflow-hidden grid md:grid-cols-2 md:h-56">
         <div class="p-6 md:p-7 flex flex-col justify-center text-white">
-          <span class="inline-flex items-center gap-1.5 bg-white/15 text-badge font-bold px-2.5 py-1 rounded-full text-[11px] uppercase tracking-wide w-fit mb-2.5">
+          <span class="parsel-badge inline-flex items-center gap-1.5 bg-white/15 text-badge font-bold px-2.5 py-1 rounded-full text-[11px] uppercase tracking-wide w-fit mb-2.5">
             <GiftIcon class="w-3.5 h-3.5" stroke-width="2" /> Parsel Kustom
           </span>
           <h2 class="text-xl md:text-2xl font-black mb-2 leading-tight">Rangkai Sendiri Parsel Buahmu</h2>
@@ -185,13 +196,18 @@
           </p>
           <button
             @click="goLogin('/parsel-kustom')"
-            class="bg-accent hover:bg-accent-light text-white font-bold px-5 py-2.5 rounded-full transition w-fit inline-flex items-center gap-2 cursor-pointer text-sm"
+            class="parsel-btn bg-accent hover:bg-accent-light text-white font-bold px-5 py-2.5 rounded-full transition w-fit inline-flex items-center gap-2 cursor-pointer text-sm"
           >
-            Mulai Rangkai Parsel <ArrowRightIcon class="w-4 h-4" stroke-width="2.5" />
+            Mulai Rangkai Parsel <ArrowRightIcon class="parsel-arrow w-4 h-4" stroke-width="2.5" />
           </button>
         </div>
         <div class="relative hidden md:flex items-center justify-center overflow-hidden bg-white">
-          <img src="/images/parsel-buah.webp" alt="Parsel buah kustom" class="relative h-40 w-auto object-contain" />
+          <!-- Sparkle dekoratif berkedip -->
+          <span class="parsel-sp1 absolute top-4 right-12 text-xl select-none pointer-events-none">✨</span>
+          <span class="parsel-sp2 absolute bottom-6 right-6 text-base select-none pointer-events-none">🌟</span>
+          <span class="parsel-sp3 absolute top-7 left-10 text-sm select-none pointer-events-none">⭐</span>
+          <span class="parsel-sp4 absolute bottom-10 left-6 text-xs select-none pointer-events-none">✨</span>
+          <img src="/images/parsel-buah.webp" alt="Parsel buah kustom" class="parsel-img relative h-40 w-auto object-contain" />
           <div class="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-primary/20 pointer-events-none"></div>
         </div>
       </div>
@@ -313,11 +329,12 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
+import { useCartStore } from '../../stores/cart'
 import { useStoreInfoStore } from '../../stores/store'
 import api from '../../services/api'
 import {
   PhotoIcon, GiftIcon, SunIcon, MapPinIcon, ChatBubbleLeftRightIcon, ArrowTopRightOnSquareIcon,
-  ArrowRightIcon, SparklesIcon,
+  ArrowRightIcon, SparklesIcon, ShoppingCartIcon,
 } from '@heroicons/vue/24/outline'
 import { StarIcon } from '@heroicons/vue/24/solid'
 import gsap from 'gsap'
@@ -328,7 +345,24 @@ gsap.registerPlugin(ScrollTrigger)
 
 const router = useRouter()
 const auth = useAuthStore()
+const cart = useCartStore()
 const storeInfo = useStoreInfoStore()
+const addingId = ref(null)
+
+async function quickAdd(p) {
+  if (!auth.isLoggedIn) {
+    router.push({ path: '/login', query: { redirect: '/', reason: 'Masuk atau daftar dulu untuk mulai belanja 🍊' } })
+    return
+  }
+  addingId.value = p.id
+  try {
+    await cart.addItem({ product_id: p.id, qty: 1 })
+  } catch (e) {
+    alert(e.response?.data?.message || 'Gagal menambahkan ke keranjang')
+  } finally {
+    addingId.value = null
+  }
+}
 
 // ===== Film "Belah Buah" =====
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -518,3 +552,58 @@ function formatPrice(v) {
   return new Intl.NumberFormat('id-ID').format(v)
 }
 </script>
+
+<style scoped>
+/* ===== Parsel Section Continuous Animations ===== */
+
+.parsel-card {
+  animation: card-glow 3.5s ease-in-out infinite;
+}
+@keyframes card-glow {
+  0%, 100% { box-shadow: 0 4px 24px -4px rgba(22, 74, 48, 0.35); }
+  50%       { box-shadow: 0 10px 48px -4px rgba(22, 74, 48, 0.65), 0 0 0 3px rgba(255, 255, 255, 0.10); }
+}
+
+.parsel-img {
+  animation: parsel-float 3s ease-in-out infinite;
+}
+@keyframes parsel-float {
+  0%, 100% { transform: translateY(0px)   rotate(0deg)  scale(1);    }
+  50%       { transform: translateY(-14px) rotate(2.5deg) scale(1.04); }
+}
+
+.parsel-badge {
+  animation: badge-shimmer 2.8s ease-in-out infinite;
+}
+@keyframes badge-shimmer {
+  0%, 100% { background-color: rgba(255,255,255,0.15); box-shadow: none; }
+  50%       { background-color: rgba(255,255,255,0.30); box-shadow: 0 0 14px rgba(255, 210, 60, 0.45); }
+}
+
+.parsel-btn {
+  animation: btn-pulse 2.2s ease-in-out infinite;
+}
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(255, 90, 54, 0.00); }
+  50%       { box-shadow: 0 0 0 10px rgba(255, 90, 54, 0.22); }
+}
+
+.parsel-arrow {
+  animation: arrow-nudge 2.2s ease-in-out infinite;
+}
+@keyframes arrow-nudge {
+  0%, 45%, 100% { transform: translateX(0); }
+  65%           { transform: translateX(6px); }
+}
+
+/* Sparkle berkedip bergantian dengan delay berbeda */
+.parsel-sp1 { animation: sparkle-pop 2.6s ease-in-out infinite 0.0s; }
+.parsel-sp2 { animation: sparkle-pop 2.6s ease-in-out infinite 0.9s; }
+.parsel-sp3 { animation: sparkle-pop 2.6s ease-in-out infinite 1.7s; }
+.parsel-sp4 { animation: sparkle-pop 2.6s ease-in-out infinite 0.5s; }
+
+@keyframes sparkle-pop {
+  0%, 100% { opacity: 0.15; transform: scale(0.6) rotate(0deg);   }
+  50%       { opacity: 1;    transform: scale(1.4) rotate(25deg);  }
+}
+</style>
